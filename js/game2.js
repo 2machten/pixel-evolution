@@ -19,52 +19,51 @@ function PixelEvolution()
     this.facing = "down";
 }
 
-PixelEvolution.prototype.blaat = function()
+PixelEvolution.prototype.generator = function()
 {
-    console.log('hai');
-    //var w = 80, h = 60;
-    //var map = new ROT.Map.Cellular(w, h, {
-        //born: [5,6,7,8],
-        //survive: [4,5,6,7,8]
-    //});
-    //map.randomize(0.52);
+    var w = 80, h = 60;
+    var map = new ROT.Map.Cellular(w, h, {
+        born: [5,6,7,8],
+        survive: [4,5,6,7,8]
+    });
+    map.randomize(0.52);
 
-    //var display;
-    //var digCallback = function(x, y, value) {
-        //if (value) { 
-            //var tile = [x, y];
-            //this.freeTiles.push(tile);
-        //}
+    var display;
+    var digCallback = function(x, y, value) {
+        if (value) { 
+            var tile = [x, y];
+            this.freeTiles.push(tile);
+        }
 
-        ////channel info to debug so the preview can be rendered.
-        //display.DEBUG(x,y,value);
-    //}
+        //channel info to debug so the preview can be rendered.
+        display.DEBUG(x,y,value);
+    }
 
     //[> generate x generations <]
-    //for (var i=0; i<10; i++) {
-        //display = new ROT.Display({width:w, height:h, fontSize:4}); 
-        //map.create(digCallback.bind(this));
-    //}
-    ////show map in canvas
-    //document.body.appendChild(display.getContainer());
+    for (var i=0; i<10; i++) {
+        display = new ROT.Display({width:w, height:h, fontSize:4}); 
+        map.create(digCallback.bind(this));
+    }
+    //show map in canvas
+    document.body.appendChild(display.getContainer());
 
-    //var level = "";
+    var level = "";
 
-    //for (var i=0; i<map._map[0].length; i++) {
-        //for (var j=0; j<map._map.length; j++) {
-            //var point = map._map[j][i]+"";
+    for (var i=0; i<map._map[0].length; i++) {
+        for (var j=0; j<map._map.length; j++) {
+            var point = map._map[j][i]+"";
 
-            //if(point=="0"){
-                //point = "1";
-            //} else {
-                //point = "0";
-            //}		
+            if(point=="0"){
+                point = "1";
+            } else {
+                point = "0";
+            }
 
-            //level += point + ",";
-        //}
-        //level += "\n";
-    //}
-    //return level;
+            level += point + ",";
+        }
+        level += "\n";
+    }
+    return level;
 };
 
 // game initialization
@@ -74,7 +73,8 @@ PixelEvolution.prototype.init = function()
         preload: this.preload,
         create: this.create,
         update: this.update,
-        render: this.render
+        render: this.render,
+        evo: this
     }, /*transparent*/ false, /*antialiasing*/ false);
 };
 
@@ -83,11 +83,10 @@ PixelEvolution.prototype.preload = function()
     this.game.load.image('chest', 'assets/chest.png');
     this.game.load.spritesheet('player', 'assets/character.png', 79, 95);
 
-    console.log(this);
     //this method usually reads csv files, but also takes a string
     //as argument. generateLevel should produce a csv representation of
     //the map and it will render this.
-    this.game.load.tilemap('level', null, this.generator(), Phaser.Tilemap.CSV);
+    this.game.load.tilemap('level', null, this.evo.generator(), Phaser.Tilemap.CSV);
     this.game.load.image('tiles', 'assets/tiles_32.png');
 };
 
@@ -112,32 +111,32 @@ PixelEvolution.prototype.create = function() {
 
     //spawn chests
     for (var i=0; i<6; i++){
-		var index = Math.floor(ROT.RNG.getUniform() * this.freeTiles.length);
-		var randomFreeTile = this.freeTiles.splice(index, 1)[0];
+		var index = Math.floor(ROT.RNG.getUniform() * this.evo.freeTiles.length);
+		var randomFreeTile = this.evo.freeTiles.splice(index, 1)[0];
 		var chest = this.game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
 		this.game.physics.enable(chest);
-		this.chests.push(chest);
+		this.evo.chests.push(chest);
 	}
 
     //Camera topdown and character
-    var index = Math.floor(ROT.RNG.getUniform() * this.freeTiles.length);
-    var randomFreeTile = this.freeTiles.splice(index, 1)[0];
+    var index = Math.floor(ROT.RNG.getUniform() * this.evo.freeTiles.length);
+    var randomFreeTile = this.evo.freeTiles.splice(index, 1)[0];
 
-    this.p = this.game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'player');
+    this.evo.p = this.game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'player');
     //this.p.anchor.setTo(0.5, 0.5);
-    this.p.scale.setTo(0.4, 0.4);
-    this.game.physics.enable(p); // ??
+    this.evo.p.scale.setTo(0.4, 0.4);
+    this.game.physics.enable(this.evo.p); // ??
 
-    this.p.body.bounce = 0.2;
-    this.p.body.collideWorldBounds = true;
+    this.evo.p.body.bounce = 0.2;
+    this.evo.p.body.collideWorldBounds = true;
 
     var animsSpeed = 8;
-    this.p.animations.add('left', [8, 9], animsSpeed, true);
-    this.p.animations.add('right', [3, 4], animsSpeed, true);
-    this.p.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
-    this.p.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+    this.evo.p.animations.add('left', [8, 9], animsSpeed, true);
+    this.evo.p.animations.add('right', [3, 4], animsSpeed, true);
+    this.evo.p.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
+    this.evo.p.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
 
-    this.game.camera.follow(this.p, Phaser.Camera.FOLLOW_TOPDOWN);
+    this.game.camera.follow(this.evo.p, Phaser.Camera.FOLLOW_TOPDOWN);
 
     this.cursors = this.game.input.keyboard.createCursorKeys();
 
@@ -148,61 +147,61 @@ PixelEvolution.prototype.create = function() {
 };
 
 PixelEvolution.prototype.update = function() {
-	if(!this.pause){
-	    this.game.physics.arcade.collide(this.p, this.layer);
+	if(!this.evo.pause){
+	    this.game.physics.arcade.collide(this.evo.p, this.evo.layer);
 
-	    for(var i=0; i<this.chests.length;i++){
-	    	var chest = this.chests[i];
-	    	this.game.physics.arcade.collide(this.chest, this.p, this.collisionHandler, null, this.update());
+	    for(var i=0; i<this.evo.chests.length;i++){
+	    	var chest = this.evo.chests[i];
+	    	this.game.physics.arcade.collide(chest, this.evo.p, this.evo.collisionHandler, null, this.update);
 		}
 
-	    this.p.body.velocity.x = 0;
-	    this.p.body.velocity.y = 0;
+	    this.evo.p.body.velocity.x = 0;
+	    this.evo.p.body.velocity.y = 0;
 
 	    if (this.cursors.up.isDown)
 	    {
-	        this.p.body.velocity.y = -movespeed;
+	        this.evo.p.body.velocity.y = -this.evo.movespeed;
 	        if (this.facing != 'up'){
-	            this.p.animations.play('up');
+	            this.evo.p.animations.play('up');
 	            this.facing = 'up';
 
 	        }
 	    }
 	    else if (this.cursors.down.isDown)
 	    {
-	        this.p.body.velocity.y = movespeed;
+	        this.evo.p.body.velocity.y = this.evo.movespeed;
 	        if (this.facing != 'down'){
-	            this.p.animations.play('down');
+	            this.evo.p.animations.play('down');
 	            this.facing = 'down';
 	        }
 	    } else if (this.cursors.left.isDown)
 	    {
-	        this.p.body.velocity.x = -movespeed;
+	        this.evo.p.body.velocity.x = -this.evo.movespeed;
 
 	        if (this.facing != 'left'){
-	            this.p.animations.play('left');
+	            this.evo.p.animations.play('left');
 	            this.facing = 'left';
 	        }
 	    }
 	    else if (this.cursors.right.isDown)
 	    {
-	        this.p.body.velocity.x = movespeed;
+	        this.evo.p.body.velocity.x = this.evo.movespeed;
 	        if (this.facing != 'right'){
-	            this.p.animations.play('right');
+	            this.evo.p.animations.play('right');
 	            this.facing = 'right';
 	        }
 	    } else {
 	    	if (this.facing != 'idle'){
-	            this.p.animations.stop();
+	            this.evo.p.animations.stop();
 
 	            if (this.facing == 'left'){
-	                this.p.frame = 8;
+	                this.evo.p.frame = 8;
 	            } else if (this.facing == 'right'){
-	            	this.p.frame = 3;
+	            	this.evo.p.frame = 3;
 	        	} else if (this.facing == 'up'){
-	        		this.p.frame = 5;
+	        		this.evo.p.frame = 5;
 	    		} else if (this.facing == 'down'){
-	                this.p.frame = 0;
+	                this.evo.p.frame = 0;
 	            }
 
 	            this.facing = 'idle';
@@ -211,12 +210,12 @@ PixelEvolution.prototype.update = function() {
 	}
 };
 
-PixelEvolution.prototype.collisionHandler = function()
+PixelEvolution.prototype.collisionHandler = function(chest)
 {
-	pause = true;
+	this.pause = true;
 	alert('hit!');
 	chest.destroy();
-	pause = false;
+	this.pause = false;
 };
 
 PixelEvolution.prototype.render = function()
