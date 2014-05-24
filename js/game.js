@@ -47,6 +47,7 @@ function generateLevel() {
 		level += "\n";
 	}
 
+	console.log(level);
 	return level;
 }
 

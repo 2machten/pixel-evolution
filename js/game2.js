@@ -10,13 +10,12 @@ function PixelEvolution()
     // init
     this.Keys = Phaser.keyboard;
     this.speed = 3;
+    this.layer = "";
 
     // create
     this.chests = [];
 
-    // update
-    this.movespeed = 150;
-    this.facing = "down";
+    this.init();
 }
 
 PixelEvolution.prototype.generator = function()
@@ -67,6 +66,10 @@ PixelEvolution.prototype.generator = function()
 };
 
 // game initialization
+
+/*
+ * NOTE: possibly just move this into the constructor? 
+ */
 PixelEvolution.prototype.init = function()
 {
     this.game = new Phaser.Game(800, 600, Phaser.CANVAS, 'game', {
@@ -105,9 +108,11 @@ PixelEvolution.prototype.create = function() {
     this.map.addTilesetImage('tiles');
     this.map.setCollisionBetween(1,200);
 
-
     this.layer = this.map.createLayer(0);
     this.layer.resizeWorld(); //??
+
+    //var map = new Map();
+    //this.game.add.existing(map.layer);
 
     //spawn chests
     for (var i=0; i<6; i++){
@@ -122,24 +127,8 @@ PixelEvolution.prototype.create = function() {
     var index = Math.floor(ROT.RNG.getUniform() * this.evo.freeTiles.length);
     var randomFreeTile = this.evo.freeTiles.splice(index, 1)[0];
 
-    this.evo.p = this.game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'player');
-    //this.p.anchor.setTo(0.5, 0.5);
-    this.evo.p.scale.setTo(0.4, 0.4);
-    this.game.physics.enable(this.evo.p); // ??
-
-    this.evo.p.body.bounce = 0.2;
-    this.evo.p.body.collideWorldBounds = true;
-
-    var animsSpeed = 8;
-    this.evo.p.animations.add('left', [8, 9], animsSpeed, true);
-    this.evo.p.animations.add('right', [3, 4], animsSpeed, true);
-    this.evo.p.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
-    this.evo.p.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
-
-    this.game.camera.follow(this.evo.p, Phaser.Camera.FOLLOW_TOPDOWN);
-
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-
+    var player = new Player(randomFreeTile[0]*32, randomFreeTile[1]*32); //tile size variable maken??
+    this.game.add.existing(player);
 
     //for (var i = 0; i < 100; i++) {
     //    game.add.sprite(game.world.randomX, game.world.randomY, 'mushroom');
@@ -147,67 +136,6 @@ PixelEvolution.prototype.create = function() {
 };
 
 PixelEvolution.prototype.update = function() {
-	if(!this.evo.pause){
-	    this.game.physics.arcade.collide(this.evo.p, this.evo.layer);
-
-	    for(var i=0; i<this.evo.chests.length;i++){
-	    	var chest = this.evo.chests[i];
-	    	this.game.physics.arcade.collide(chest, this.evo.p, this.evo.collisionHandler, null, this.update);
-		}
-
-	    this.evo.p.body.velocity.x = 0;
-	    this.evo.p.body.velocity.y = 0;
-
-	    if (this.cursors.up.isDown)
-	    {
-	        this.evo.p.body.velocity.y = -this.evo.movespeed;
-	        if (this.facing != 'up'){
-	            this.evo.p.animations.play('up');
-	            this.facing = 'up';
-
-	        }
-	    }
-	    else if (this.cursors.down.isDown)
-	    {
-	        this.evo.p.body.velocity.y = this.evo.movespeed;
-	        if (this.facing != 'down'){
-	            this.evo.p.animations.play('down');
-	            this.facing = 'down';
-	        }
-	    } else if (this.cursors.left.isDown)
-	    {
-	        this.evo.p.body.velocity.x = -this.evo.movespeed;
-
-	        if (this.facing != 'left'){
-	            this.evo.p.animations.play('left');
-	            this.facing = 'left';
-	        }
-	    }
-	    else if (this.cursors.right.isDown)
-	    {
-	        this.evo.p.body.velocity.x = this.evo.movespeed;
-	        if (this.facing != 'right'){
-	            this.evo.p.animations.play('right');
-	            this.facing = 'right';
-	        }
-	    } else {
-	    	if (this.facing != 'idle'){
-	            this.evo.p.animations.stop();
-
-	            if (this.facing == 'left'){
-	                this.evo.p.frame = 8;
-	            } else if (this.facing == 'right'){
-	            	this.evo.p.frame = 3;
-	        	} else if (this.facing == 'up'){
-	        		this.evo.p.frame = 5;
-	    		} else if (this.facing == 'down'){
-	                this.evo.p.frame = 0;
-	            }
-
-	            this.facing = 'idle';
-	        }
-	    }
-	}
 };
 
 PixelEvolution.prototype.collisionHandler = function(chest)
@@ -223,9 +151,6 @@ PixelEvolution.prototype.render = function()
     //game.debug.cameraInfo(game.camera, 32, 32).style.fontSize = 5;
 };
 
-var game = new PixelEvolution();
+var pixelEvolution = new PixelEvolution();
 
-console.log(game);
-
-//initialization
-game.init();
+console.log(pixelEvolution);
