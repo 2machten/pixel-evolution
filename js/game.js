@@ -9,6 +9,7 @@ function PixelEvolution()
     // game variables
     this._pause = false;
     this._chests = [];
+    this._type = "rpg"; // other option is RPG
 
     //instantiate Phaser game object
     // We use Phaser.CANVAS for development. We will set it later to
@@ -19,9 +20,15 @@ function PixelEvolution()
 
 PixelEvolution.prototype.preload = function()
 {
-    this._game.load.image('chest', 'assets/chest.png');
-    this._game.load.spritesheet('player', 'assets/character.png', 79, 95);
-    this._game.load.image('tiles', 'assets/tiles_32.png');
+    if (this._type == 'rpg') {
+        this._game.load.image('chest', 'assets/chest.png');
+        this._game.load.spritesheet('player', 'assets/character.png', 79, 95);
+        this._game.load.image('tiles', 'assets/tiles_32.png');
+    } else if (this._type == 'dungeon') {
+        this._game.load.image('mushroom', 'assets/melon.png');
+        this._game.load.image('phaser', 'assets/melon.png');
+        this._game.load.image('tiles', 'assets/catastrophi_tiles_16.png');
+    }
 };
 
 PixelEvolution.prototype.create = function()
@@ -30,22 +37,24 @@ PixelEvolution.prototype.create = function()
     this._game.stage.smoothed = false;
 
     //instantiate worldmap and create layer (this displays the map)
-    this._worldMap = new WorldMap("rpg");
+    this._worldMap = new WorldMap(this._type);
     this._layer = this._worldMap.map.createLayer(0);
     this._layer.resizeWorld();
 
-    //spawn chests
-    for (var i=0; i<6; i++){
-        var index = Math.floor(ROT.RNG.getUniform() *  this._worldMap.freeTiles.length);
-        var randomFreeTile = this._worldMap.freeTiles.splice(index, 1)[0];
-        var chest = this._game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
-        this._game.physics.enable(chest);
-        this._chests.push(chest);
-    }
+    if (this._type == 'rpg') {
+        //spawn chests
+        for (var i=0; i<6; i++){
+            var index = Math.floor(ROT.RNG.getUniform() *  this._worldMap.freeTiles.length);
+            var randomFreeTile = this._worldMap.freeTiles.splice(index, 1)[0];
+            var chest = this._game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
+            this._game.physics.enable(chest);
+            this._chests.push(chest);
+        }
 
-    //Instantiate new player object
-    var player = new Player();
-    this._game.add.existing(player);
+        //Instantiate new player object
+        var player = new Player();
+        this._game.add.existing(player);
+    }
 };
 
 //updates usually get handled by smaller classes like Player.
