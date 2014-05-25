@@ -17,7 +17,7 @@ WorldMap = function(type) {
     //this method usually reads csv files, but also takes a string
     //as argument. generateLevel should produce a csv representation of
     //the map and it will render this.
-	this.map = pixelEvolution.game.add.tilemap('level', 32, 32);
+	this.map = pixelEvolution._game.add.tilemap('level', 32, 32);
     
     this.map.addTilesetImage('tiles');
     //make sure the player collides (cannot walk through) tiles of type 1 (tree)
@@ -77,7 +77,7 @@ WorldMap.prototype.generateRPG = function()
         level += "\n";
     }
 
-    pixelEvolution.game.load.tilemap('level', null, level, Phaser.Tilemap.CSV);
+    pixelEvolution._game.load.tilemap('level', null, level, Phaser.Tilemap.CSV);
 
     return level;
 };
@@ -195,7 +195,7 @@ WorldMap.prototype.generateDungeon = function()
 		level += "\n";
 	}
 
-	pixelEvolution.game.load.tilemap('level', null, level, Phaser.Tilemap.CSV);
+	pixelEvolution._game.load.tilemap('level', null, level, Phaser.Tilemap.CSV);
 
 	return level;
 }
