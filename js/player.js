@@ -46,7 +46,8 @@ Player.prototype.constructor = Player;
 Player.prototype.collisionHandler = function(chest)
 {
     this.pause = true;
-    alert('hit!');
+    console.log('hit!');
+    console.log(chest);
     chest.destroy();
     this.pause = false;
 };
