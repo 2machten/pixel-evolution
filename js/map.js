@@ -22,7 +22,7 @@ WorldMap = function(game, key, tileSize, generateFunction, itemPositionFunction)
     this._items = new Phaser.Group(this._game, null, "items", false);
 
     //spawn collectables in this group
-    for (var i=0; i<6; i++){
+    for (var i=0; i<15; i++){
         var spawnPosition = itemPositionFunction();
         var collectable = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'collectable');
         this._game.physics.enable(collectable);

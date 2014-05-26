@@ -40,7 +40,7 @@ function create()
     this.state.add('rpg', rpgPhase);
 
     //and start the menu one
-    this.state.start('rpg');
+    this.state.start('menu');
 
     //set up transition plugin to smoothly transition between states.
     transitions = this.game.plugins.add(Phaser.Plugin.StateTransition);
@@ -73,6 +73,14 @@ PixelEvolution.prototype.update = function(time){
 //Displays a message on the screen and 'types it out' (animation).
 PixelEvolution.prototype.showMessage = function(message){
     //this._pause = true;
+
+    if(this._bg){ 
+        this._bg.destroy();
+        this._continue.destroy();
+        this._message.destroy();
+        this._pause = false;
+    }
+    
 
     //show background
     this._bg = this.add.tileSprite(0, this.camera.height-150, this.camera.width, 150, 'message_bg');
