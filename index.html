@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <title>Game concept</title><!--TODO: game title -->
+        <title>Pixel Evolution</title>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
@@ -11,10 +11,27 @@
     </head>
 
     <body>
-        <a href="index.html">dungeon</a> - <a href="index2.html">rpg</a>
-        <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="js/phaser.min.js"></script>
-        <script type="text/javascript" src="js/rot.min.js"></script>
-        <script type="text/javascript" src="js/game_dungeonborders.js"></script>
+        <a id="dungeonLink" href="#">dungeon</a> - <a id="rpgLink" href="#">rpg</a>
+
+        <div id="minimap"></div>
+
+        <!-- Libaries -->
+        <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="js/lib/phaser.min.js"></script>
+        <script type="text/javascript" src="js/lib/rot.min.js"></script>
+        <script type="text/javascript" src="js/lib/phaser-state-transition.js"></script>
+
+        <!-- Main game elements -->
+        <script type="text/javascript" src="js/player.js"></script>
+        <script type="text/javascript" src="js/map.js"></script>
+
+        <!-- States of the game -->
+        <!--<script type="text/javascript" src="js/state/mainMenu.js"></script>
+        <script type="text/javascript" src="js/state/pixelPhase.js"></script>
+        <script type="text/javascript" src="js/state/pacmanPhase.js"></script>-->
+        <script type="text/javascript" src="js/state/dungeonPhase.js"></script>
+        <script type="text/javascript" src="js/state/rpgPhase.js"></script>
+
+        <script type="text/javascript" src="js/game.js"></script>
     </body>
 </html>

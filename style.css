@@ -4,11 +4,11 @@ body,html {
 	height: 100%;
 }
 
-/*DEBUG canvas:last-of-type{
+#minimap {
 	position: absolute;
 	top: 1em;
 	right: 0;
-}*/
+}
 
 /*make sure canvas stretches 8 bit style 
 canvas {

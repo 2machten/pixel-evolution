@@ -4,71 +4,82 @@
  * This object is also given to Phaser.Game. To make sure it is all
  * compatible, all internal variables and methods are prefixed with _.
  */
-function PixelEvolution()
+
+var transitions = null;
+
+function PixelEvolution(width, height, renderer, parent, state, transparent, antialias)
 {
     // game variables
-    this._pause = false;
+    this._showMinimap = true;
     this._chests = [];
     this._type = "rpg"; // other option is RPG
 
-    //instantiate Phaser game object
-    // We use Phaser.CANVAS for development. We will set it later to
-    // Phaser.AUTO for performance
-    this._game = new Phaser.Game(800, 600, Phaser.CANVAS,
-        'game', this, /*transparent*/ false, /*antialiasing*/ false);
+    Phaser.Game.call(this, width, height, renderer, parent, state, transparent, antialias);
 }
 
-PixelEvolution.prototype.preload = function()
+PixelEvolution.prototype = Object.create(Phaser.Game.prototype);
+PixelEvolution.prototype.constructor = PixelEvolution;
+
+function preload()
 {
-    if (this._type == 'rpg') {
-        this._game.load.image('chest', 'assets/chest.png');
-        this._game.load.spritesheet('player', 'assets/character.png', 79, 95);
-        this._game.load.image('tiles', 'assets/tiles_32.png');
-    } else if (this._type == 'dungeon') {
-        this._game.load.image('mushroom', 'assets/melon.png');
-        this._game.load.image('phaser', 'assets/melon.png');
-        this._game.load.image('tiles', 'assets/catastrophi_tiles_16.png');
-    }
+    //preloading is done within state (phase) objects.
 };
 
-PixelEvolution.prototype.create = function()
+function create()
 {
     //8Bit mode: don't smooth edges when scaling objects
-    this._game.stage.smoothed = false;
+    this.stage.smoothed = false;
 
-    //instantiate worldmap and create layer (this displays the map)
-    this._worldMap = new WorldMap(this._type);
-    this._layer = this._worldMap.map.createLayer(0);
-    this._layer.resizeWorld();
+    //this.state.add('menu', mainMenu);
+    //this.state.add('pixel', pixelStage);
+    //this.state.add('pacman', pacmanStage);
+    this.state.add('dungeon', dungeonStage);
+    this.state.add('rpg', rpgStage);
 
-    if (this._type == 'rpg') {
-        //spawn chests
-        for (var i=0; i<6; i++){
-            var index = Math.floor(ROT.RNG.getUniform() *  this._worldMap.freeTiles.length);
-            var randomFreeTile = this._worldMap.freeTiles.splice(index, 1)[0];
-            var chest = this._game.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
-            this._game.physics.enable(chest);
-            this._chests.push(chest);
+    this.state.start('rpg');
+
+    transitions = this.game.plugins.add(Phaser.Plugin.StateTransition);
+    transitions.settings({
+        duration: 700,
+        properties: {
+            alpha: 0,
+            scale: {
+                x: 1.5,
+                y: 1.5
+            }
         }
-
-        //Instantiate new player object
-        var player = new Player();
-        this._game.add.existing(player);
-    }
+    });
 };
 
 //updates usually get handled by smaller classes like Player.
-PixelEvolution.prototype.update = function()
+function update()
 {
 };
 
-PixelEvolution.prototype.render = function()
+function render()
 {
     //Show camera debug info.
-    //this._game.debug.cameraInfo(this._game.camera, 32, 32);
+    //this.debug.cameraInfo(this.camera, 32, 32);
 };
 
-//3..2..1.. Take off!
-var pixelEvolution = new PixelEvolution();
 
 
+
+//instantiate Phaser game object
+// We use Phaser.CANVAS for development. We will set it later to
+// Phaser.AUTO for performance
+
+var pixelEvolution = new PixelEvolution(800, 600, Phaser.AUTO, 'game', {
+    preload: preload,
+    create: create,
+    update: update,
+    render: render
+}, false, false);
+
+$('#dungeonLink').click(function(){
+    transitions.to('dungeon');
+});
+
+$('#rpgLink').click(function(){
+    transitions.to('rpg');
+});
