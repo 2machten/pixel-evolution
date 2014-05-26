@@ -1,6 +1,6 @@
 var digger;
 
-dungeonStage = function(game) {
+dungeonPhase = function(game) {
     Phaser.State.call(this); 
 
     this.game = game;
@@ -8,18 +8,17 @@ dungeonStage = function(game) {
 }
 
 //Extend the player object to be a Phaser.State
-dungeonStage.prototype = Object.create(Phaser.State.prototype);
-dungeonStage.prototype.constructor = dungeonStage;
+dungeonPhase.prototype = Object.create(Phaser.State.prototype);
+dungeonPhase.prototype.constructor = dungeonPhase;
 
 
-dungeonStage.prototype.preload = function(){
-    this.game.stage.backgroundColor = '#27672f';
-    this.load.spritesheet('player', 'assets/character.png', 79, 95);
-    this.game.load.image('tiles', 'assets/dungeon_tiles.png');
+dungeonPhase.prototype.preload = function(){
+    this.load.spritesheet('player', 'assets/character_large.png', 79, 95);
+    this.load.image('tiles', 'assets/dungeon_tiles.png');
 
 }
 
-dungeonStage.prototype.create = function(){
+dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this.game, 'level', 32, 32, this.generate);
     this._map.addTilesetImage('tiles');
@@ -40,7 +39,7 @@ dungeonStage.prototype.create = function(){
     this.game.add.existing(this._player);
 };
 
-dungeonStage.prototype.getPlayerPosition = function(){
+dungeonPhase.prototype.getPlayerPosition = function(){
     //get the index of a random room
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
     
@@ -49,7 +48,7 @@ dungeonStage.prototype.getPlayerPosition = function(){
 }
 
 //map generation for dungeon (ROT uniform dungeon algorithm)
-dungeonStage.prototype.generate = function()
+dungeonPhase.prototype.generate = function()
 {
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {

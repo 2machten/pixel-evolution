@@ -30,13 +30,13 @@ function create()
     //8Bit mode: don't smooth edges when scaling objects
     this.stage.smoothed = false;
 
-    //this.state.add('menu', mainMenu);
-    //this.state.add('pixel', pixelStage);
-    //this.state.add('pacman', pacmanStage);
-    this.state.add('dungeon', dungeonStage);
-    this.state.add('rpg', rpgStage);
+    this.state.add('menu', mainMenu);
+    this.state.add('pixel', pixelPhase);
+    this.state.add('pacman', pacmanPhase);
+    this.state.add('dungeon', dungeonPhase);
+    this.state.add('rpg', rpgPhase);
 
-    this.state.start('rpg');
+    this.state.start('menu');
 
     transitions = this.game.plugins.add(Phaser.Plugin.StateTransition);
     transitions.settings({
@@ -66,9 +66,7 @@ function render()
 
 
 //instantiate Phaser game object
-// We use Phaser.CANVAS for development. We will set it later to
-// Phaser.AUTO for performance
-
+// To use Phaser.AUTO instead of Phaser.CANVAS, you have to run a local server.
 var pixelEvolution = new PixelEvolution(800, 600, Phaser.AUTO, 'game', {
     preload: preload,
     create: create,
@@ -76,10 +74,10 @@ var pixelEvolution = new PixelEvolution(800, 600, Phaser.AUTO, 'game', {
     render: render
 }, false, false);
 
-$('#dungeonLink').click(function(){
-    transitions.to('dungeon');
-});
 
-$('#rpgLink').click(function(){
-    transitions.to('rpg');
-});
+// DEBUG: links to change between states/phases manually
+$('#menuLink').click(function(){ transitions.to('menu'); });
+$('#pixelLink').click(function(){ transitions.to('pixel'); });
+$('#pacmanLink').click(function(){ transitions.to('pacman'); });
+$('#dungeonLink').click(function(){ transitions.to('dungeon'); });
+$('#rpgLink').click(function(){ transitions.to('rpg'); });

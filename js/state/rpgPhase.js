@@ -1,4 +1,4 @@
-rpgStage = function(game) {
+rpgPhase = function(game) {
     Phaser.State.call(this); 
 
     this.game = game;
@@ -6,18 +6,18 @@ rpgStage = function(game) {
 }
 
 //Extend the player object to be a Phaser.State
-rpgStage.prototype = Object.create(Phaser.State.prototype);
-rpgStage.prototype.constructor = rpgStage;
+rpgPhase.prototype = Object.create(Phaser.State.prototype);
+rpgPhase.prototype.constructor = rpgPhase;
 
 
-rpgStage.prototype.preload = function(){
-    this.game.stage.backgroundColor = '#6db523';
-    this.load.spritesheet('player', 'assets/character.png', 79, 95);
-    this.game.load.image('tiles', 'assets/rpg_tiles.png');
+rpgPhase.prototype.preload = function(){
+    this.load.spritesheet('player', 'assets/character_large.png', 79, 95);
+    this.load.image('chest', 'assets/chest.png');
+    this.load.image('tiles', 'assets/rpg_tiles.png');
 
 }
 
-rpgStage.prototype.create = function(){
+rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this.game, 'level', 32, 32, this.generate);
     this._map.addTilesetImage('tiles');
@@ -34,11 +34,11 @@ rpgStage.prototype.create = function(){
     }*/
 
     //Instantiate new player object
-    this._player = new Player(this.game, 0.35, this.getPlayerPosition);
+    this._player = new Player(this.game, 0.4, this.getPlayerPosition);
     this.game.add.existing(this._player);
 };
 
-rpgStage.prototype.getPlayerPosition = function(){
+rpgPhase.prototype.getPlayerPosition = function(){
     var index = Math.floor(ROT.RNG.getUniform() * this.freeTiles.length);
     
     //returns an array of x and y position (nth tile) that is free.
@@ -46,7 +46,7 @@ rpgStage.prototype.getPlayerPosition = function(){
 }
 
 //map generation for RPG (cellular automata)
-rpgStage.prototype.generate = function()
+rpgPhase.prototype.generate = function()
 {
     this.freeTiles = [];
     var w = 80, h = 60;

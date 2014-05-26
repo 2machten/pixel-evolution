@@ -45,11 +45,11 @@ Player.prototype.constructor = Player;
 //collisionhandler for chests (only, currently)
 Player.prototype.collisionHandler = function(chest)
 {
-    this.game.pause = true;
+    this.game.paused = true;
     console.log('hit!');
     console.log(chest);
     chest.destroy();
-    this.game.pause = false;
+    this.game.paused = false;
 };
 
 /**
