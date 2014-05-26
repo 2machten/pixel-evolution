@@ -1,54 +1,54 @@
 rpgPhase = function(game) {
     Phaser.State.call(this); 
 
-    this.game = game;
-    this.freeTiles = [];
+    this._game = game;
+    this._freeTiles = [];
 }
 
-//Extend the player object to be a Phaser.State
+//Extend the rpgPhase object to be a Phaser.State
 rpgPhase.prototype = Object.create(Phaser.State.prototype);
 rpgPhase.prototype.constructor = rpgPhase;
 
 
 rpgPhase.prototype.preload = function(){
-    this.load.spritesheet('player', 'assets/character_large.png', 79, 95);
-    this.load.image('chest', 'assets/chest.png');
+    this.load.spritesheet('player', 'assets/character.png', 27, 32);
+    this.load.image('collectable', 'assets/chest.png');
     this.load.image('tiles', 'assets/rpg_tiles.png');
 
 }
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this.game, 'level', 32, 32, this.generate);
+    this._map = new WorldMap(this._game, 'level', 32, this.generate, this.getItemPosition);
     this._map.addTilesetImage('tiles');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
-    //spawn chests
-    /*for (var i=0; i<6; i++){
-        var index = Math.floor(ROT.RNG.getUniform() *  this._worldMap.freeTiles.length);
-        var randomFreeTile = this._worldMap.freeTiles.splice(index, 1)[0];
-        var chest = this.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
-        this.physics.enable(chest);
-        this._chests.push(chest);
-    }*/
+    //add items to the game
+    this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this.game, 0.4, this.getPlayerPosition);
-    this.game.add.existing(this._player);
+    this._player = new Player(this._game, 1, this.getPlayerPosition);
+    this._game.add.existing(this._player);
 };
 
+//Returns a position on the map where the player or an item can spawn
+rpgPhase.prototype.getItemPosition = 
 rpgPhase.prototype.getPlayerPosition = function(){
-    var index = Math.floor(ROT.RNG.getUniform() * this.freeTiles.length);
+    //shuffle the array of free tiles
+    shuffle(this._freeTiles);
     
-    //returns an array of x and y position (nth tile) that is free.
-    return this.freeTiles.splice(index, 1)[0];
+    //returns an array of x and y position (nth tile) that is free, 
+    //and remove it from the list so no other item can spawn on this position.
+    var randomPosition = this._freeTiles.pop();
+    return [randomPosition[0]*32, randomPosition[1]*32];
 }
+
 
 //map generation for RPG (cellular automata)
 rpgPhase.prototype.generate = function()
 {
-    this.freeTiles = [];
+    this._freeTiles = [];
     var w = 80, h = 60;
     var map = new ROT.Map.Cellular(w, h, {
         born: [5,6,7,8],
@@ -60,7 +60,7 @@ rpgPhase.prototype.generate = function()
     var digCallback = function(x, y, value) {
         if (value) {
             var tile = [x, y];
-            this.freeTiles.push(tile);
+            this._freeTiles.push(tile);
         }
 
         //channel info to debug so the preview can be rendered.
@@ -100,4 +100,11 @@ rpgPhase.prototype.generate = function()
     }
 
     return level;
+};
+
+
+//helper method: shuffles arrays
+function shuffle(o){ 
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
 };

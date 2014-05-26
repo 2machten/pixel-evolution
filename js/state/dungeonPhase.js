@@ -3,48 +3,83 @@ var digger;
 dungeonPhase = function(game) {
     Phaser.State.call(this); 
 
-    this.game = game;
-    this.freeTiles = [];
+    this._game = game;
+    this._freeTiles = [];
 }
 
-//Extend the player object to be a Phaser.State
+//Extend the dungeonPhase object to be a Phaser.State
 dungeonPhase.prototype = Object.create(Phaser.State.prototype);
 dungeonPhase.prototype.constructor = dungeonPhase;
 
 
 dungeonPhase.prototype.preload = function(){
-    this.load.spritesheet('player', 'assets/character_large.png', 79, 95);
+    this.load.spritesheet('player', 'assets/character.png', 27, 32);
+    this.load.image('collectable', 'assets/chest.png');
     this.load.image('tiles', 'assets/dungeon_tiles.png');
 
 }
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this.game, 'level', 32, 32, this.generate);
+    this._map = new WorldMap(this._game, 'level', 32, this.generate, this.getItemPosition);
     this._map.addTilesetImage('tiles');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
-    //spawn chests
-    /*for (var i=0; i<6; i++){
-        var index = Math.floor(ROT.RNG.getUniform() *  this._worldMap.freeTiles.length);
-        var randomFreeTile = this._worldMap.freeTiles.splice(index, 1)[0];
-        var chest = this.add.sprite(randomFreeTile[0]*32, randomFreeTile[1]*32, 'chest');
-        this.physics.enable(chest);
-        this._chests.push(chest);
-    }*/
+    //add items to the game
+    this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this.game, 0.25, this.getPlayerPosition);
-    this.game.add.existing(this._player);
+    this._player = new Player(this._game, 0.6, this.getPlayerPosition);
+    this._game.add.existing(this._player);
 };
 
+//Returns a position on the map where the player can spawn
 dungeonPhase.prototype.getPlayerPosition = function(){
     //get the index of a random room
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
     
     //return the center of htat room
-    return digger._rooms[i].getCenter();
+    var randomPosition = digger._rooms[i].getCenter();
+    return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+//Returns a position on the map where an item can spawn
+dungeonPhase.prototype.getItemPosition = function(){
+    var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
+    
+    //return a tile against the wall of that room
+    var room = digger._rooms[i];
+    var left = room.getLeft();
+    var right = room.getRight();
+    var top = room.getTop();
+    var bottom = room.getBottom();
+
+    var side = Math.floor(ROT.RNG.getUniform() * 4);    
+    var x, y;
+
+    console.log(digger);
+
+    switch(side){
+        case 0: //left wall
+            x = left;
+            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+            break;
+        case 1: //right wall
+            x = right;
+            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+            break;
+        case 2: //top wall
+            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+            y = top;
+            break;
+        case 3: //bottom wall
+            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+            y = bottom;
+            break;
+    }
+
+    return [x*32 ,y*32];
 }
 
 //map generation for dungeon (ROT uniform dungeon algorithm)
@@ -53,8 +88,8 @@ dungeonPhase.prototype.generate = function()
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
-           roomHeight: [5,10],
-           roomDugPercentage: 0.10
+       roomHeight: [5,10],
+       roomDugPercentage: 0.10
     });
     //map.randomize(0.52);
 
@@ -130,10 +165,11 @@ dungeonPhase.prototype.generate = function()
                         point = "65";
                     } else if(terrainMap[j+1][i-1] == 1 && terrainMap[j+1][i] == 1 && terrainMap[j][i-1] == 1){ //top right corner outward
                         point = "63";
-                    } else if(terrainMap[j+1][i] == 1){ //right V
-                        point = "57";
                     } else if(terrainMap[j-1][i] == 1){ //left V
                         point = "59";
+                        } else if(terrainMap[j+1][i] == 1){ //right V
+                        point = "57";
+                    
                     } else if(terrainMap[j][i-1] == 1){ //bottom V
                         point = "61";
                     } else if(terrainMap[j][i+1] == 1){ //top V

@@ -5,7 +5,7 @@ pixelPhase = function(game) {
     this.freeTiles = [];
 }
 
-//Extend the player object to be a Phaser.State
+//Extend the pixelPhase object to be a Phaser.State
 pixelPhase.prototype = Object.create(Phaser.State.prototype);
 pixelPhase.prototype.constructor = pixelPhase;
 

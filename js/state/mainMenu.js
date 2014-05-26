@@ -6,14 +6,12 @@ mainMenu = function(game) {
     this.ticks = 0;
 }
 
-//Extend the player object to be a Phaser.State
+//Extend the mainMenu object to be a Phaser.State
 mainMenu.prototype = Object.create(Phaser.State.prototype);
 mainMenu.prototype.constructor = mainMenu;
 
 
 mainMenu.prototype.preload = function(){
-    this.load.image('logo', 'assets/logo.png');
-    this.load.image('background', 'assets/pixel_bg.png');
 }
 
 mainMenu.prototype.create = function(){
@@ -37,17 +35,20 @@ mainMenu.prototype.create = function(){
 
 mainMenu.prototype.update = function(){
 	//scroll background to the left ever so slightly
-	this.background.position.x -= 0.3;
+	this.background.position.x -= 0.4;
 
 	//blink the "press start.." text every 45 ticks
 	this.ticks++;
 	if(this.ticks > 45){
+		//re-set text so it works when the custom font is loaded.
+		this.text.setText("Press start..");
+
+		//toggle visibility
 		this.text.visible = !this.text.visible;
 		this.ticks = 0;
 	}
 
-	//when clicked or any key is pressed: start the game
-	if(this.game.input.activePointer.isDown){ transitions.to('rpg'); }
-	this.game.input.keyboard.onDownCallback = function(e) { transitions.to('rpg'); }
+	//when clicked: start the game
+	if(this.input.activePointer.isDown){ transitions.to('rpg'); }
 }
 

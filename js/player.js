@@ -3,7 +3,7 @@
  */
 
 Player = function(game, scale, positionFunction) {
-    this.game = game;
+    this._game = game;
 
     //properties
     this.quests = [];
@@ -16,12 +16,12 @@ Player = function(game, scale, positionFunction) {
     startPosition = positionFunction();
 
     //create a new sprite and put it on that free spot
-    Phaser.Sprite.call(this, this.game, startPosition[0]*32, startPosition[1]*32 - 6, 'player');
+    Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], 'player');
 
     this.scale.setTo(scale, scale);
 
     //enable physics for collision detection and collide to the worlds edge
-    this.game.physics.enable(this);
+    this._game.physics.enable(this);
     this.body.collideWorldBounds = true;
 
     //Add animations for walking
@@ -32,10 +32,10 @@ Player = function(game, scale, positionFunction) {
     this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
 
     //store cursors object for controlling the character
-    this.cursors = this.game.input.keyboard.createCursorKeys();
+    this.cursors = this._game.input.keyboard.createCursorKeys();
 
     //make the camera follow the player
-    this.game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
+    this._game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
 };
 
 //Extend the player object to be a Phaser.Sprite
@@ -43,25 +43,22 @@ Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
 //collisionhandler for chests (only, currently)
-Player.prototype.collisionHandler = function(chest)
+Player.prototype.collisionHandler = function(player, chest)
 {
-    this.game.paused = true;
-    console.log('hit!');
-    console.log(chest);
+
+    player._game.showMessage("You found a chest! \n Good fucking job.");
     chest.destroy();
-    this.game.paused = false;
 };
 
 /**
  * Automatically called by World.update
  */
 Player.prototype.update = function() {
-    this.game.physics.arcade.collide(this, this.game.state.getCurrentState()._layer);
+    var tiles = this._game.state.getCurrentState()._layer;
+    this._game.physics.arcade.collide(this, tiles);
 
-    for(var i=0; i<this.game._chests.length;i++){
-        var chest = this.game._chests[i];
-        this.game.physics.arcade.collide(chest, this, this.collisionHandler, null, this.update);
-    }
+    var items = this._game.state.getCurrentState()._map._items;
+    this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
 
     //Reset speed each update (else character keeps moving, velocity not position)
     this.body.velocity.x = 0;

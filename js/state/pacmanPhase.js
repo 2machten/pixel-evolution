@@ -5,7 +5,7 @@ pacmanPhase = function(game) {
     this.freeTiles = [];
 }
 
-//Extend the player object to be a Phaser.State
+//Extend the pacmanPhase object to be a Phaser.State
 pacmanPhase.prototype = Object.create(Phaser.State.prototype);
 pacmanPhase.prototype.constructor = pacmanPhase;
 
