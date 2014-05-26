@@ -46,7 +46,7 @@ Player.prototype.constructor = Player;
 Player.prototype.collisionHandler = function(player, chest)
 {
 
-    player._game.showMessage("You found a chest! \n Good fucking job.");
+    player._game.showMessage("You found a chest!\nGood fucking job.");
     chest.destroy();
 };
 
@@ -54,65 +54,70 @@ Player.prototype.collisionHandler = function(player, chest)
  * Automatically called by World.update
  */
 Player.prototype.update = function() {
-    var tiles = this._game.state.getCurrentState()._layer;
-    this._game.physics.arcade.collide(this, tiles);
+    if(!this._game._pause){
+        var tiles = this._game.state.getCurrentState()._layer;
+        this._game.physics.arcade.collide(this, tiles);
 
-    var items = this._game.state.getCurrentState()._map._items;
-    this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
+        var items = this._game.state.getCurrentState()._map._items;
+        this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
 
-    //Reset speed each update (else character keeps moving, velocity not position)
-    this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+        //Reset speed each update (else character keeps moving, velocity not position)
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
 
-    //walk up/down/left/right
-    if (this.cursors.up.isDown)
-    {
-        this.body.velocity.y = -this.movespeed;
-        if (this.facing != 'up'){
-            this.animations.play('up');
-            this.facing = 'up';
+        //walk up/down/left/right
+        if (this.cursors.up.isDown)
+        {
+            this.body.velocity.y = -this.movespeed;
+            if (this.facing != 'up'){
+                this.animations.play('up');
+                this.facing = 'up';
 
+            }
         }
-    }
-    else if (this.cursors.down.isDown)
-    {
-        this.body.velocity.y = this.movespeed;
-        if (this.facing != 'down'){
-            this.animations.play('down');
-            this.facing = 'down';
-        }
-    } else if (this.cursors.left.isDown)
-    {
-        this.body.velocity.x = -this.movespeed;
+        else if (this.cursors.down.isDown)
+        {
+            this.body.velocity.y = this.movespeed;
+            if (this.facing != 'down'){
+                this.animations.play('down');
+                this.facing = 'down';
+            }
+        } else if (this.cursors.left.isDown)
+        {
+            this.body.velocity.x = -this.movespeed;
 
-        if (this.facing != 'left'){
-            this.animations.play('left');
-            this.facing = 'left';
+            if (this.facing != 'left'){
+                this.animations.play('left');
+                this.facing = 'left';
+            }
         }
-    }
-    else if (this.cursors.right.isDown)
-    {
-        this.body.velocity.x = this.movespeed;
-        if (this.facing != 'right'){
-            this.animations.play('right');
-            this.facing = 'right';
+        else if (this.cursors.right.isDown)
+        {
+            this.body.velocity.x = this.movespeed;
+            if (this.facing != 'right'){
+                this.animations.play('right');
+                this.facing = 'right';
+            }
+        } else {
+            //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
+            if (this.facing != 'idle'){
+                this.animations.stop();
+
+                if (this.facing == 'left'){
+                    this.frame = 8;
+                } else if (this.facing == 'right'){
+                    this.frame = 3;
+                } else if (this.facing == 'up'){
+                    this.frame = 5;
+                } else if (this.facing == 'down'){
+                    this.frame = 0;
+                }
+
+                this.facing = 'idle';
+            }
         }
     } else {
-        //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
-        if (this.facing != 'idle'){
-            this.animations.stop();
-
-            if (this.facing == 'left'){
-                this.frame = 8;
-            } else if (this.facing == 'right'){
-                this.frame = 3;
-            } else if (this.facing == 'up'){
-                this.frame = 5;
-            } else if (this.facing == 'down'){
-                this.frame = 0;
-            }
-
-            this.facing = 'idle';
-        }
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
     }
 };
