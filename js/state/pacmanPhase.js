@@ -10,9 +10,6 @@ pacmanPhase.prototype = Object.create(Phaser.State.prototype);
 pacmanPhase.prototype.constructor = pacmanPhase;
 
 
-pacmanPhase.prototype.preload = function(){
-}
-
 pacmanPhase.prototype.create = function(){
 }
 

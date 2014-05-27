@@ -9,8 +9,6 @@ rpgPhase = function(game) {
 rpgPhase.prototype = Object.create(Phaser.State.prototype);
 rpgPhase.prototype.constructor = rpgPhase;
 
-rpgPhase.prototype.preload = function(){
-}
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
@@ -24,14 +22,10 @@ rpgPhase.prototype.create = function(){
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', this.getPlayerPosition);
     
-    setTimeout(
-        (function(self) {        
-            return function() {  
-                self._game.add.existing(self._player);
-            }
-        })(this),
-        200
-    ); 
+    //postpone character creation for a sec to avoid rendering problems
+    setTimeout((function(self) { return function() {  
+            self._game.add.existing(self._player);
+        }})(this),200); 
 };
 
 //Returns a position on the map where the player or an item can spawn

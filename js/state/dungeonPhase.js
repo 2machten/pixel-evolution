@@ -10,6 +10,7 @@ dungeonPhase = function(game) {
 dungeonPhase.prototype = Object.create(Phaser.State.prototype);
 dungeonPhase.prototype.constructor = dungeonPhase;
 
+
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, this.generate, 'collectable_dungeon', this.getItemPosition);
@@ -22,14 +23,10 @@ dungeonPhase.prototype.create = function(){
     //Instantiate new player object
     this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition);
     
-    setTimeout(
-        (function(self) {        
-            return function() {  
-                self._game.add.existing(self._player);
-            }
-        })(this),
-        200
-    ); 
+    //postpone character creation for a sec to avoid rendering problems
+    setTimeout((function(self) { return function() {  
+            self._game.add.existing(self._player);
+        }})(this),200); 
 };
 
 //Returns a position on the map where the player can spawn

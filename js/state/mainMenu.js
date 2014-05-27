@@ -45,6 +45,6 @@ mainMenu.prototype.update = function(){
 	}
 
 	//when clicked: start the game
-	if(this.input.activePointer.isDown){ transitions.to('rpg'); }
+	if(this.input.activePointer.isDown){ transitions.to('pixel'); }
 }
 

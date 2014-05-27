@@ -29,14 +29,19 @@ function preload()
     this.load.image('logo', 'assets/logo.png');
     this.load.image('background', 'assets/pixel_bg.png');
 
+    //Pixel state sprites
+    this.load.spritesheet('player_pixel', 'assets/character_pixel.png', 16, 16);
+    this.load.image('tiles_pixel', 'assets/tiles_pixel.png');
+    this.load.image('collectable_pixel', 'assets/collectable_pixel.png');
+
     //Dungeon state sprites
-    this.load.spritesheet('player_dungeon', 'assets/character.png', 27, 32);
-    this.load.image('tiles_dungeon', 'assets/dungeon_tiles.png');
+    this.load.spritesheet('player_dungeon', 'assets/character_rpg.png', 27, 32);
+    this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
     this.load.image('collectable_dungeon', 'assets/chest.png');
 
     //RPG state sprites
-    this.load.spritesheet('player_rpg', 'assets/character.png', 27, 32);
-    this.load.image('tiles_rpg', 'assets/rpg_tiles.png');
+    this.load.spritesheet('player_rpg', 'assets/character_rpg.png', 27, 32);
+    this.load.image('tiles_rpg', 'assets/tiles_rpg.png');
     this.load.image('collectable_rpg', 'assets/chest.png');
 };
 
