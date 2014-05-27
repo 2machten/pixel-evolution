@@ -2,7 +2,7 @@
  * Player object, extends Phaser.Sprite
  */
 
-Player = function(game, scale, positionFunction) {
+Player = function(game, scale, sprite, positionFunction) {
     this._game = game;
 
     //properties
@@ -16,7 +16,7 @@ Player = function(game, scale, positionFunction) {
     startPosition = positionFunction();
 
     //create a new sprite and put it on that free spot
-    Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], 'player');
+    Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
 
     this.scale.setTo(scale, scale);
 
@@ -58,8 +58,11 @@ Player.prototype.update = function() {
         var tiles = this._game.state.getCurrentState()._layer;
         this._game.physics.arcade.collide(this, tiles);
 
-        var items = this._game.state.getCurrentState()._map._items;
-        this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
+        //during loading this is sometimes not working yet
+        try{
+            var items = this._game.state.getCurrentState()._map._items;
+            this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
+        }catch(e){}
 
         //Reset speed each update (else character keeps moving, velocity not position)
         this.body.velocity.x = 0;

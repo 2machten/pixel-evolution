@@ -19,12 +19,25 @@ function PixelEvolution(width, height, renderer, parent, state, transparent, ant
 PixelEvolution.prototype = Object.create(Phaser.Game.prototype);
 PixelEvolution.prototype.constructor = PixelEvolution;
 
+//preload all sprites in advance before actually starting the game.
 function preload()
 {
-    //all other preloading is done within state (phase) objects.
-    this.load.image('logo', 'assets/logo.png');
+    //general game sprites
     this.load.image('message_bg', 'assets/message_bg.png');
+    
+    //Main menu sprites
+    this.load.image('logo', 'assets/logo.png');
     this.load.image('background', 'assets/pixel_bg.png');
+
+    //Dungeon state sprites
+    this.load.spritesheet('player_dungeon', 'assets/character.png', 27, 32);
+    this.load.image('tiles_dungeon', 'assets/dungeon_tiles.png');
+    this.load.image('collectable_dungeon', 'assets/chest.png');
+
+    //RPG state sprites
+    this.load.spritesheet('player_rpg', 'assets/character.png', 27, 32);
+    this.load.image('tiles_rpg', 'assets/rpg_tiles.png');
+    this.load.image('collectable_rpg', 'assets/chest.png');
 };
 
 function create()
@@ -54,8 +67,6 @@ function create()
             }
         }
     });
-
-
 };
 
 PixelEvolution.prototype.update = function(time){
@@ -110,11 +121,12 @@ PixelEvolution.prototype.showMessage = function(message){
 
 
 // Instantiate game object.  
-var pixelEvolution = new PixelEvolution(800, 600, Phaser.AUTO, 'game', {
-        preload: preload,
-        create: create
-    }, false, false);
-    //        NOTE: To use Phaser.AUTO instead of Phaser.CANVAS, you have to run a local server.
+var pixelEvolution = new PixelEvolution(800, 600, Phaser.CANVAS, 'game', {
+    preload: preload,
+    create: create
+}, false, false);
+//        NOTE: To use Phaser.AUTO instead of Phaser.CANVAS, you have to run a local server.
+
 
 // DEBUG: links to change between states/phases manually
 $('#menuLink').click(function(){ transitions.to('menu'); });

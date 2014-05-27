@@ -1,7 +1,7 @@
 mainMenu = function(game) {
     Phaser.State.call(this); 
 
-    this.game = game;
+    this._game = game;
     this.freeTiles = [];
     this.ticks = 0;
 }
@@ -10,20 +10,16 @@ mainMenu = function(game) {
 mainMenu.prototype = Object.create(Phaser.State.prototype);
 mainMenu.prototype.constructor = mainMenu;
 
-
-mainMenu.prototype.preload = function(){
-}
-
 mainMenu.prototype.create = function(){
 	//background
-	this.background = this.game.add.tileSprite(0,0, 9999999, this.game.height, 'background');
+	this.background = this._game.add.tileSprite(0,0, 9999999, this._game.height, 'background');
 	
 	//logo
-	this.logo = this.game.add.sprite(this.game.width/2, (this.game.height* (1/3)), 'logo');
+	this.logo = this._game.add.sprite(this._game.width/2, (this._game.height* (1/3)), 'logo');
 	this.logo.anchor.setTo(0.5, 0.5);
 
 	//text "press start"
-    this.text = this.game.add.text(this.game.width/2, (this.game.height* (3/5)), "Press start..", { 
+    this.text = this._game.add.text(this._game.width/2, (this._game.height* (3/5)), "Press start..", { 
     	font: "20px 'Press Start 2P'", 
     	fill: "#fff", 
     	align: "center" 

@@ -4,25 +4,15 @@ dungeonPhase = function(game) {
     Phaser.State.call(this); 
 
     this._game = game;
-    this._freeTiles = [];
 }
 
 //Extend the dungeonPhase object to be a Phaser.State
 dungeonPhase.prototype = Object.create(Phaser.State.prototype);
 dungeonPhase.prototype.constructor = dungeonPhase;
 
-
-dungeonPhase.prototype.preload = function(){
-    this.load.spritesheet('player', 'assets/character.png', 27, 32);
-    this.load.image('collectable', 'assets/chest.png');
-    this.load.image('tiles', 'assets/dungeon_tiles.png');
-
-}
-
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 32, this.generate, this.getItemPosition);
-    this._map.addTilesetImage('tiles');
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, this.generate, 'collectable_dungeon', this.getItemPosition);
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
@@ -30,8 +20,16 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 0.6, this.getPlayerPosition);
-    this._game.add.existing(this._player);
+    this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition);
+    
+    setTimeout(
+        (function(self) {        
+            return function() {  
+                self._game.add.existing(self._player);
+            }
+        })(this),
+        200
+    ); 
 };
 
 //Returns a position on the map where the player can spawn
@@ -57,8 +55,6 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
-
-    console.log(digger);
 
     switch(side){
         case 0: //left wall

@@ -9,18 +9,12 @@ rpgPhase = function(game) {
 rpgPhase.prototype = Object.create(Phaser.State.prototype);
 rpgPhase.prototype.constructor = rpgPhase;
 
-
 rpgPhase.prototype.preload = function(){
-    this.load.spritesheet('player', 'assets/character.png', 27, 32);
-    this.load.image('collectable', 'assets/chest.png');
-    this.load.image('tiles', 'assets/rpg_tiles.png');
-
 }
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 32, this.generate, this.getItemPosition);
-    this._map.addTilesetImage('tiles');
+    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, this.generate, 'collectable_rpg', this.getItemPosition);
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
@@ -28,8 +22,16 @@ rpgPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, this.getPlayerPosition);
-    this._game.add.existing(this._player);
+    this._player = new Player(this._game, 1, 'player_rpg', this.getPlayerPosition);
+    
+    setTimeout(
+        (function(self) {        
+            return function() {  
+                self._game.add.existing(self._player);
+            }
+        })(this),
+        200
+    ); 
 };
 
 //Returns a position on the map where the player or an item can spawn
@@ -44,11 +46,10 @@ rpgPhase.prototype.getPlayerPosition = function(){
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
-
 //map generation for RPG (cellular automata)
-rpgPhase.prototype.generate = function()
-{
+rpgPhase.prototype.generate = function(){
     this._freeTiles = [];
+
     var w = 80, h = 60;
     var map = new ROT.Map.Cellular(w, h, {
         born: [5,6,7,8],

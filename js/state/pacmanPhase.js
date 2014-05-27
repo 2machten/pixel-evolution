@@ -1,7 +1,7 @@
 pacmanPhase = function(game) {
     Phaser.State.call(this); 
 
-    this.game = game;
+    this._game = game;
     this.freeTiles = [];
 }
 
