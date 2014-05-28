@@ -82,7 +82,7 @@ dungeonPhase.prototype.generate = function()
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
        roomHeight: [5,10],
-       roomDugPercentage: 0.10
+       roomDugPercentage: 0.50
     });
     //map.randomize(0.52);
 
@@ -113,10 +113,6 @@ dungeonPhase.prototype.generate = function()
 
     //add a row to the BOTTOM of the map
     for(var i = 0; i < terrainMap.length; i++){ terrainMap[i].push("border"); }
-
-    console.log(terrainMap.length);
-    console.log(terrainMap[1].length);
-    console.log(terrainMap);
 
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
     startLocation = digger._rooms[i].getCenter();
