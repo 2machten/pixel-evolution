@@ -36,6 +36,8 @@
 
     //make the camera follow the player
     this._game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
+
+    this.ticks = 0;
 };
 
 //Extend the player object to be a Phaser.Sprite
@@ -56,6 +58,7 @@ Player.prototype.collisionHandler = function(player, chest)
  */
  Player.prototype.update = function() {
     if(!this._game._pause){
+
         var tiles = this._game.state.getCurrentState()._layer;
         this._game.physics.arcade.collide(this, tiles);
 

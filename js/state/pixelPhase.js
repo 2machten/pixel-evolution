@@ -21,9 +21,55 @@ pixelPhase.prototype.create = function(){
 
     //Instantiate new player object
 	this._player = new Player(this._game, 1, 'player_pixel', this.getPlayerPosition);
+    
+    //Override the update function
     this._player.update = function(){
+        if(!this._game._pause){
 
+            this.ticks++;
+            if (this.ticks > 4) {
+
+            var spriteSize = 16;
+
+            //during loading this is sometimes not working yet
+            try{
+                var items = this._game.state.getCurrentState()._map._items;
+                //this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
+                this._game.physics.arcade.overlap(this, items, this.collisionHandler, null, this.update);
+            }catch(e){}
+
+            //Reset speed each update (else character keeps moving, velocity not position)
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
+
+            
+                //walk up/down/left/right
+                if (this.cursors.up.isDown)
+                {
+                    this.y = this.position.y-spriteSize;                   
+                }
+                else if (this.cursors.down.isDown)
+                {             
+                    this.y = this.position.y+spriteSize;              
+                } else if (this.cursors.left.isDown)
+                {                  
+                    this.x = this.position.x-spriteSize;
+                }
+                else if (this.cursors.right.isDown)
+                {
+                    this.x = this.position.x+spriteSize;     
+                } else {
+
+                }
+                this.ticks = 0;
+            }
+        } else {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;            
+        }
     };
+
+    //Override the collision detection.
 
 	//postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
