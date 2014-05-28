@@ -2,7 +2,7 @@
  * Player object, extends Phaser.Sprite
  */
 
-Player = function(game, scale, sprite, positionFunction) {
+ Player = function(game, scale, sprite, positionFunction) {
     this._game = game;
 
     //properties
@@ -50,10 +50,11 @@ Player.prototype.collisionHandler = function(player, chest)
     chest.destroy();
 };
 
+
 /**
  * Automatically called by World.update
  */
-Player.prototype.update = function() {
+ Player.prototype.update = function() {
     if(!this._game._pause){
         var tiles = this._game.state.getCurrentState()._layer;
         this._game.physics.arcade.collide(this, tiles);

@@ -2,7 +2,6 @@ mainMenu = function(game) {
     Phaser.State.call(this); 
 
     this._game = game;
-    this.freeTiles = [];
     this.ticks = 0;
 }
 
