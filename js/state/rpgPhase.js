@@ -54,7 +54,7 @@ rpgPhase.prototype.generate = function(){
     var display;
     var digCallback = function(x, y, value) {
         if (value) {
-            var tile = [x, y];
+            var tile = [x, y+1]; //+1 for border tile compensation
             this._freeTiles.push(tile);
         }
 
@@ -72,6 +72,21 @@ rpgPhase.prototype.generate = function(){
             map.create(digCallback.bind(this));
         }
     }
+
+    //add a row to the TOP of the map
+    for(var i = 0; i < map._map.length; i++){ map._map[i].unshift("border"); }
+
+    //add a column to the LEFT of the map
+    map._map[0] = [];
+    for(var i = 0; i < map._map[1].length; i++){ map._map[0].push("border"); }
+
+    //add a column to the RIGHT of the map
+    map._map[map._map.length-1] = [];
+    for(var i = 0; i < map._map[1].length; i++){ map._map[map._map.length-1].push("border"); }
+
+    //add a row to the BOTTOM of the map
+    for(var i = 0; i < map._map.length; i++){ map._map[i].push("border"); }
+
     //show map in canvas
     if (pixelEvolution._showMinimap){
         $('#minimap').html(display.getContainer());
@@ -83,7 +98,7 @@ rpgPhase.prototype.generate = function(){
         for (var j=0; j<map._map.length; j++) {
             var point = map._map[j][i]+"";
 
-            if(point=="0"){
+            if(point=="0" || point=="border"){
                 point = "1";
             } else {
                 point = "0";
@@ -91,7 +106,7 @@ rpgPhase.prototype.generate = function(){
 
             level += point + ",";
         }
-        level += "\n";
+        level = level.substring(0,level.length-1) + "\n";
     }
 
     return level;

@@ -36,7 +36,7 @@ dungeonPhase.prototype.getPlayerPosition = function(){
     
     //return the center of htat room
     var randomPosition = digger._rooms[i].getCenter();
-    return [randomPosition[0]*32, randomPosition[1]*32];
+    return [(randomPosition[0]+1)*32, (randomPosition[1]+1)*32]; //+1 for border tile compensation
 }
 
 //Returns a position on the map where an item can spawn
@@ -45,10 +45,10 @@ dungeonPhase.prototype.getItemPosition = function(){
     
     //return a tile against the wall of that room
     var room = digger._rooms[i];
-    var left = room.getLeft();
-    var right = room.getRight();
-    var top = room.getTop();
-    var bottom = room.getBottom();
+    var left = room.getLeft()+1; //+1 for border tile compensation
+    var right = room.getRight()+1;
+    var top = room.getTop()+1;
+    var bottom = room.getBottom()+1;
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
@@ -90,11 +90,11 @@ dungeonPhase.prototype.generate = function()
     var terrainMap = [];
 
     var digCallback = function(x, y, value) {
-        if(terrainMap[x] == null){
-            terrainMap[x] = [];
+        if(terrainMap[x+1] == null){
+            terrainMap[x+1] = ["border",]; //add row to the TOP of the map
         }
 
-        terrainMap[x][y] = value;
+        terrainMap[x+1][y+1] = value; //+1 for border tile compensation
 
         //channel info to debug so the preview can be rendered.
         display.DEBUG(x,y,value);
@@ -102,6 +102,21 @@ dungeonPhase.prototype.generate = function()
 
     display = new ROT.Display({width:w, height:h, fontSize:4});
     digger.create(digCallback.bind(this));
+
+    //add a column to the LEFT of the map
+    terrainMap[0] = [];
+    for(var i = 0; i < terrainMap[1].length; i++){ terrainMap[0].push("border"); }
+
+    //add a column to the RIGHT of the map
+    terrainMap[terrainMap.length-1] = [];
+    for(var i = 0; i < terrainMap[1].length; i++){ terrainMap[terrainMap.length-1].push("border"); }
+
+    //add a row to the BOTTOM of the map
+    for(var i = 0; i < terrainMap.length; i++){ terrainMap[i].push("border"); }
+
+    console.log(terrainMap.length);
+    console.log(terrainMap[1].length);
+    console.log(terrainMap);
 
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
     startLocation = digger._rooms[i].getCenter();
@@ -148,7 +163,7 @@ dungeonPhase.prototype.generate = function()
         for (var j=0; j<terrainMap.length; j++) {
             var point = terrainMap[j][i]+"";
 
-            if(point=="0"){
+            if(point=="0" || point=="border"){
                 try{
                     if(terrainMap[j-1][i+1] == 1 && terrainMap[j-1][i] == 1 && terrainMap[j][i+1] == 1){ //bottom left corner outward
                         point = "66";
@@ -188,7 +203,7 @@ dungeonPhase.prototype.generate = function()
 
             level += point + ",";
         }
-        level += "\n";
+        level = level.substring(0,level.length-1) + "\n";
     }
 
     return level;
