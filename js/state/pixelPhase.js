@@ -2,6 +2,10 @@ pixelPhase = function(game) {
     Phaser.State.call(this); 
 
     this._game = game;
+
+    // Check which level of the phase it is.
+    
+    this.ran = false;
 }
 
 
@@ -19,8 +23,18 @@ pixelPhase.prototype.create = function(){
     //add items to the game
     this._game.add.existing(this._map._items);
 
+    //Switch player sprites
+
     //Instantiate new player object
-	this._player = new Player(this._game, 1, 'player_pixel', this.getPlayerPosition);
+    switch (this._game.pixelLevel) {
+        case 0: 
+            this._player = new Player(this._game, 1, 'player_pixel1', this.getPlayerPosition);
+            break;
+        case 1:
+            this._player = new Player(this._game, 1, 'player_pixel2', this.getPlayerPosition);
+            break;
+    }
+	
     
     //Override the update function
     this._player.update = function(){
@@ -34,7 +48,6 @@ pixelPhase.prototype.create = function(){
             //during loading this is sometimes not working yet
             try{
                 var items = this._game.state.getCurrentState()._map._items;
-                //this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
                 this._game.physics.arcade.overlap(this, items, this.collisionHandler, null, this.update);
             }catch(e){}
 
@@ -67,9 +80,8 @@ pixelPhase.prototype.create = function(){
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;            
         }
-    };
 
-    //Override the collision detection.
+    };
 
 	//postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
@@ -78,6 +90,20 @@ pixelPhase.prototype.create = function(){
 }
 
 pixelPhase.prototype.update = function(){
+    var items = this._game.state.getCurrentState()._map._items;
+    
+
+        if(items.children.length > 0) {
+            console.log(items.children.length);
+        }
+        else if(items.children.length == 0 && !this.ran){
+            this.ran = true;
+            console.log("Finished a level");
+            console.log(this._game.pixelLevel);
+            this._game.pixelLevel++;
+
+
+        }
 }
 
 
@@ -92,6 +118,7 @@ pixelPhase.prototype.getItemPosition = function(){
     return [x*16, y*16];
 }
 
+//Create a black background to make transitions between phases smoother.
 pixelPhase.prototype.generate = function(){
 	return "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n"+
            "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n"+

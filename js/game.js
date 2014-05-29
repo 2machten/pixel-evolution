@@ -7,11 +7,15 @@
 
 var transitions = null;
 
+
 function PixelEvolution(width, height, renderer, parent, state, transparent, antialias)
 {
     // game variables
     this._pause = false;
     this._showMinimap = false;
+
+    this.pixelLevel = 0;
+    this.ran = false;
 
     Phaser.Game.call(this, width, height, renderer, parent, state, transparent, antialias);
 }
@@ -30,7 +34,8 @@ function preload()
     this.load.image('background', 'assets/pixel_bg.png');
 
     //Pixel state sprites
-    this.load.spritesheet('player_pixel', 'assets/character_pixel.png', 16, 16);
+    this.load.spritesheet('player_pixel1', 'assets/character_pixel.png', 16, 16);
+    this.load.spritesheet('player_pixel2', 'assets/character_pixel2.png', 16, 16);
     this.load.image('tiles_pixel', 'assets/tiles_pixel.png');
     this.load.image('collectable_pixel', 'assets/collectable_pixel.png');
 
@@ -77,6 +82,14 @@ function create()
 PixelEvolution.prototype.update = function(time){
     //super(), neccesary for it to function
     Phaser.Game.prototype.update.call(this, time);
+
+    if(this.pixelLevel == 1 && !this.ran) {
+        console.log("true");
+        this.ran = true;
+        //Start the pixelPhase again.
+        this.state.add('pixel2', pixelPhase, false);
+        transitions.to('pixel2');
+    }
 
     if(this.input.activePointer.isDown && this._bg){ 
         this._bg.destroy();
