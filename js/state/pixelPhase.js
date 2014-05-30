@@ -6,6 +6,7 @@ pixelPhase = function(game) {
     // Check which level of the phase it is.
     
     this.ran = false;
+    this.ticks = 0;
 }
 
 
@@ -36,7 +37,7 @@ pixelPhase.prototype.create = function(){
     }
 	
     
-    //Override the update function
+    //Override the Player's update function
     this._player.update = function(){
         if(!this._game._pause){
 
@@ -90,22 +91,40 @@ pixelPhase.prototype.create = function(){
 }
 
 pixelPhase.prototype.update = function(){
-    var items = this._game.state.getCurrentState()._map._items;
-    
+    this.ticks++;
+    var map = this._game.state.getCurrentState()._map;
+    var items = map._items;
 
-        if(items.children.length > 0) {
-            console.log(items.children.length);
-        }
-        else if(items.children.length == 0 && !this.ran){
+        if(items.children.length == 0 && !this.ran){
+            console.log("Next level");
             this.ran = true;
-            console.log("Finished a level");
-            console.log(this._game.pixelLevel);
             this._game.pixelLevel++;
-
-
         }
-}
+        if(this.ticks > 100 && items.children.length > 0) {
+            this.ticks = 0;
 
+            //Respawn.
+            var collectables = [];
+            console.log(items.children);
+            console.log(items.children.length);
+            for(var i = 0; i < items.children.length; i++) {
+                console.log(i);
+                items.children[i].destroy();
+                var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
+                var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], 'collectable_pixel');
+                pixelEvolution.physics.enable(collectable);
+                i--;
+                collectables.push(collectable);
+            }
+            for(var j = 0; j < collectables.length; j++) {
+                items.add(collectables[j])
+            }
+
+            console.log(collectables);
+            console.log("\n");
+        }
+        
+}
 
 pixelPhase.prototype.getPlayerPosition = function(){
     return [Math.floor(pixelEvolution.width/32)*16, Math.floor(pixelEvolution.height/32)*16];
