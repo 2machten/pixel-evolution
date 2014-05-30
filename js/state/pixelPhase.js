@@ -1,10 +1,7 @@
 pixelPhase = function(game) {
     Phaser.State.call(this); 
 
-    this._game = game;
-
-    // Check which level of the phase it is.
-    
+    this._game = game;    
     this.ran = false;
     this.ticks = 0;
 }
@@ -16,17 +13,17 @@ pixelPhase.prototype.constructor = pixelPhase;
 
 
 pixelPhase.prototype.create = function(){
-    //instantiate worldmap and create layer (this displays the map)
+    //Instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this._game, 'level', 'tiles_pixel', 16, this.generate, 'collectable_pixel', this.getItemPosition);
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
-    //add items to the game
+    //Add items to the game
     this._game.add.existing(this._map._items);
 
-    //Switch player sprites
 
-    //Instantiate new player object
+
+    //Instantiate new player object and switch sprites depending on the level.
     switch (this._game.pixelLevel) {
         case 0: 
             this._player = new Player(this._game, 1, 'player_pixel1', this.getPlayerPosition);
@@ -46,7 +43,7 @@ pixelPhase.prototype.create = function(){
 
             var spriteSize = 16;
 
-            //during loading this is sometimes not working yet
+            //During loading this is sometimes not working yet
             try{
                 var items = this._game.state.getCurrentState()._map._items;
                 this._game.physics.arcade.overlap(this, items, this.collisionHandler, null, this.update);
@@ -81,7 +78,6 @@ pixelPhase.prototype.create = function(){
             this.body.velocity.x = 0;
             this.body.velocity.y = 0;            
         }
-
     };
 
 	//postpone character creation for a sec to avoid rendering problems
@@ -95,15 +91,15 @@ pixelPhase.prototype.update = function(){
     var map = this._game.state.getCurrentState()._map;
     var items = map._items;
 
-        if(items.children.length == 0 && !this.ran){
+        //Check whether the collectables are collected, and whether we have not switched to level 1 yet.
+        if(items.children.length == 0 && !this.ran && this._game.pixelLevel == 0){
             console.log("Next level");
             this.ran = true;
             this._game.pixelLevel++;
         }
-        if(this.ticks > 100 && items.children.length > 0) {
+        //If in level 1 and time is up, respawn collectables.
+        if(this.ticks > 100 && items.children.length > 0 && this._game.pixelLevel == 1) {
             this.ticks = 0;
-
-            //Respawn.
             var collectables = [];
 
             for(var i = 0; i < items.children.length; i++) {
@@ -111,12 +107,14 @@ pixelPhase.prototype.update = function(){
                 //Destroying moves all items to the left.
                 i--;
 
+                //Create a new collectable on a random location.
                 var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
                 var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], 'collectable_pixel');
                 pixelEvolution.physics.enable(collectable);
 
                 collectables.push(collectable);
             }
+            //Add all new items to the item-group.
             for(var j = 0; j < collectables.length; j++) {
                 items.add(collectables[j])
             }

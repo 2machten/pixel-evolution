@@ -83,8 +83,8 @@ PixelEvolution.prototype.update = function(time){
     //super(), neccesary for it to function
     Phaser.Game.prototype.update.call(this, time);
 
+    //Switch from level 0 to level 1.
     if(this.pixelLevel == 1 && !this.ran) {
-        console.log("true");
         this.ran = true;
         //Start the pixelPhase again.
         this.state.add('pixel2', pixelPhase, false);
