@@ -40,9 +40,22 @@ dungeonPhase.prototype.getPlayerPosition = function(){
 }
 
 //Returns a position on the map where an item can spawn
+var roomObjectCount = {};
+var maxObjectsPerRoom = 1;
+
 dungeonPhase.prototype.getItemPosition = function(){
-    var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
-    
+    var i;
+    while(roomObjectCount[i] > maxObjectsPerRoom || typeof i == "undefined"){
+        i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
+        
+        //roomObjectCount[i] = 1;
+        if(typeof roomObjectCount[i] == "undefined"){
+            roomObjectCount[i] = 1;
+        } else {
+            roomObjectCount[i]++; 
+        }
+    }
+
     //return a tile against the wall of that room
     var room = digger._rooms[i];
     var left = room.getLeft()+1; //+1 for border tile compensation
@@ -52,24 +65,38 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
+    var prohibitedx = [];
+    var prohibitedy = []; //x and y's from doors: we dont want to have chests spawning there.
 
-    switch(side){
-        case 0: //left wall
-            x = left;
-            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
-            break;
-        case 1: //right wall
-            x = right;
-            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
-            break;
-        case 2: //top wall
-            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
-            y = top;
-            break;
-        case 3: //bottom wall
-            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
-            y = bottom;
-            break;
+    //find all the coordinates of all doors in the current room
+    for (var door in room._doors){
+        var coords = door.split(',');
+        prohibitedx.push(coords[0]);
+        prohibitedy.push(coords[1]);
+    }
+
+    //retry when the x and y match a door location. 
+
+    ////////////////////////////////NOTE: super ugly, but functional.
+    while(prohibitedx.indexOf(x) != -1 && prohibitedy.contains(y) != -1 || typeof x == "undefined"){
+        switch(side){
+            case 0: //left wall
+                x = left;
+                y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+                break;
+            case 1: //right wall
+                x = right;
+                y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+                break;
+            case 2: //top wall
+                x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+                y = top;
+                break;
+            case 3: //bottom wall
+                x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+                y = bottom;
+                break;
+        }
     }
 
     return [x*32 ,y*32];
@@ -81,8 +108,8 @@ dungeonPhase.prototype.generate = function()
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
-       roomHeight: [5,10],
-       roomDugPercentage: 0.50
+        roomHeight: [5,10],
+        roomDugPercentage: 0.12
     });
     //map.randomize(0.52);
 
