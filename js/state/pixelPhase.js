@@ -105,23 +105,21 @@ pixelPhase.prototype.update = function(){
 
             //Respawn.
             var collectables = [];
-            console.log(items.children);
-            console.log(items.children.length);
+
             for(var i = 0; i < items.children.length; i++) {
-                console.log(i);
                 items.children[i].destroy();
+                //Destroying moves all items to the left.
+                i--;
+
                 var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
                 var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], 'collectable_pixel');
                 pixelEvolution.physics.enable(collectable);
-                i--;
+
                 collectables.push(collectable);
             }
             for(var j = 0; j < collectables.length; j++) {
                 items.add(collectables[j])
             }
-
-            console.log(collectables);
-            console.log("\n");
         }
         
 }
