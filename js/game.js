@@ -43,6 +43,7 @@ function preload()
     this.load.spritesheet('player_dungeon', 'assets/character_rpg.png', 27, 32);
     this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
     this.load.image('collectable_dungeon', 'assets/chest.png');
+    this.load.image('door_dungeon', 'assets/keyhole_block.png');
 
     //RPG state sprites
     this.load.spritesheet('player_rpg', 'assets/character_rpg.png', 27, 32);
