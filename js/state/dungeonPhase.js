@@ -13,12 +13,24 @@ dungeonPhase.prototype.constructor = dungeonPhase;
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, this.generate, 'collectable_dungeon', this.getItemPosition);
+    this._map = new WorldMap(
+        this._game,             //game
+        'level',                //reference to tilemap
+        'tiles_dungeon',        //reference to tile images
+        32,                     //tileimage dimensions
+        this.generate,          //map generation function
+        'collectable_dungeon',  //collectable image
+        this.getItemPosition    //item position function
+    );
+
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
     //add items to the game
     this._game.add.existing(this._map._items);
+
+    //add doors to the game
+    this._game.add.existing(this._map._doors);
 
     //Instantiate new player object
     this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition);
@@ -40,9 +52,26 @@ dungeonPhase.prototype.getPlayerPosition = function(){
 }
 
 //Returns a position on the map where an item can spawn
-dungeonPhase.prototype.getItemPosition = function(){
+var roomObjectCount = {};
+var roomDoorCount = {};
+
+dungeonPhase.prototype.getRoom = function(condition, log){
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
-    
+
+    if(condition(i)){
+        //increase log array
+        if(typeof log[i] == "undefined"){ log[i] = 1; } else { log[i]++; }
+        return i;
+    } else {
+        return this.getRoom(condition, log);
+    }
+
+}
+
+dungeonPhase.prototype.getItemPosition = function(){
+    //get right room index to put a door at.
+    var i = this.getRoom(function(i){return ((roomDoorCount[i] > 0) && (typeof roomObjectCount[i] == "undefined"));}, roomObjectCount);
+
     //return a tile against the wall of that room
     var room = digger._rooms[i];
     var left = room.getLeft()+1; //+1 for border tile compensation
@@ -52,27 +81,59 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
+    var prohibitedx = [];
+    var prohibitedy = []; //x and y's from doors: we dont want to have chests spawning there.
 
-    switch(side){
-        case 0: //left wall
-            x = left;
-            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
-            break;
-        case 1: //right wall
-            x = right;
-            y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
-            break;
-        case 2: //top wall
-            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
-            y = top;
-            break;
-        case 3: //bottom wall
-            x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
-            y = bottom;
-            break;
+    //find all the coordinates of all doors in the current room
+    for (var door in room._doors){
+        var coords = door.split(',');
+        prohibitedx.push(coords[0]);
+        prohibitedy.push(coords[1]);
+    }
+
+    //retry when the x and y match a door location. 
+
+    ////////////////////////////////NOTE: super ugly, but functional.
+    while((prohibitedx.indexOf(x) != -1 && prohibitedy.contains(y) != -1) || typeof x == "undefined"){
+        switch(side){
+            case 0: //left wall
+                x = left;
+                y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+                break;
+            case 1: //right wall
+                x = right;
+                y = top + Math.floor(ROT.RNG.getUniform() * (bottom-top));
+                break;
+            case 2: //top wall
+                x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+                y = top;
+                break;
+            case 3: //bottom wall
+                x = left + Math.floor(ROT.RNG.getUniform() * (right-left));
+                y = bottom;
+                break;
+        }
     }
 
     return [x*32 ,y*32];
+}
+
+dungeonPhase.prototype.getDoorPosition = function(){
+    //get right room index to put a door at.
+    var i = this.getRoom(function(i){return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length < 2);}, roomDoorCount);
+
+    console.log("room " + i + " has a door");
+    //return a tile against the wall of that room
+    var room = digger._rooms[i];
+    var x,y;
+    for (var door in room._doors){
+        var coords = door.split(',');
+        x = parseInt(coords[0])+1;
+        y = parseInt(coords[1])+1;
+
+        
+        return [x*32 ,y*32];
+    }
 }
 
 //map generation for dungeon (ROT uniform dungeon algorithm)
@@ -81,8 +142,8 @@ dungeonPhase.prototype.generate = function()
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
-       roomHeight: [5,10],
-       roomDugPercentage: 0.50
+        roomHeight: [5,10],
+        roomDugPercentage: 0.12
     });
     //map.randomize(0.52);
 
@@ -109,6 +170,8 @@ dungeonPhase.prototype.generate = function()
 
     //add a column to the RIGHT of the map
     terrainMap[terrainMap.length-1] = [];
+    for(var i = 0; i < terrainMap[1].length; i++){ terrainMap[terrainMap.length-1].push("border"); }
+        terrainMap[terrainMap.length-1] = [];
     for(var i = 0; i < terrainMap[1].length; i++){ terrainMap[terrainMap.length-1].push("border"); }
 
     //add a row to the BOTTOM of the map
