@@ -6,6 +6,7 @@
  */
 
 var transitions = null;
+var run = false;
 
 
 function PixelEvolution(width, height, renderer, parent, state, transparent, antialias)
@@ -14,9 +15,7 @@ function PixelEvolution(width, height, renderer, parent, state, transparent, ant
     this._pause = false;
     this._showMinimap = false;
 
-    this.pixelLevel = 0;
-    this.ran = false;
-
+    this._level = 0;
     Phaser.Game.call(this, width, height, renderer, parent, state, transparent, antialias);
 }
 
@@ -88,12 +87,10 @@ PixelEvolution.prototype.update = function(time){
     //super(), neccesary for it to function
     Phaser.Game.prototype.update.call(this, time);
 
-    //Switch from level 0 to level 1.
-    if(this.pixelLevel == 1 && !this.ran) {
-        this.ran = true;
-        //Start the pixelPhase again.
-        this.state.add('pixel2', pixelPhase, false);
-        transitions.to('pixel2');
+    if(run) {
+        run = false;
+        this.switchLevel();
+        
     }
 
     if(this.input.activePointer.isDown && this._bg){ 
@@ -101,6 +98,20 @@ PixelEvolution.prototype.update = function(time){
         this._continue.destroy();
         this._message.destroy();
         this._pause = false;
+    }
+}
+
+
+PixelEvolution.prototype.switchLevel = function() {
+    switch(this._level) {
+        case 1: transitions.to('pixel');
+                console.log("level1");
+                break;
+        case 2: transitions.to('pixel');
+                console.log("level2");
+                break;
+        case 3: transitions.to('pacman');
+                console.log("level3");
     }
 }
 
@@ -152,8 +163,8 @@ var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
 
 
 // DEBUG: links to change between states/phases manually
-$('#menuLink').click(function(){ transitions.to('menu'); });
-$('#pixelLink').click(function(){ transitions.to('pixel'); });
-$('#pacmanLink').click(function(){ transitions.to('pacman'); });
-$('#dungeonLink').click(function(){ transitions.to('dungeon'); });
-$('#rpgLink').click(function(){ transitions.to('rpg'); });
+$('#menuLink').click(function(){    pixelEvolution._level = 0; transitions.to(   'menu'); });
+$('#pixelLink').click(function(){   pixelEvolution._level = 0; transitions.to('pixel'); });
+$('#pacmanLink').click(function(){  pixelEvolution._level = 3; transitions.to('pacman'); });
+$('#dungeonLink').click(function(){ pixelEvolution._level = 6; transitions.to('dungeon'); });
+$('#rpgLink').click(function(){     pixelEvolution._level = 9; transitions.to('rpg'); });

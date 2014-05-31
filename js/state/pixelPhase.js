@@ -21,18 +21,18 @@ pixelPhase.prototype.create = function(){
     //Add items to the game
     this._game.add.existing(this._map._items);
 
-
-
     //Instantiate new player object and switch sprites depending on the level.
-    switch (this._game.pixelLevel) {
+    switch (this._game._level) {
         case 0: 
             this._player = new Player(this._game, 1, 'player_pixel1', this.getPlayerPosition);
             break;
         case 1:
             this._player = new Player(this._game, 1, 'player_pixel2', this.getPlayerPosition);
             break;
-    }
-	
+        case 2:
+            this._player = new Player(this._game, 1, 'player_pixel2', this.getPlayerPosition);
+            break;
+    }	
     
     //Override the Player's update function
     this._player.update = function(){
@@ -92,13 +92,15 @@ pixelPhase.prototype.update = function(){
     var items = map._items;
 
         //Check whether the collectables are collected, and whether we have not switched to level 1 yet.
-        if(items.children.length == 0 && !this.ran && this._game.pixelLevel == 0){
+        if(items.children.length == 0 && !this.ran && this._game._level == 0){
             console.log("Next level");
             this.ran = true;
-            this._game.pixelLevel++;
-        }
+            run = true;
+            this._game._level++;
+            console.log(this._game._level);
+        } 
         //If in level 1 and time is up, respawn collectables.
-        if(this.ticks > 100 && items.children.length > 0 && this._game.pixelLevel == 1) {
+        if(this.ticks > 100 && items.children.length > 0 && this._game._level != 0) {
             this.ticks = 0;
             var collectables = [];
 
