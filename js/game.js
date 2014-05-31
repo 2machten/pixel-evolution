@@ -39,6 +39,11 @@ function preload()
     this.load.image('tiles_pixel', 'assets/tiles_pixel.png');
     this.load.image('collectable_pixel', 'assets/collectable_pixel.png');
 
+    //Pacman state sprites
+    this.load.spritesheet('player_pacman', 'assets/character_rpg.png', 27, 32);
+    this.load.image('tiles_pacman', 'assets/tiles_dungeon.png');
+    this.load.image('collectable_pacman', 'assets/collectable_pixel.png');
+
     //Dungeon state sprites
     this.load.spritesheet('player_dungeon', 'assets/character_rpg.png', 27, 32);
     this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
