@@ -1,8 +1,5 @@
 /**
  * Main game object.
- *
- * This object is also given to Phaser.Game. To make sure it is all
- * compatible, all internal variables and methods are prefixed with _.
  */
 
 var transitions = null;
