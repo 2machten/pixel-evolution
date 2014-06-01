@@ -18,7 +18,7 @@ WorldMap = function(game, key, tileSprite, tileSize, generateFunction, collectab
     this.setCollisionByExclusion([0]);
 
     //create a group of doors
-    if(this._game._level == 7){
+    if(this._game._level == 6){
         this._doors = new Phaser.Group(this._game, null, "doors", false);
         //spawn collectables in this group
         for (var i=0; i<3; i++){

@@ -4,6 +4,7 @@
 
  Player = function(game, scale, sprite, positionFunction) {
     this._game = game;
+    var state = this._game.state.getCurrentState();
 
     //properties
     this.quests = [];
@@ -13,7 +14,7 @@
     this.movespeed = 150;
     this.facing = "down";
 
-    startPosition = positionFunction();
+    startPosition = state.getPlayerPosition();
 
     //create a new sprite and put it on that free spot
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
