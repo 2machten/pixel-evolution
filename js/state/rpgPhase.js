@@ -127,7 +127,7 @@ rpgPhase.prototype.generate = function(){
        rFreeTiles[tile[0]][tile[1]] = i;
     }
 
-    // now, get all tiles
+    // now, unionize all free tiles together
 
     for (var i = 0; i < this._freeTiles.length; i++) {
         var tile = this._freeTiles[i];
@@ -157,7 +157,28 @@ rpgPhase.prototype.generate = function(){
         }
     }
 
-    console.log(union);
+    // find all open fields
+    var fields = {};
+
+    for (var i = 0; i < this._freeTiles.length; i++) {
+        var field = union.find(i);
+        if (!(field in fields)) {
+            fields[field] = [];
+        }
+        fields[field].push(this._freeTiles[i]);
+    }
+
+    // find the largest open field
+    var max = 0;
+    var largest;
+    $.each(fields, function(index, field) {
+        if (field.length > max) {
+            max = field.length;
+            largest = field;
+        }
+    });
+
+    this._freeTiles = largest;
 
     return level;
 };
