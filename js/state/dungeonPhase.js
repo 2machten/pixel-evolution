@@ -149,11 +149,14 @@ dungeonPhase.prototype.getDoorPosition = function(){
 //map generation for dungeon (ROT uniform dungeon algorithm)
 dungeonPhase.prototype.generate = function()
 {
+    roomObjectCount = {};
+    roomDoorCount = {};
+
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
         roomHeight: [5,10],
-        roomDugPercentage: 0.12
+        roomDugPercentage: 0.13
     });
     //map.randomize(0.52);
 
