@@ -91,7 +91,8 @@ PixelEvolution.prototype.update = function(time){
         
     }
 
-    if(this.input.activePointer.isDown && this._bg){ 
+    if((this.input.activePointer.isDown || this.input.keyboard.isDown(Phaser.Keyboard.ENTER)) && this._bg){ 
+        console.log(this);
         this._bg.destroy();
         this._continue.destroy();
         this._message.destroy();
