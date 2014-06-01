@@ -12,7 +12,7 @@ pacmanPhase.prototype.constructor = pacmanPhase;
 
 pacmanPhase.prototype.create = function(){
 	//instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, this.generate, 'collectable_pacman', this.getItemPosition);
+    this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, this.generate, 'collectable_pacman');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
@@ -20,7 +20,7 @@ pacmanPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
 	//create player
-    this._player = new Player(this._game, 0.85, 'player_pacman', this.getPlayerPosition);
+    this._player = new Player(this._game, 0.85, 'player_pacman');
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  

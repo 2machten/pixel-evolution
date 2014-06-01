@@ -12,7 +12,7 @@ rpgPhase.prototype.constructor = rpgPhase;
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, this.generate, 'collectable_rpg', this.getItemPosition);
+    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, this.generate, 'collectable_rpg');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
@@ -20,7 +20,7 @@ rpgPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_rpg', this.getPlayerPosition);
+    this._player = new Player(this._game, 1, 'player_rpg');
     
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
