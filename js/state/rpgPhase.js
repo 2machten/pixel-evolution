@@ -9,6 +9,16 @@ rpgPhase = function(game) {
 rpgPhase.prototype = Object.create(Phaser.State.prototype);
 rpgPhase.prototype.constructor = rpgPhase;
 
+rpgPhase.prototype.update = function(){
+    //Check whether the collectables are collected,and whether we are not yet in the last level of the phase.
+        if(items.children.length == 0 && !this.ran && this._game._level != 11){
+            console.log("Next level");
+            this.ran = true;
+            run = true;
+            this._game._level++;
+            console.log(this._game._level);
+        } 
+}
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)

@@ -91,8 +91,8 @@ pixelPhase.prototype.update = function(){
     var map = this._game.state.getCurrentState()._map;
     var items = map._items;
 
-        //Check whether the collectables are collected, and whether we have not switched to level 1 yet.
-        if(items.children.length == 0 && !this.ran && this._game._level == 0){
+        //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
+        if(items.children.length == 0 && !this.ran && this._game._level != 2){
             console.log("Next level");
             this.ran = true;
             run = true;
