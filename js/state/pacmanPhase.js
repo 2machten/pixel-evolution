@@ -20,7 +20,7 @@ pacmanPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
 	//create player
-    this._player = new Player(this._game, 0.85, 'player_pacman');
+    this._player = new Player(this._game, 1, 'player_pacman');
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
