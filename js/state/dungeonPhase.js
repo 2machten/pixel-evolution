@@ -37,11 +37,10 @@ dungeonPhase.prototype.create = function(){
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
-    //add items to the game
+    //add items, doors and keys to the game
     this._game.add.existing(this._map._items);
-
-    //add doors to the game
     this._game.add.existing(this._map._doors);
+    this._game.add.existing(this._map._keys);
 
     //Instantiate new player object
     this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition);
@@ -52,15 +51,8 @@ dungeonPhase.prototype.create = function(){
         }})(this),200); 
 };
 
-//Returns a position on the map where the player can spawn
-dungeonPhase.prototype.getPlayerPosition = function(){
-    //get the index of a random room
-    var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
-    
-    //return the center of htat room
-    var randomPosition = digger._rooms[i].getCenter();
-    return [(randomPosition[0]+1)*32, (randomPosition[1]+1)*32]; //+1 for border tile compensation
-}
+
+
 
 //Returns a position on the map where an item can spawn
 var roomObjectCount = {};
@@ -71,22 +63,34 @@ dungeonPhase.prototype.getRoom = function(condition, log){
 
     if(condition(i)){
         //increase log array
-        if(typeof log[i] == "undefined"){ log[i] = 1; } else { log[i]++; }
+        if(log != null){
+            if(typeof log[i] == "undefined"){ log[i] = 1; } else { log[i]++; }
+        }
+
         return i;
     } else {
         return this.getRoom(condition, log);
     }
-
 }
 
+//Returns the middle of a room that has not have a locked door.
+dungeonPhase.prototype.getPlayerPosition = function(){
+    //get the index of a random room
+    var i = this.getRoom(function(i){
+        return (typeof roomDoorCount[i] == "undefined");
+    }, null);
+    
+    //return the center of htat room
+    var randomPosition = digger._rooms[i].getCenter();
+    return [(randomPosition[0]+1)*32, (randomPosition[1]+1)*32]; //+1 for border tile compensation
+}
+
+//return the sides of a room where that has a locked door if those are available.
+//this never spawns a second chest in a room either.
 dungeonPhase.prototype.getItemPosition = function(){
     //get right room index to put a door at.
     var i = this.getRoom(function(i){
-        //console.log(Object.keys(roomDoorCount).length);
-        console.log(Object.keys(roomObjectCount).length);
-
         if(Object.keys(roomObjectCount).length >= Object.keys(roomDoorCount).length){
-            console.log('test');
             return ((typeof roomObjectCount[i] == "undefined"));
         } else {
             return ((roomDoorCount[i] > 0) && (typeof roomObjectCount[i] == "undefined"));
@@ -139,11 +143,33 @@ dungeonPhase.prototype.getItemPosition = function(){
     return [x*32 ,y*32];
 }
 
+dungeonPhase.prototype.getKeyPosition = function(){
+    //get right room index to put a key at.
+    var i = this.getRoom(function(i){
+        return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length > 1);
+    }, roomDoorCount);
+
+
+    //return a tile against the wall of that room
+    var room = digger._rooms[i];
+    var left = room.getLeft()+1; //+1 for border tile compensation
+    var right = room.getRight()+1;
+    var top = room.getTop()+1;
+    var bottom = room.getBottom()+1;
+
+    var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
+    var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
+
+    return [x*32 ,y*32];
+}
+
+
 dungeonPhase.prototype.getDoorPosition = function(){
     //get right room index to put a door at.
-    var i = this.getRoom(function(i){return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length < 2);}, roomDoorCount);
+    var i = this.getRoom(function(i){
+        return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length < 2);
+    }, roomDoorCount);
 
-    console.log("room " + i + " has a door");
     //return a tile against the wall of that room
     var room = digger._rooms[i];
     var x,y;
