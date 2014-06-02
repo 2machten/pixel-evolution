@@ -4,6 +4,7 @@
 
 var transitions = null;
 var run = false;
+var ran = false;
 
 
 function PixelEvolution(width, height, renderer, parent, state, transparent, antialias)
@@ -104,12 +105,50 @@ PixelEvolution.prototype.switchLevel = function() {
     switch(this._level) {
         case 1: transitions.to('pixel');
                 console.log("level1");
+                ran = false;
                 break;
         case 2: transitions.to('pixel');
                 console.log("level2");
+                ran = false;
                 break;
         case 3: transitions.to('pacman');
                 console.log("level3");
+                ran = false;
+                break;
+        case 4: transitions.to('pacman');
+                console.log("level4");
+                ran = false;
+                break;
+        case 5: transitions.to('pacman');
+                console.log("level5");
+                ran = false;
+                break;
+        case 6: transitions.to('dungeon');
+                console.log("level6");
+                ran = false;
+                break;
+        case 7: transitions.to('dungeon');
+                console.log("level7");
+                ran = false;
+                break;                
+        case 8: transitions.to('dungeon');
+                console.log("level8");
+                ran = false;
+                break;
+        case 9: transitions.to('rpg');
+                console.log("level9");
+                ran = false;
+                break;
+        case 10: transitions.to('rpg');
+                console.log("level10");
+                ran = false;
+                break;
+        case 11: transitions.to('rpg');
+                console.log("level11");
+                ran = false;
+                break;
+        case 12: console.log("done");
+                break;
     }
 }
 
@@ -161,7 +200,7 @@ var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
 
 
 // DEBUG: links to change between states/phases manually
-$('#menuLink').click(function(){    pixelEvolution._level = 0; transitions.to(   'menu'); });
+$('#menuLink').click(function(){    pixelEvolution._level = 0; transitions.to('menu'); });
 $('#pixelLink').click(function(){   pixelEvolution._level = 0; transitions.to('pixel'); });
 $('#pacmanLink').click(function(){  pixelEvolution._level = 3; transitions.to('pacman'); });
 $('#dungeonLink').click(function(){ pixelEvolution._level = 6; transitions.to('dungeon'); });

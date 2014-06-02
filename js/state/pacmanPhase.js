@@ -30,10 +30,13 @@ pacmanPhase.prototype.create = function(){
 }
 
 pacmanPhase.prototype.update = function(){
+	var map = this._game.state.getCurrentState()._map;
+    var items = map._items;
+
 	//Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
-        if(items.children.length == 0 && !this.ran && this._game._level != 5){
+        if(items.children.length == 0 && !ran && this._game._level != 6){
             console.log("Next level");
-            this.ran = true;
+            ran = true;
             run = true;
             this._game._level++;
             console.log(this._game._level);
@@ -57,7 +60,7 @@ pacmanPhase.prototype.generate = function(){
 	this._freeTiles = [];
 
 	switch (this._game._level) {
-		case 2: var map =   
+		case 3: var map =   
 				"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\n"+
 				"0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0\n"+
 				"0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0\n"+
@@ -80,7 +83,7 @@ pacmanPhase.prototype.generate = function(){
 				"0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0\n"+
 				"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0";
 				break;
-			case 3: 
+			case 4: 
 				var map = 	
 				"0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0\n"+
 				"0,1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,0\n"+
@@ -103,7 +106,7 @@ pacmanPhase.prototype.generate = function(){
 				"0,1,0,0,0,0,0,1,0,1,0,1,0,1,0,1,0,0,0,0,0,1,0\n"+
 				"0,1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,0\n"+
 				"0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0";
-			case 4: 
+			case 5: 
 				var map = 	
 				"0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0\n"+
 				"0,1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,1,1,1,1,0\n"+

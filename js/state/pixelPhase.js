@@ -2,7 +2,6 @@ pixelPhase = function(game) {
     Phaser.State.call(this); 
 
     this._game = game;    
-    this.ran = false;
     this.ticks = 0;
 }
 
@@ -92,15 +91,15 @@ pixelPhase.prototype.update = function(){
     var items = map._items;
 
         //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
-        if(items.children.length == 0 && !this.ran && this._game._level != 2){
+        if(items.children.length == 0 && !ran && this._game._level != 3){
             console.log("Next level");
-            this.ran = true;
+            ran = true;
             run = true;
             this._game._level++;
             console.log(this._game._level);
         } 
-        //If in level 1 and time is up, respawn collectables.
-        if(this.ticks > 100 && items.children.length > 0 && this._game._level != 0) {
+        //If in level higher than 2 and time is up, respawn collectables.
+        if(this.ticks > 150 && items.children.length > 0 && this._game._level != 0) {
             this.ticks = 0;
             var collectables = [];
 
