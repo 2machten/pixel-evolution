@@ -80,7 +80,17 @@ dungeonPhase.prototype.getRoom = function(condition, log){
 
 dungeonPhase.prototype.getItemPosition = function(){
     //get right room index to put a door at.
-    var i = this.getRoom(function(i){return ((roomDoorCount[i] > 0) && (typeof roomObjectCount[i] == "undefined"));}, roomObjectCount);
+    var i = this.getRoom(function(i){
+        //console.log(Object.keys(roomDoorCount).length);
+        console.log(Object.keys(roomObjectCount).length);
+
+        if(Object.keys(roomObjectCount).length >= Object.keys(roomDoorCount).length){
+            console.log('test');
+            return ((typeof roomObjectCount[i] == "undefined"));
+        } else {
+            return ((roomDoorCount[i] > 0) && (typeof roomObjectCount[i] == "undefined"));
+        }
+    }, roomObjectCount);
 
     //return a tile against the wall of that room
     var room = digger._rooms[i];
@@ -149,11 +159,14 @@ dungeonPhase.prototype.getDoorPosition = function(){
 //map generation for dungeon (ROT uniform dungeon algorithm)
 dungeonPhase.prototype.generate = function()
 {
+    roomObjectCount = {};
+    roomDoorCount = {};
+
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
         roomWidth: [5,10],
         roomHeight: [5,10],
-        roomDugPercentage: 0.12
+        roomDugPercentage: 0.13
     });
     //map.randomize(0.52);
 
