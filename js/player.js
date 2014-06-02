@@ -13,6 +13,7 @@
     this.facing = "";
     this.movespeed = 150;
     this.facing = "down";
+    this._keys = 0;
 
     startPosition = state.getPlayerPosition();
 
@@ -45,12 +46,27 @@
 Player.prototype = Object.create(Phaser.Sprite.prototype);
 Player.prototype.constructor = Player;
 
-//collisionhandler for chests (only, currently)
-Player.prototype.collisionHandler = function(player, chest)
-{
-
+//collisionhandler for items
+Player.prototype.itemCollisionHandler = function(player, chest){
     player._game.showMessage("You found a chest!\nGood fucking job.");
     chest.destroy();
+};
+
+//collisionhandler for doors in the dungeon stage
+Player.prototype.doorCollisionHandler = function(player, door){
+    if(player._keys == 0){
+        player._game.showMessage("The door is locked,\nif only I had a key!");
+    } else {
+        door.destroy();
+    }
+};
+
+//collisionhandler for doors in the dungeon stage
+Player.prototype.keyCollisionHandler = function(player, key){
+    player._keys++;
+    console.log("player now got: " + player._keys + " keys.");
+    key.destroy(); 
+    //visual interface thingy here.
 };
 
 
@@ -63,10 +79,22 @@ Player.prototype.collisionHandler = function(player, chest)
         var tiles = this._game.state.getCurrentState()._layer;
         this._game.physics.arcade.collide(this, tiles);
 
-        //during loading this is sometimes not working yet
+        //collide with items
         try{
             var items = this._game.state.getCurrentState()._map._items;
-            this._game.physics.arcade.collide(this, items, this.collisionHandler, null, this.update);
+            this._game.physics.arcade.collide(this, items, this.itemCollisionHandler, null, this.update);
+        }catch(e){}
+
+        //collide with doors
+        try{
+            var doors = this._game.state.getCurrentState()._map._doors;
+            this._game.physics.arcade.collide(this, doors, this.doorCollisionHandler, null, this.update);
+        }catch(e){}
+
+        //collide with keys
+        try{
+            var keys = this._game.state.getCurrentState()._map._keys;
+            this._game.physics.arcade.collide(this, keys, this.keyCollisionHandler, null, this.update);
         }catch(e){}
 
         //Reset speed each update (else character keeps moving, velocity not position)
