@@ -38,6 +38,7 @@ function preload()
 
     //Pacman state sprites
     this.load.spritesheet('player_pacman', 'assets/character_pacman.png', 18, 18);
+    this.load.spritesheet('enemy_pacman', 'assets/character_rpg.png', 20, 20);
     this.load.image('tiles_pacman', 'assets/tiles_dungeon.png');
     this.load.image('collectable_pacman', 'assets/collectable_pixel.png');
 
