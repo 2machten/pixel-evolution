@@ -53,6 +53,26 @@ dungeonPhase.prototype.create = function(){
         this._hearts.add(heart);
     }
     this._game.add.existing(this._hearts);
+
+    //display player lives in terms of hearts
+    this._score = new Phaser.Group(this._game, null, "score", false);
+    
+    var collectable = this._game.add.sprite(this._game.camera.width - 15, this._game.camera.height - 15, 'collectable_dungeon');
+    collectable.anchor.setTo(1,1);
+    var text = this._game.add.text(this._game.camera.width - 50, this._game.camera.height - 22, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+    text.anchor.setTo(1,1);
+
+    var key = this._game.add.sprite(this._game.camera.width - 100, this._game.camera.height - 15, 'key_dungeon');
+    key.anchor.setTo(1,1);
+    var text2 = this._game.add.text(this._game.camera.width - 135, this._game.camera.height - 22, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+    text2.anchor.setTo(1,1);
+
+    this._score.fixedToCamera = true;
+    this._score.add(collectable);
+    this._score.add(text);
+    this._score.add(key);
+    this._score.add(text2);
+    this._game.add.existing(this._score);
 };
 
 
