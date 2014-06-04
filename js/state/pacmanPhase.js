@@ -21,7 +21,7 @@ pacmanPhase.prototype.create = function(){
 
 	//create player
     this._player = new Player(this._game, 1, 'player_pacman');
-    this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
+    this._enemy = new Enemy(this._game, 0.95, 'enemy_pacman');
 
 
     //postpone character creation for a sec to avoid rendering problems
@@ -29,6 +29,17 @@ pacmanPhase.prototype.create = function(){
             self._game.add.existing(self._player);
             self._game.add.existing(self._enemy);
         }})(this),200); 
+
+    //display player lives in terms of hearts
+    this._hearts = new Phaser.Group(this._game, null, "hearts", false);
+    
+    for(var i = 0; i < this._player.hp; i++){
+        var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
+        heart.scale.setTo(4,4);
+        heart.fixedToCamera = true;
+        this._hearts.add(heart);
+    }
+    this._game.add.existing(this._hearts);
 
 }
 

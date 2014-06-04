@@ -15,11 +15,11 @@ dungeonPhase.prototype.update = function(){
     var items = map._items;
 
     //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
-        if(items.children.length == 0 && !ran && this._game._level != 9){
-            ran = true;
-            run = true;
-            this._game._level++;
-        } 
+    if(items.children.length == 0 && !ran && this._game._level != 9){
+        ran = true;
+        run = true;
+        this._game._level++;
+    }
 }
 
 dungeonPhase.prototype.create = function(){
@@ -41,6 +41,18 @@ dungeonPhase.prototype.create = function(){
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
         }})(this),200); 
+
+
+    //display player lives in terms of hearts
+    this._hearts = new Phaser.Group(this._game, null, "hearts", false);
+    
+    for(var i = 0; i < this._player.hp; i++){
+        var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
+        heart.scale.setTo(4,4);
+        heart.fixedToCamera = true;
+        this._hearts.add(heart);
+    }
+    this._game.add.existing(this._hearts);
 };
 
 
