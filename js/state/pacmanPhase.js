@@ -12,7 +12,7 @@ pacmanPhase.prototype.constructor = pacmanPhase;
 
 pacmanPhase.prototype.create = function(){
 	//instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, this.generate, 'collectable_pacman');
+    this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, 'collectable_pacman');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 

@@ -2,7 +2,7 @@
  * WorldMap object, extends Phaser.Tilemap
  */
 
-WorldMap = function(game, key, tileSprite, tileSize, generateFunction, collectableSprite, itemPositionFunction) {
+WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
     this._game = game;
     var state = this._game.state.getCurrentState();
     

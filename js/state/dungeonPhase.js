@@ -24,15 +24,7 @@ dungeonPhase.prototype.update = function(){
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(
-        this._game,             //game
-        'level',                //reference to tilemap
-        'tiles_dungeon',        //reference to tile images
-        32,                     //tileimage dimensions
-        this.generate,          //map generation function
-        'collectable_dungeon',  //collectable image
-        this.getItemPosition    //item position function
-    );
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon');
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
@@ -191,8 +183,8 @@ dungeonPhase.prototype.generate = function()
 
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
-        roomWidth: [5,10],
-        roomHeight: [5,10],
+        roomWidth: [5,7],
+        roomHeight: [5,7],
         roomDugPercentage: 0.13
     });
     //map.randomize(0.52);

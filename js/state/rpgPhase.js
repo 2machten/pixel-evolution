@@ -23,7 +23,7 @@ rpgPhase.prototype.update = function(){
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, this.generate, 'collectable_rpg');
+    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, 'collectable_rpg');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 

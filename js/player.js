@@ -57,6 +57,10 @@ Player.prototype.doorCollisionHandler = function(player, door){
     if(player._keys == 0){
         player._game.showMessage("The door is locked,\nif only I had a key!");
     } else {
+        //"use" 1 key.
+        player._keys--;
+
+        //destroy or "open" the door.
         door.destroy();
     }
 };
