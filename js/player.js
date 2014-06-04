@@ -8,7 +8,7 @@
 
     //properties
     this.quests = [];
-    this.hp = 1;
+    this.hp = 10;
     this.damage = 1;
     this.facing = "";
     this.movespeed = 150;
@@ -52,6 +52,16 @@ Player.prototype.itemCollisionHandler = function(player, chest){
     chest.destroy();
 };
 
+Player.prototype.enemyCollisionHandler = function(player, enemy){
+    player._game.showMessage("Autch!");
+    if(this.hp <= 0) {
+        player._game.showMessage("You died. Kthxbai!")
+    } else {
+        this.hp--;
+        console.log(this.hp);
+    }
+}
+
 //collisionhandler for doors in the dungeon stage
 Player.prototype.doorCollisionHandler = function(player, door){
     if(player._keys == 0){
@@ -87,6 +97,12 @@ Player.prototype.keyCollisionHandler = function(player, key){
         try{
             var items = this._game.state.getCurrentState()._map._items;
             this._game.physics.arcade.collide(this, items, this.itemCollisionHandler, null, this.update);
+        }catch(e){}
+
+        //collide with enemies
+        try{
+            var enemies = this._game.state.getCurrentState()._enemy;
+            this._game.physics.arcade.collide(this, enemies, this.enemyCollisionHandler, null, this.update);
         }catch(e){}
 
         //collide with doors
