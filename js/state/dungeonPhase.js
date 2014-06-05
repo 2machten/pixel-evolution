@@ -15,24 +15,16 @@ dungeonPhase.prototype.update = function(){
     var items = map._items;
 
     //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
-        if(items.children.length == 0 && !ran && this._game._level != 9){
-            ran = true;
-            run = true;
-            this._game._level++;
-        } 
+    if(items.children.length == 0 && !ran && this._game._level != 9){
+        ran = true;
+        run = true;
+        this._game._level++;
+    }
 }
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(
-        this._game,             //game
-        'level',                //reference to tilemap
-        'tiles_dungeon',        //reference to tile images
-        32,                     //tileimage dimensions
-        this.generate,          //map generation function
-        'collectable_dungeon',  //collectable image
-        this.getItemPosition    //item position function
-    );
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon');
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
@@ -49,6 +41,38 @@ dungeonPhase.prototype.create = function(){
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
         }})(this),200); 
+
+
+    //display player lives in terms of hearts
+    this._hearts = new Phaser.Group(this._game, null, "hearts", false);
+    
+    for(var i = 0; i < this._player.hp; i++){
+        var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
+        heart.scale.setTo(4,4);
+        heart.fixedToCamera = true;
+        this._hearts.add(heart);
+    }
+    this._game.add.existing(this._hearts);
+
+    //display player lives in terms of hearts
+    this._score = new Phaser.Group(this._game, null, "score", false);
+    
+    var collectable = this._game.add.sprite(this._game.camera.width - 15, this._game.camera.height - 15, 'collectable_dungeon');
+    collectable.anchor.setTo(1,1);
+    var text = this._game.add.text(this._game.camera.width - 50, this._game.camera.height - 22, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+    text.anchor.setTo(1,1);
+
+    var key = this._game.add.sprite(this._game.camera.width - 100, this._game.camera.height - 15, 'key_dungeon');
+    key.anchor.setTo(1,1);
+    var text2 = this._game.add.text(this._game.camera.width - 135, this._game.camera.height - 22, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+    text2.anchor.setTo(1,1);
+
+    this._score.fixedToCamera = true;
+    this._score.add(collectable);
+    this._score.add(text);
+    this._score.add(key);
+    this._score.add(text2);
+    this._game.add.existing(this._score);
 };
 
 
@@ -191,8 +215,8 @@ dungeonPhase.prototype.generate = function()
 
     var w = 80, h = 60;
     digger = new ROT.Map.Uniform(w, h, {
-        roomWidth: [5,10],
-        roomHeight: [5,10],
+        roomWidth: [5,7],
+        roomHeight: [5,7],
         roomDugPercentage: 0.13
     });
     //map.randomize(0.52);

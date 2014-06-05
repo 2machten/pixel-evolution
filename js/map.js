@@ -2,7 +2,7 @@
  * WorldMap object, extends Phaser.Tilemap
  */
 
-WorldMap = function(game, key, tileSprite, tileSize, generateFunction, collectableSprite, itemPositionFunction) {
+WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
     this._game = game;
     var state = this._game.state.getCurrentState();
     
@@ -18,7 +18,7 @@ WorldMap = function(game, key, tileSprite, tileSize, generateFunction, collectab
     this.setCollisionByExclusion([0]);
 
     //create a group of doors
-    if(this._game._level == 6){
+    if(this._game._level == 6 || this._game._level == 7 || this._game._level == 8){
         this._doors = new Phaser.Group(this._game, null, "doors", false);
         //spawn collectables in this group
         for (var i=0; i<3; i++){
