@@ -26,10 +26,10 @@ var ticks = 0;
 
     //Add animations for walking
     var animsSpeed = 8;
-    this.animations.add('left', [8, 9], animsSpeed, true);
-    this.animations.add('right', [3, 4], animsSpeed, true);
-    this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
-    this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+    this.animations.add('left', [4, 5], animsSpeed, true);
+    this.animations.add('right', [6, 7], animsSpeed, true);
+    this.animations.add('up', [0, 1], animsSpeed, true);
+    this.animations.add('down', [2, 3], animsSpeed, true);
 
 };
 
@@ -61,18 +61,34 @@ Enemy.prototype.update = function() {
         //down
         if(direction == 1) {
             this.body.velocity.y = this.movespeed;
+            if (this.facing != 'down'){
+                this.animations.play('down');
+                this.facing = 'down';
+            }
         }
         //up
         else if(direction == 2) {
             this.body.velocity.y = -this.movespeed;
+            if (this.facing != 'up'){
+                this.animations.play('up');
+                this.facing = 'up';
+            }
         }
         //left
          else if(direction == 3) {
             this.body.velocity.x = -this.movespeed;
+            if (this.facing != 'left'){
+                this.animations.play('left');
+                this.facing = 'left';
+            }
         }
         //right
         else if(direction == 4) {
             this.body.velocity.x = this.movespeed;
+            if (this.facing != 'right'){
+                this.animations.play('right');
+                this.facing = 'right';
+            }
         }
     }
 
