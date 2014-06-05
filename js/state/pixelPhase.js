@@ -13,7 +13,7 @@ pixelPhase.prototype.constructor = pixelPhase;
 
 pixelPhase.prototype.create = function(){
     //Instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_pixel', 16, this.generate, 'collectable_pixel', this.getItemPosition);
+    this._map = new WorldMap(this._game, 'level', 'tiles_pixel', 16, 'collectable_pixel');
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 

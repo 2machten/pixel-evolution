@@ -8,7 +8,7 @@
 
     //properties
     this.quests = [];
-    this.hp = 10;
+    this.hp = 3;
     this.damage = 1;
     this.facing = "";
     this.movespeed = 150;
@@ -54,6 +54,11 @@ Player.prototype.itemCollisionHandler = function(player, chest){
 
 Player.prototype.enemyCollisionHandler = function(player, enemy){
     player._game.showMessage("Autch!");
+    if(typeof pixelEvolution.state.getCurrentState()._hearts != "undefined"){
+        pixelEvolution.state.getCurrentState()._hearts.getTop().destroy();
+    }
+    alert('test');
+
     if(this.hp <= 0) {
         player._game.showMessage("You died. Kthxbai!")
     } else {
@@ -67,6 +72,10 @@ Player.prototype.doorCollisionHandler = function(player, door){
     if(player._keys == 0){
         player._game.showMessage("The door is locked,\nif only I had a key!");
     } else {
+        //"use" 1 key.
+        player._keys--;
+
+        //destroy or "open" the door.
         door.destroy();
     }
 };

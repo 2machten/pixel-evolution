@@ -25,6 +25,7 @@ function preload()
 {
     //general game sprites
     this.load.image('message_bg', 'assets/message_bg.png');
+    this.load.spritesheet('heart', 'assets/heart.png', 8, 7);
     
     //Main menu sprites
     this.load.image('logo', 'assets/logo.png');
