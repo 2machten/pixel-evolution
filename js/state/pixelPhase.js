@@ -45,7 +45,7 @@ pixelPhase.prototype.create = function(){
             //During loading this is sometimes not working yet
             try{
                 var items = this._game.state.getCurrentState()._map._items;
-                this._game.physics.arcade.overlap(this, items, this.collisionHandler, null, this.update);
+                this._game.physics.arcade.overlap(this, items, this.itemCollisionHandler, null, this.update);
             }catch(e){}
 
             //Reset speed each update (else character keeps moving, velocity not position)
