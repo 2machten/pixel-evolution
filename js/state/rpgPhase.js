@@ -41,6 +41,18 @@ rpgPhase.prototype.create = function(){
             self._game.add.existing(self._player);
             self._game.add.existing(self._npc);
         }})(this),200);
+
+    this._score = new Phaser.Group(this._game, null, "score", false);
+
+    var collectable = this._game.add.sprite(this._game.camera.width - 25, this._game.camera.height - 25, 'collectable_rpg');
+    collectable.anchor.setTo(0.5, 0.5);
+    this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+    this._collectableText.anchor.setTo(0.5, 0.5);
+
+    this._score.fixedToCamera = true;
+    this._score.add(collectable);
+    this._score.add(this._collectableText);
+    this._game.add.existing(this._score);
 };
 
 //Returns a position on the map where the player or an item can spawn

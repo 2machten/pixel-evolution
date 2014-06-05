@@ -48,7 +48,11 @@ Player.prototype.constructor = Player;
 
 //collisionhandler for items
 Player.prototype.itemCollisionHandler = function(player, chest){
-    player._game.showMessage("You found a chest!\nGood fucking job.");
+    var textElement = pixelEvolution.state.getCurrentState()._collectableText;
+    var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
+
+    //Set new text off collectable ui
+    textElement.setText(newText);
     chest.destroy();
 };
 
@@ -83,9 +87,13 @@ Player.prototype.doorCollisionHandler = function(player, door){
 //collisionhandler for doors in the dungeon stage
 Player.prototype.keyCollisionHandler = function(player, key){
     player._keys++;
-    console.log("player now got: " + player._keys + " keys.");
+
+    var textElement = pixelEvolution.state.getCurrentState()._keyText;
+    var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
+
+    //Set new text off collectable ui
+    textElement.setText(newText);
     key.destroy(); 
-    //visual interface thingy here.
 };
 
 
