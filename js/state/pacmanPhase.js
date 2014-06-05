@@ -22,7 +22,7 @@ pacmanPhase.prototype.create = function(){
 	//create player
     this._player = new Player(this._game, 1, 'player_pacman');
 
-    this._enemy = new Enemy(this._game, 1.90, 'enemy_pacman');
+    this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
@@ -39,13 +39,6 @@ pacmanPhase.prototype.create = function(){
 
 	    if(ticks > 20) {
 	        ticks = 0;
-
-	        /*var x = Math.floor((this.world.x)/32);
-	        var y = Math.floor((this.world.y)/32);
-	        var map = this._game.state.getCurrentState()._map;
-	        var layer = map.currentLayer;
-	        var tile = map.getTile(x, y, layer);*/
-	        console.log(this);
 
 	        var options = [];
 
@@ -68,19 +61,31 @@ pacmanPhase.prototype.create = function(){
 	        switch (direction) {
 	        	case "down": 
 	        		this.position.y = this.position.y+this.spriteSize;
-	        		console.log("down");
+	        		if (this.facing != 'down'){
+		                this.animations.play('down');
+		                this.facing = 'down';
+		            }
 	        		break;
 	        	case "up":
 	        		this.position.y = this.position.y-this.spriteSize
-	        		//console.log("up");
+	        		if (this.facing != 'up'){
+		                this.animations.play('up');
+		                this.facing = 'up';
+		            }
 	        		break;
 	        	case "left": 
 	        		this.position.x = this.position.x-this.spriteSize;
-	        		//console.log("left");
+			        if (this.facing != 'left'){
+		                this.animations.play('left');
+		                this.facing = 'left';
+		            }
 	        		break;
 	        	case "right":
 	        		this.position.x = this.position.x+this.spriteSize;
-	        		//console.log("right");
+	        		if (this.facing != 'right'){
+		                this.animations.play('right');
+		                this.facing = 'right';
+		            }
 	        		break;
 	        }	    
 
