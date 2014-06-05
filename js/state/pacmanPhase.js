@@ -20,7 +20,7 @@ pacmanPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
 	//create player
-    this._player = new Player(this._game, 1, 'player_pacman');
+    this._player = new Player(this._game, 1, 'player_pacman', 170);
 
     this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
 
@@ -67,7 +67,7 @@ pacmanPhase.prototype.create = function(){
 		            }
 	        		break;
 	        	case "up":
-	        		this.position.y = this.position.y-this.spriteSize
+	        		this.position.y = this.position.y-this.spriteSize;
 	        		if (this.facing != 'up'){
 		                this.animations.play('up');
 		                this.facing = 'up';
