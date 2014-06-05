@@ -38,7 +38,7 @@ function preload()
 
     //Pacman state sprites
     this.load.spritesheet('player_pacman', 'assets/character_pacman.png', 18, 18);
-    this.load.spritesheet('enemy_pacman', 'assets/character_rpg.png', 20, 20);
+    this.load.spritesheet('enemy_pacman', 'assets/character_pixel2.png', 16, 16);
     this.load.image('tiles_pacman', 'assets/tiles_dungeon.png');
     this.load.image('collectable_pacman', 'assets/collectable_pixel.png');
 
@@ -194,7 +194,7 @@ PixelEvolution.prototype.showMessage = function(message){
 
 
 // Instantiate game object.  
-var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
+var pixelEvolution = new PixelEvolution(736, 608, Phaser.CANVAS, 'game', {
     preload: preload,
     create: create
 }, false, false);

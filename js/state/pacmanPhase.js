@@ -21,7 +21,9 @@ pacmanPhase.prototype.create = function(){
 
 	//create player
     this._player = new Player(this._game, 1, 'player_pacman');
-    this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
+    this._enemy = new Enemy(this._game, 1.90, 'enemy_pacman');
+
+    
 
 
     //postpone character creation for a sec to avoid rendering problems
@@ -30,6 +32,63 @@ pacmanPhase.prototype.create = function(){
             self._game.add.existing(self._enemy);
         }})(this),200); 
 
+	this._enemy.update = function(){
+	    ticks++;
+	    this.spriteSize = 32;
+	    var tiles = this._game.state.getCurrentState()._layer;
+	    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
+	    //this._game.physics.arcade.collide(this, tiles);
+
+	    if(ticks > 20) {
+	        ticks = 0;
+
+	        /*var x = Math.floor((this.world.x)/32);
+	        var y = Math.floor((this.world.y)/32);
+	        var map = this._game.state.getCurrentState()._map;
+	        var layer = map.currentLayer;
+	        var tile = map.getTile(x, y, layer);*/
+	        console.log(this);
+
+	        var options = [];
+
+	        if(this.body.blocked.down == false) {
+	            options.push("down");
+	        }
+	        if(this.body.blocked.up == false) {
+	            options.push("up");
+	        }
+	        if(this.body.blocked.left == false) {
+	            options.push("left");
+	        }
+	        if(this.body.blocked.right == false) {
+	            options.push("right");
+	        }
+
+	        var index = Math.floor(Math.random() * options.length);
+	        var direction = options[index];
+
+	        switch (direction) {
+	        	case "down": 
+	        		this.position.y = this.position.y+this.spriteSize;
+	        		console.log("down");
+	        		break;
+	        	case "up":
+	        		this.position.y = this.position.y-this.spriteSize
+	        		//console.log("up");
+	        		break;
+	        	case "left": 
+	        		this.position.x = this.position.x-this.spriteSize;
+	        		//console.log("left");
+	        		break;
+	        	case "right":
+	        		this.position.x = this.position.x+this.spriteSize;
+	        		//console.log("right");
+	        		break;
+	        }	    
+
+
+	    }
+	}
 }
 
 pacmanPhase.prototype.update = function(){
@@ -104,7 +163,7 @@ pacmanPhase.prototype.generate = function(){
 				"0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0\n"+
 				"0,1,0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,0\n"+
 				"0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0\n"+
-				"0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0\n"+
+				"0,1,0,1,1,1,0,1,1,1,1,0,1,1,1,0,1,0\n"+
 				"0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0\n"+
 				"0,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,0\n"+
 				"0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,0\n"+

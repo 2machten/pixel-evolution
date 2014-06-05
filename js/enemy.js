@@ -10,7 +10,7 @@ var ticks = 0;
     //properties
     this.hp = 1;
     this.facing = "";
-    this.movespeed = 110;
+    this.movespeed = 70;
     this.facing = "down";
 
     startPosition = state.getEnemyPosition();
@@ -41,33 +41,39 @@ console.log("Created enemy");
 /**
  * Automatically called by World.update
  */
- Enemy.prototype.update = function() {
+Enemy.prototype.update = function() {
+
+    try {
     var tiles = this._game.state.getCurrentState()._layer;
     this._game.physics.arcade.collide(this, tiles);
+    } catch (e) {
+
+    }
 
     ticks++;
-    
+
     if(ticks > 50) {
         ticks = 0;
-        var direction = Math.floor((Math.random() * 5));
+        var direction = Math.ceil(Math.random() * 4);
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
-        if (direction == 1) 
-        {   // Move north
-            this.body.velocity.y = -this.movespeed;
-        } 
-        else if (direction == 2) 
-        {   // Move south
+        //down
+        if(direction == 1) {
             this.body.velocity.y = this.movespeed;
         }
-        else if (direction == 3) 
-        {   // Move east
-            this.body.velocity.x = this.movespeed;
+        //up
+        else if(direction == 2) {
+            this.body.velocity.y = -this.movespeed;
         }
-        else if (direction == 4) 
-        {   // Move west
+        //left
+         else if(direction == 3) {
             this.body.velocity.x = -this.movespeed;
         }
+        //right
+        else if(direction == 4) {
+            this.body.velocity.x = this.movespeed;
+        }
     }
+
 };

@@ -41,6 +41,17 @@ WorldMap = function(game, key, tileSprite, tileSize, generateFunction, collectab
         }
     }
 
+    /*if(this._game._level > 3) {
+        this._enemies = new Phaser.Group(this._game, null, "enemies", false);
+        
+        for (var i=0; i<3; i++){
+            var spawnPosition = state.getEnemyPosition();
+            var enemy = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'enemy_dungeon');
+            this._game.physics.enable(enemy);
+            this._enemies.add(enemy);
+        }
+    }*/
+
     //create a group of items
     this._items = new Phaser.Group(this._game, null, "items", false);
     //spawn collectables in this group
