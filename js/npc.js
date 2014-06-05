@@ -1,5 +1,4 @@
-
-NPC = function(game, scale, sprite, positionFunction, startPosition) {
+NPC = function(game, scale, sprite, startPosition) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
