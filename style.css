@@ -4,6 +4,11 @@ body,html {
 	height: 100%;
 }
 
+canvas {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #minimap {
 	position: absolute;
 	top: 1em;
