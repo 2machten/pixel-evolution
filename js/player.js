@@ -78,6 +78,11 @@ Player.prototype.doorCollisionHandler = function(player, door){
     } else {
         //"use" 1 key.
         player._keys--;
+        var textElement = pixelEvolution.state.getCurrentState()._keyText;
+        var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))-1 + "x";
+
+        //Set new text off collectable ui
+        textElement.setText(newText);
 
         //destroy or "open" the door.
         door.destroy();
