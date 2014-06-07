@@ -3060,7 +3060,7 @@ ROT.Map.Rogue = function(width, height, options) {
 	Set the room sizes according to the over-all width of the map, 
 	and the cell sizes. 
 	*/
-	
+
 	if (!this._options.hasOwnProperty("roomWidth")) {
 		this._options["roomWidth"] = this._calculateRoomSize(width, this._options["cellWidth"]);
 	}
@@ -3103,8 +3103,8 @@ ROT.Map.Rogue.prototype._getRandomInt = function(min, max) {
 }
 
 ROT.Map.Rogue.prototype._calculateRoomSize = function(size, cell) {
-	var max = Math.floor((size/cell) * 0.8);
-	var min = Math.floor((size/cell) * 0.25);
+	var max = Math.floor((size/cell) * 0.35);
+	var min = Math.floor((size/cell) * 0.35);
 	if (min < 2) min = 2;
 	if (max < 2) max = 2;
 	return [min, max];
@@ -3115,7 +3115,7 @@ ROT.Map.Rogue.prototype._initRooms = function () {
 	for (var i = 0; i < this._options.cellWidth; i++) {  
 		this.rooms.push([]);
 		for(var j = 0; j < this._options.cellHeight; j++) {
-			this.rooms[i].push({"x":0, "y":0, "width":0, "height":0, "connections":[], "cellx":i, "celly":j});
+			this.rooms[i].push({"x":0, "y":0, "width":0, "height":0, "connections":[], "_doors": [], "cellx":i, "celly":j});
 		}
 	}
 }
@@ -3137,6 +3137,7 @@ ROT.Map.Rogue.prototype._connectRooms = function() {
 	do {
 	
 		//var dirToCheck = [0,1,2,3,4,5,6,7];
+		//var dirToCheck = [0,5,2,4,6,3];
 		var dirToCheck = [0,2,4,6];
 		dirToCheck = dirToCheck.randomize();
 		
@@ -3237,7 +3238,8 @@ ROT.Map.Rogue.prototype._connectUnconnectedRooms = function() {
 				if(validRoom) { 
 					room["connections"].push( [otherRoom["cellx"], otherRoom["celly"]] );  
 				} else {
-					console.log("-- Unable to connect room.");
+					console.log("-- Unable to connect room. DENNIS: restart generation!");
+					this._game.state.start("dungeon");
 				}
 			}
 		}
@@ -3463,7 +3465,11 @@ ROT.Map.Rogue.prototype._createCorridors = function () {
 					otherWall = 3;
 				}
 				
-				this._drawCorridore(this._getWallPosition(room, wall), this._getWallPosition(otherRoom, otherWall));
+				var doorPosition = this._getWallPosition(room, wall);
+				var otherDoorPosition = this._getWallPosition(otherRoom, otherWall);
+				room._doors.push(doorPosition);
+				otherRoom._doors.push(otherDoorPosition);
+				this._drawCorridore(doorPosition, otherDoorPosition);
 			}
 		}
 	}

@@ -11,68 +11,78 @@ dungeonPhase.prototype = Object.create(Phaser.State.prototype);
 dungeonPhase.prototype.constructor = dungeonPhase;
 
 dungeonPhase.prototype.update = function(){
-    var map = this._game.state.getCurrentState()._map;
-    var items = map._items;
+    try {
+        var map = this._game.state.getCurrentState()._map;
+        var items = map._items;
 
-    //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
-    if(items.children.length == 0 && !ran && this._game._level != 9){
-        ran = true;
-        run = true;
-        this._game._level++;
+        //Check whether the collectables are collected, and whether we are not yet in the last level of the phase.
+        if(items.children.length == 0 && !ran && this._game._level != 9){
+            ran = true;
+            run = true;
+            this._game._level++;
+        }
+    }catch(e){
+        this._game.state.start("dungeon");
+        this.shutdown();
     }
 }
 
 dungeonPhase.prototype.create = function(){
-    //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon');
+    try{
+        //instantiate worldmap and create layer (this displays the map)
+        this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon');
 
-    this._layer = this._map.createLayer(0);
-    this._layer.resizeWorld();
+        this._layer = this._map.createLayer(0);
+        this._layer.resizeWorld();
 
-    //add items, doors and keys to the game
-    this._game.add.existing(this._map._items);
-    this._game.add.existing(this._map._doors);
-    this._game.add.existing(this._map._keys);
+        //add items, doors and keys to the game
+        this._game.add.existing(this._map._items);
+        this._game.add.existing(this._map._doors);
+        this._game.add.existing(this._map._keys);
 
-    //Instantiate new player object
-    this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition, 190);
-    
-    //postpone character creation for a sec to avoid rendering problems
-    setTimeout((function(self) { return function() {  
-            self._game.add.existing(self._player);
-        }})(this),200); 
+        //Instantiate new player object
+        this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition, 190);
+        
+        //postpone character creation for a sec to avoid rendering problems
+        setTimeout((function(self) { return function() {  
+                self._game.add.existing(self._player);
+            }})(this),200); 
 
 
-    //display player lives in terms of hearts
-    this._hearts = new Phaser.Group(this._game, null, "hearts", false);
-    
-    for(var i = 0; i < this._player.hp; i++){
-        var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
-        heart.scale.setTo(4,4);
-        heart.fixedToCamera = true;
-        this._hearts.add(heart);
+        //display player lives in terms of hearts
+        this._hearts = new Phaser.Group(this._game, null, "hearts", false);
+        
+        for(var i = 0; i < this._player.hp; i++){
+            var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
+            heart.scale.setTo(4,4);
+            heart.fixedToCamera = true;
+            this._hearts.add(heart);
+        }
+        this._game.add.existing(this._hearts);
+
+        //display player lives in terms of hearts
+        this._score = new Phaser.Group(this._game, null, "score", false);
+        
+        var collectable = this._game.add.sprite(this._game.camera.width - 25, this._game.camera.height - 25, 'collectable_dungeon');
+        collectable.anchor.setTo(0.5, 0.5);
+        this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+        this._collectableText.anchor.setTo(0.5, 0.5);
+
+        var key = this._game.add.sprite(this._game.camera.width - 110, this._game.camera.height - 25, 'key_dungeon');
+        key.anchor.setTo(0.5, 0.5);
+        this._keyText = this._game.add.text(this._game.camera.width - 145, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
+        this._keyText.anchor.setTo(0.5, 0.5);
+
+        this._score.fixedToCamera = true;
+        this._score.add(collectable);
+        this._score.add(this._collectableText);
+        this._score.add(key);
+        this._score.add(this._keyText);
+        this._game.add.existing(this._score);
+    }catch(e){
+        this._game.state.start("dungeon");
+        this.shutdown();
     }
-    this._game.add.existing(this._hearts);
-
-    //display player lives in terms of hearts
-    this._score = new Phaser.Group(this._game, null, "score", false);
-    
-    var collectable = this._game.add.sprite(this._game.camera.width - 25, this._game.camera.height - 25, 'collectable_dungeon');
-    collectable.anchor.setTo(0.5, 0.5);
-    this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
-    this._collectableText.anchor.setTo(0.5, 0.5);
-
-    var key = this._game.add.sprite(this._game.camera.width - 110, this._game.camera.height - 25, 'key_dungeon');
-    key.anchor.setTo(0.5, 0.5);
-    this._keyText = this._game.add.text(this._game.camera.width - 145, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
-    this._keyText.anchor.setTo(0.5, 0.5);
-
-    this._score.fixedToCamera = true;
-    this._score.add(collectable);
-    this._score.add(this._collectableText);
-    this._score.add(key);
-    this._score.add(this._keyText);
-    this._game.add.existing(this._score);
 };
 
 
@@ -81,6 +91,7 @@ dungeonPhase.prototype.create = function(){
 //Returns a position on the map where an item can spawn
 var roomObjectCount = {};
 var roomDoorCount = {};
+var roomGenerationCount = 0;
 
 dungeonPhase.prototype.getRoom = function(condition, log){
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
@@ -93,7 +104,19 @@ dungeonPhase.prototype.getRoom = function(condition, log){
 
         return i;
     } else {
-        return this.getRoom(condition, log);
+        roomGenerationCount++;
+
+        if(roomGenerationCount < 50){
+            return this.getRoom(condition, log);
+        }else{
+            roomGenerationCount = 0;
+            this._game.state.start("dungeon");
+            this.shutdown();
+
+            if(this._game._level != 6){
+                this._game._level--;
+            }
+        }
     }
 }
 
@@ -105,7 +128,10 @@ dungeonPhase.prototype.getPlayerPosition = function(){
     }, null);
     
     //return the center of htat room
-    var randomPosition = digger._rooms[i].getCenter();
+    var randomPosition = [];
+    randomPosition[0] = digger._rooms[i].x + digger._rooms[i].width/2;
+    randomPosition[1] = digger._rooms[i].y + digger._rooms[i].height/2;
+
     return [(randomPosition[0]+1)*32, (randomPosition[1]+1)*32]; //+1 for border tile compensation
 }
 
@@ -123,10 +149,10 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     //return a tile against the wall of that room
     var room = digger._rooms[i];
-    var left = room.getLeft()+1; //+1 for border tile compensation
-    var right = room.getRight()+1;
-    var top = room.getTop()+1;
-    var bottom = room.getBottom()+1;
+    var left = room.x + 1; //+1 for border tile compensation
+    var right = room.x + room.width;
+    var top = room.y + 1;
+    var bottom = room.y + room.height;
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
@@ -135,9 +161,8 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     //find all the coordinates of all doors in the current room
     for (var door in room._doors){
-        var coords = door.split(',');
-        prohibitedx.push(coords[0]);
-        prohibitedy.push(coords[1]);
+        prohibitedx.push(door[0]);
+        prohibitedy.push(door[1]);
     }
 
     //retry when the x and y match a door location. 
@@ -170,16 +195,16 @@ dungeonPhase.prototype.getItemPosition = function(){
 dungeonPhase.prototype.getKeyPosition = function(){
     //get right room index to put a key at.
     var i = this.getRoom(function(i){
-        return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length > 1);
+        return ((typeof roomDoorCount[i] == "undefined") /*&& digger._rooms[i].connections.length > 1*/);
     }, roomDoorCount);
 
 
     //return a tile against the wall of that room
     var room = digger._rooms[i];
-    var left = room.getLeft()+1; //+1 for border tile compensation
-    var right = room.getRight()+1;
-    var top = room.getTop()+1;
-    var bottom = room.getBottom()+1;
+    var left = room.x+1; //+1 for border tile compensation
+    var right = room.x + room.width;
+    var top = room.y+1;
+    var bottom = room.y + room.height;
 
     var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
     var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
@@ -191,19 +216,15 @@ dungeonPhase.prototype.getKeyPosition = function(){
 dungeonPhase.prototype.getDoorPosition = function(){
     //get right room index to put a door at.
     var i = this.getRoom(function(i){
-        return ((typeof roomDoorCount[i] == "undefined") && Object.keys(digger._rooms[i]._doors).length < 2);
+        return ((typeof roomDoorCount[i] == "undefined") && digger._rooms[i]._doors.length < 2);
     }, roomDoorCount);
 
     //return a tile against the wall of that room
     var room = digger._rooms[i];
-    var x,y;
-    for (var door in room._doors){
-        var coords = door.split(',');
-        x = parseInt(coords[0])+1;
-        y = parseInt(coords[1])+1;
 
-        
-        return [x*32 ,y*32];
+    for (var j = 0; j < room._doors.length; j++){
+        var door = room._doors[j];
+        return [(door[0]+1) * 32 ,(door[1]+1) * 32];
     }
 }
 
@@ -214,10 +235,11 @@ dungeonPhase.prototype.generate = function()
     roomDoorCount = {};
 
     var w = 80, h = 60;
-    digger = new ROT.Map.Uniform(w, h, {
-        roomWidth: [5,7],
-        roomHeight: [5,7],
-        roomDugPercentage: 0.13
+    digger = new ROT.Map.Rogue(w, h, {
+        cellWidth: 4,
+        cellHeight: 3,
+        roomWidth: [5,9],
+        roomHeight: [5,9]
     });
     //map.randomize(0.52);
 
@@ -238,6 +260,22 @@ dungeonPhase.prototype.generate = function()
     display = new ROT.Display({width:w, height:h, fontSize:4});
     digger.create(digCallback.bind(this));
 
+    //flatten rooms array
+    function walkLeaves(arr, fn){
+        for (var i = 0; i < arr.length; ++i) {
+            if (typeof arr[i] == 'object' && arr[i].length) { // simple array check
+                walkLeaves(arr[i], fn);
+            } else {
+                fn(arr[i], i); // only collect leaves
+            }
+        }
+    }
+    //still flatten the rooms array
+    digger._rooms = [];
+    walkLeaves(digger.rooms, function(item, index) {
+        digger._rooms.push(item);
+    });
+
     //add a column to the LEFT of the map
     terrainMap[0] = [];
     for(var i = 0; i < terrainMap[1].length; i++){ terrainMap[0].push("border"); }
@@ -250,9 +288,6 @@ dungeonPhase.prototype.generate = function()
 
     //add a row to the BOTTOM of the map
     for(var i = 0; i < terrainMap.length; i++){ terrainMap[i].push("border"); }
-
-    var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
-    startLocation = digger._rooms[i].getCenter();
 
     //show map in canvas
     if (pixelEvolution._showMinimap){
