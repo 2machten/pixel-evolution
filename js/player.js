@@ -17,10 +17,14 @@
 
     startPosition = state.getPlayerPosition();
 
+    var halfWidth = this._game.state.getCurrentState()._map.tileWidth * 0.5;
+    var halfHeight = this._game.state.getCurrentState()._map.tileHeight * 0.5;
+
     //create a new sprite and put it on that free spot
-    Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
+    Phaser.Sprite.call(this, this._game, startPosition[0]+halfWidth, startPosition[1]+halfHeight, sprite);
 
     this.scale.setTo(scale, scale);
+    this.anchor.setTo(0.5, 0.5);
 
     //enable physics for collision detection and collide to the worlds edge
     this._game.physics.enable(this);
