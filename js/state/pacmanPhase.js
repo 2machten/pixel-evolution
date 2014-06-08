@@ -35,7 +35,7 @@ pacmanPhase.prototype.create = function(){
     }
 
     for(var i = 0; i < 4; i++) {
-    	this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
+    	this._enemy = new Enemy(this._game, 1, 'enemy_pacman'+(i+1));
 
     	this._enemy.update = function(){
 		    ticks++;
