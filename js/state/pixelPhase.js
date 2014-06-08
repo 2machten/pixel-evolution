@@ -3,6 +3,7 @@ pixelPhase = function(game) {
 
     this._game = game;    
     this.ticks = 0;
+    this._game.stage.smoothed = true;
 }
 
 

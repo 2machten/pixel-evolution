@@ -4,6 +4,7 @@ dungeonPhase = function(game) {
     Phaser.State.call(this); 
 
     this._game = game;
+    this._game.stage.smoothed = false;
 }
 
 //Extend the dungeonPhase object to be a Phaser.State
@@ -109,6 +110,7 @@ dungeonPhase.prototype.getRoom = function(condition, log){
         if(roomGenerationCount < 50){
             return this.getRoom(condition, log);
         }else{
+            console.log("retry");
             roomGenerationCount = 0;
             this._game.state.start("dungeon");
             this.shutdown();
