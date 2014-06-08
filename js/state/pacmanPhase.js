@@ -3,6 +3,7 @@ pacmanPhase = function(game) {
 
     this._game = game;
     this._freeTiles = [];
+    this._game.stage.smoothed = false;
 }
 
 //Extend the pacmanPhase object to be a Phaser.State

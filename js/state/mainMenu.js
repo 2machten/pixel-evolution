@@ -3,6 +3,7 @@ mainMenu = function(game) {
 
     this._game = game;
     this.ticks = 0;
+    this._game.stage.smoothed = false;
 }
 
 //Extend the mainMenu object to be a Phaser.State
