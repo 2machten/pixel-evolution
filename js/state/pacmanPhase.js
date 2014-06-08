@@ -24,10 +24,10 @@ pacmanPhase.prototype.create = function(){
             this._player = new Player(this._game, 1, 'player_pacman1', 100);
             break;
         case 4:
-            this._player = new Player(this._game, 1, 'player_pacman2', 120);
+            this._player = new Player(this._game, 0.9, 'player_pacman2', 120);
             break;
         case 5:
-            this._player = new Player(this._game, 1, 'player_pacman2', 150);
+            this._player = new Player(this._game, 0.9, 'player_pacman2', 150);
             break;
     }
 
@@ -46,7 +46,7 @@ pacmanPhase.prototype.create = function(){
 	    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
 	    //this._game.physics.arcade.collide(this, tiles);
 
-	    if(ticks > 20) {
+	    if(ticks > 40) {
 	        ticks = 0;
 
 	        var options = [];
