@@ -9,7 +9,6 @@ pacmanPhase = function(game) {
 pacmanPhase.prototype = Object.create(Phaser.State.prototype);
 pacmanPhase.prototype.constructor = pacmanPhase;
 
-
 pacmanPhase.prototype.create = function(){
 	//instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, 'collectable_pacman');
@@ -42,16 +41,21 @@ pacmanPhase.prototype.create = function(){
 
 	        var options = [];
 
-	        if(this.body.blocked.down == false) {
+	        var tileX = this.position.x/32;
+	        var tileY = this.position.y/32;
+
+	        var state = this._game.state.getCurrentState();
+
+	        if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
 	            options.push("down");
 	        }
-	        if(this.body.blocked.up == false) {
+	        if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
 	            options.push("up");
 	        }
-	        if(this.body.blocked.left == false) {
+	        if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
 	            options.push("left");
 	        }
-	        if(this.body.blocked.right == false) {
+	        if(state._map.getTileRight(0, tileX,tileY).index == "0") {
 	            options.push("right");
 	        }
 
