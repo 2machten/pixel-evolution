@@ -33,7 +33,8 @@ function preload()
 
     //Pixel state sprites
     this.load.spritesheet('player_pixel1', 'assets/character_pixel.png', 16, 16);
-    this.load.spritesheet('player_pixel2', 'assets/character_pixel2.png', 16, 16);
+    this.load.spritesheet('player_pixel2', 'assets/character_pixel2.png', 90, 90);
+    this.load.spritesheet('player_pixel3', 'assets/character_pixel3.png', 90, 90);
     this.load.image('tiles_pixel', 'assets/tiles_pixel.png');
     this.load.image('collectable_pixel', 'assets/collectable_pixel.png');
 
@@ -59,9 +60,6 @@ function preload()
 
 function create()
 {
-    //8Bit mode: don't smooth edges when scaling objects
-    this.stage.smoothed = false;
-
     //Add all different states/phases
     this.state.add('menu', mainMenu);
     this.state.add('pixel', pixelPhase);
@@ -199,7 +197,7 @@ PixelEvolution.prototype.showMessage = function(message){
 var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
     preload: preload,
     create: create
-}, false, false);
+}, false, true);
 //        NOTE: To use Phaser.AUTO instead of Phaser.CANVAS, you have to run a local server.
 
 
