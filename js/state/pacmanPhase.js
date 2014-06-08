@@ -56,17 +56,33 @@ pacmanPhase.prototype.create = function(){
 
 	        var state = this._game.state.getCurrentState();
 
-	        if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
-	            options.push("down");
+	        try{
+	        	if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
+		            options.push("down");
+		            console.log("down");
+		        }
+	        } catch(e) {	
 	        }
-	        if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
-	            options.push("up");
+	        try{
+	        	if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
+		            options.push("up");
+		            console.log("up");
+		        }
+	        } catch(e) {	
 	        }
-	        if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
-	            options.push("left");
+	        try {
+	        	if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
+		            options.push("left");
+		            console.log("left");
+		        }
+	        } catch(e) {	
 	        }
-	        if(state._map.getTileRight(0, tileX,tileY).index == "0") {
-	            options.push("right");
+	        try {
+	        	if(state._map.getTileRight(0, tileX,tileY).index == "0") {
+		            options.push("right");
+		            console.log("right");
+		        }
+	        } catch(e) {	
 	        }
 
 	        var index = Math.floor(Math.random() * options.length);
