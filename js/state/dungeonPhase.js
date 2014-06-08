@@ -41,7 +41,7 @@ dungeonPhase.prototype.create = function(){
         this._game.add.existing(this._map._keys);
 
         //Instantiate new player object
-        this._player = new Player(this._game, 0.6, 'player_dungeon', this.getPlayerPosition, 190);
+        this._player = new Player(this._game, 0.6, 'player_dungeon', 190);
         
         //postpone character creation for a sec to avoid rendering problems
         setTimeout((function(self) { return function() {  

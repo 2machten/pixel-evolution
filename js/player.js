@@ -2,7 +2,7 @@
  * Player object, extends Phaser.Sprite
  */
 
- Player = function(game, scale, sprite, positionFunction, moveSpeed) {
+ Player = function(game, scale, sprite, moveSpeed) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = 150;
+    this.movespeed = moveSpeed;
     this.facing = "down";
     this._keys = 0;
 

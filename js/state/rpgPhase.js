@@ -31,7 +31,7 @@ rpgPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_rpg');
+    this._player = new Player(this._game, 1, 'player_rpg', 150);
 
     // and new NPC object
     this._npc = new NPC(this._game, 0.8, 'player_rpg', this.getItemPosition(), 200);
