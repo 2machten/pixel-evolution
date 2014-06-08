@@ -3,6 +3,8 @@ pacmanPhase = function(game) {
 
     this._game = game;
     this._freeTiles = [];
+
+    
 }
 
 //Extend the pacmanPhase object to be a Phaser.State
@@ -10,6 +12,7 @@ pacmanPhase.prototype = Object.create(Phaser.State.prototype);
 pacmanPhase.prototype.constructor = pacmanPhase;
 
 pacmanPhase.prototype.create = function(){
+	this._enemies = [];
 	//instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this._game, 'level', 'tiles_pacman', 32, 'collectable_pacman');
     this._layer = this._map.createLayer(0);
@@ -31,8 +34,6 @@ pacmanPhase.prototype.create = function(){
             break;
     }
 
-    this._enemies = new Phaser.Group(this._game, null, "enemies", false);
-    
     for(var i = 0; i < 4; i++) {
     	this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
 
@@ -119,14 +120,16 @@ pacmanPhase.prototype.create = function(){
 		    }
     	}
 
-    	this._enemies.add(this._enemy);
-    	this._game.add.existing(this._enemy);
-	}	
+    	this._enemies.push(this._enemy);
+    }	
     
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
+            for(var i = 0; i < 4; i++) {
+            	self._game.add.existing(self._enemies[i]);
+            }
         }})(this),200); 
 
 
@@ -158,7 +161,25 @@ pacmanPhase.prototype.update = function(){
         } 
 }
 
-pacmanPhase.prototype.getEnemyPosition =
+pacmanPhase.prototype.getEnemyPosition = function() {
+	if(this._game._level == 3 || this._game._level == 5) {
+		switch(this._enemies.length) {
+			case 0: return [10*32, 8*32];
+			case 1: return [14*32, 8*32];
+			case 2: return [10*32, 10*32];
+			case 3: return [14*32, 10*32];
+		}
+	} else if(this._game._level == 4) {
+		switch(this._enemies.length) {
+			case 0: return [11*32, 5*32];
+			case 1: return [13*32, 5*32];
+			case 2: return [11*32, 13*32];
+			case 3: return [13*32, 13*32];
+		}
+	} 
+}
+
+
 pacmanPhase.prototype.getItemPosition =
 pacmanPhase.prototype.getPlayerPosition = function(){
     //shuffle the array of free tiles
