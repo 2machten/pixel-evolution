@@ -196,7 +196,7 @@ PixelEvolution.prototype.showMessage = function(message){
 
 
 // Instantiate game object.  
-var pixelEvolution = new PixelEvolution(736, 608, Phaser.CANVAS, 'game', {
+var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
     preload: preload,
     create: create
 }, false, false);
