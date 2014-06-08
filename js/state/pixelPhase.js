@@ -23,13 +23,13 @@ pixelPhase.prototype.create = function(){
     //Instantiate new player object and switch sprites depending on the level.
     switch (this._game._level) {
         case 0: 
-            this._player = new Player(this._game, 1, 'player_pixel1', this.getPlayerPosition, 100);
+            this._player = new Player(this._game, 1, 'player_pixel1', 100);
             break;
         case 1:
-            this._player = new Player(this._game, 1, 'player_pixel2', this.getPlayerPosition, 120);
+            this._player = new Player(this._game, 1, 'player_pixel2', 120);
             break;
         case 2:
-            this._player = new Player(this._game, 1, 'player_pixel2', this.getPlayerPosition, 150);
+            this._player = new Player(this._game, 1, 'player_pixel2', 150);
             break;
     }	
     

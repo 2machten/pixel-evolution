@@ -19,7 +19,17 @@ pacmanPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
 	//create player
-    this._player = new Player(this._game, 1, 'player_pacman', 170);
+	switch (this._game._level) {
+        case 3: 
+            this._player = new Player(this._game, 1, 'player_pacman1', 100);
+            break;
+        case 4:
+            this._player = new Player(this._game, 1, 'player_pacman2', 120);
+            break;
+        case 5:
+            this._player = new Player(this._game, 1, 'player_pacman2', 150);
+            break;
+    }
 
     this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
 
