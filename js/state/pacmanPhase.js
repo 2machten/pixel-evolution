@@ -25,104 +25,111 @@ pacmanPhase.prototype.create = function(){
             this._player = new Player(this._game, 1, 'player_pacman1', 100);
             break;
         case 4:
-            this._player = new Player(this._game, 1, 'player_pacman2', 120);
+            this._player = new Player(this._game, 0.9, 'player_pacman2', 120);
             break;
         case 5:
-            this._player = new Player(this._game, 1, 'player_pacman2', 150);
+            this._player = new Player(this._game, 0.9, 'player_pacman2', 150);
             break;
     }
 
-    this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
+    this._enemies = new Phaser.Group(this._game, null, "enemies", false);
+    
+    for(var i = 0; i < 4; i++) {
+    	this._enemy = new Enemy(this._game, 1, 'enemy_pacman');
+
+    	this._enemy.update = function(){
+		    ticks++;
+		    this.spriteSize = 32;
+		    var tiles = this._game.state.getCurrentState()._layer;
+		    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
+
+		    if(ticks > 40) {
+		        ticks = 0;
+
+		        var options = [];
+
+		        var tileX = this.position.x/32;
+		        var tileY = this.position.y/32;
+
+		        var state = this._game.state.getCurrentState();
+
+		        try{
+		        	if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
+			            options.push("down");
+			            //console.log("down");
+			        }
+		        } catch(e) {	
+		        }
+		        try{
+		        	if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
+			            options.push("up");
+			            //console.log("up");
+			        }
+		        } catch(e) {	
+		        }
+		        try {
+		        	if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
+			            options.push("left");
+			            //console.log("left");
+			        }
+		        } catch(e) {	
+		        }
+		        try {
+		        	if(state._map.getTileRight(0, tileX,tileY).index == "0") {
+			            options.push("right");
+			            //console.log("right");
+			        }
+		        } catch(e) {	
+		        }
+
+		        var index = Math.floor(Math.random() * options.length);
+		        var direction = options[index];
+
+		        switch (direction) {
+		        	case "down": 
+		        		this.position.y = this.position.y+this.spriteSize;
+		        		if (this.facing != 'down'){
+			                this.animations.play('down');
+			                this.facing = 'down';
+			            }
+		        		break;
+		        	case "up":
+		        		this.position.y = this.position.y-this.spriteSize;
+		        		if (this.facing != 'up'){
+			                this.animations.play('up');
+			                this.facing = 'up';
+			            }
+		        		break;
+		        	case "left": 
+		        		this.position.x = this.position.x-this.spriteSize;
+				        if (this.facing != 'left'){
+			                this.animations.play('left');
+			                this.facing = 'left';
+			            }
+		        		break;
+		        	case "right":
+		        		this.position.x = this.position.x+this.spriteSize;
+		        		if (this.facing != 'right'){
+			                this.animations.play('right');
+			                this.facing = 'right';
+			            }
+		        		break;
+		        }	    
+
+
+		    }
+    	}
+
+    	this._enemies.add(this._enemy);
+    	this._game.add.existing(this._enemy);
+	}	
+    
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
-            self._game.add.existing(self._enemy);
         }})(this),200); 
 
-	this._enemy.update = function(){
-	    ticks++;
-	    this.spriteSize = 32;
-	    var tiles = this._game.state.getCurrentState()._layer;
-	    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
-	    //this._game.physics.arcade.collide(this, tiles);
-
-	    if(ticks > 20) {
-	        ticks = 0;
-
-	        var options = [];
-
-	        var tileX = this.position.x/32;
-	        var tileY = this.position.y/32;
-
-	        var state = this._game.state.getCurrentState();
-
-	        try{
-	        	if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
-		            options.push("down");
-		            console.log("down");
-		        }
-	        } catch(e) {	
-	        }
-	        try{
-	        	if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
-		            options.push("up");
-		            console.log("up");
-		        }
-	        } catch(e) {	
-	        }
-	        try {
-	        	if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
-		            options.push("left");
-		            console.log("left");
-		        }
-	        } catch(e) {	
-	        }
-	        try {
-	        	if(state._map.getTileRight(0, tileX,tileY).index == "0") {
-		            options.push("right");
-		            console.log("right");
-		        }
-	        } catch(e) {	
-	        }
-
-	        var index = Math.floor(Math.random() * options.length);
-	        var direction = options[index];
-
-	        switch (direction) {
-	        	case "down": 
-	        		this.position.y = this.position.y+this.spriteSize;
-	        		if (this.facing != 'down'){
-		                this.animations.play('down');
-		                this.facing = 'down';
-		            }
-	        		break;
-	        	case "up":
-	        		this.position.y = this.position.y-this.spriteSize;
-	        		if (this.facing != 'up'){
-		                this.animations.play('up');
-		                this.facing = 'up';
-		            }
-	        		break;
-	        	case "left": 
-	        		this.position.x = this.position.x-this.spriteSize;
-			        if (this.facing != 'left'){
-		                this.animations.play('left');
-		                this.facing = 'left';
-		            }
-	        		break;
-	        	case "right":
-	        		this.position.x = this.position.x+this.spriteSize;
-	        		if (this.facing != 'right'){
-		                this.animations.play('right');
-		                this.facing = 'right';
-		            }
-	        		break;
-	        }	    
-
-
-	    }
-	}
 
 	this._score = new Phaser.Group(this._game, null, "score", false);
 
@@ -152,7 +159,7 @@ pacmanPhase.prototype.update = function(){
         } 
 }
 
-pacmanPhase.prototype.getEnemyPosition= 
+pacmanPhase.prototype.getEnemyPosition =
 pacmanPhase.prototype.getItemPosition =
 pacmanPhase.prototype.getPlayerPosition = function(){
     //shuffle the array of free tiles
@@ -190,7 +197,7 @@ pacmanPhase.prototype.generate = function(){
 				"0,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,0\n"+
 				"0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0\n"+
 				"0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0\n"
-				break;
+				break;tegels
 			case 4: 
 				var map = 	
 				"0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0\n"+
