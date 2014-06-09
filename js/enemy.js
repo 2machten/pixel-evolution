@@ -25,7 +25,7 @@ var ticks = 0;
     this.body.collideWorldBounds = true;
 
     //Add animations for walking
-    var animsSpeed = 8;
+    var animsSpeed = 4;
     this.animations.add('left', [4, 5], animsSpeed, true);
     this.animations.add('right', [6, 7], animsSpeed, true);
     this.animations.add('up', [0, 1], animsSpeed, true);
@@ -93,3 +93,103 @@ Enemy.prototype.update = function() {
     }
 
 };
+
+Enemy.prototype.pacmanNormal = function() {
+    var options = [];
+
+    var tileX = this.position.x/32;
+    var tileY = this.position.y/32;
+
+    var state = this._game.state.getCurrentState();
+
+    try{
+        if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
+            options.push("down");
+            if(this._lastMove != "up") {
+                options.push("down");
+                options.push("down");
+            }
+            //console.log("down");
+        }
+    } catch(e) {    
+    }
+    try{
+        if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
+            options.push("up");
+            if(this._lastMove != "down") {
+                options.push("up");
+                options.push("up");
+            }
+            //console.log("up");
+        }
+    } catch(e) {    
+    }
+    try {
+        if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
+            options.push("left");
+            if(this._lastMove != "right") {
+                options.push("left");
+                options.push("left");
+            }
+            //console.log("left");
+        }
+    } catch(e) {    
+    }
+    try {
+        if(state._map.getTileRight(0, tileX,tileY).index == "0") {
+            options.push("right");
+            if(this._lastMove != "left") {
+                options.push("right");
+                options.push("right");
+            }
+            //console.log("right");
+        }
+    } catch(e) {    
+    }
+
+    this.chooseDirection(options);   
+}
+
+Enemy.prototype.pacmanPlayer = function() {
+    console.log("player action");
+}
+
+Enemy.prototype.chooseDirection = function(options) {
+    var index = Math.floor(Math.random() * options.length);
+    var direction = options[index];
+
+    switch (direction) {
+        case "down": 
+            this.position.y = this.position.y+this.spriteSize;
+            if (this.facing != 'down'){
+                this.animations.play('down');
+                this.facing = 'down';
+                this._lastMove = "down";
+            }
+            break;
+        case "up":
+            this.position.y = this.position.y-this.spriteSize;
+            if (this.facing != 'up'){
+                this.animations.play('up');
+                this.facing = 'up';
+                this._lastMove = "up";
+            }
+            break;
+        case "left": 
+            this.position.x = this.position.x-this.spriteSize;
+            if (this.facing != 'left'){
+                this.animations.play('left');
+                this.facing = 'left';
+                this._lastMove = "left";
+            }
+            break;
+        case "right":
+            this.position.x = this.position.x+this.spriteSize;
+            if (this.facing != 'right'){
+                this.animations.play('right');
+                this.facing = 'right';
+                this._lastMove = "right";
+            }
+            break;
+    }
+}

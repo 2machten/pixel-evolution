@@ -5,6 +5,7 @@ pacmanPhase = function(game) {
     this._freeTiles = [];
 
     this._game.stage.smoothed = false;
+    this._lastMove = null;
 }
 
 //Extend the pacmanPhase object to be a Phaser.State
@@ -32,6 +33,8 @@ pacmanPhase.prototype.create = function(){
         case 5:
             this._player = new Player(this._game, 0.9, 'player_pacman2', 150);
             break;
+        default:
+        	this._player = new Player(this._game, 1,'player_pacman1', 100);
     }
 
     for(var i = 0; i < 4; i++) {
@@ -44,82 +47,18 @@ pacmanPhase.prototype.create = function(){
 		    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
 
 		    if(ticks > 40) {
-		        ticks = 0;
+                ticks = 0;
 
-		        var options = [];
-
-		        var tileX = this.position.x/32;
-		        var tileY = this.position.y/32;
-
-		        var state = this._game.state.getCurrentState();
-
-		        try{
-		        	if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
-			            options.push("down");
-			            //console.log("down");
-			        }
-		        } catch(e) {	
-		        }
-		        try{
-		        	if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
-			            options.push("up");
-			            //console.log("up");
-			        }
-		        } catch(e) {	
-		        }
-		        try {
-		        	if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
-			            options.push("left");
-			            //console.log("left");
-			        }
-		        } catch(e) {	
-		        }
-		        try {
-		        	if(state._map.getTileRight(0, tileX,tileY).index == "0") {
-			            options.push("right");
-			            //console.log("right");
-			        }
-		        } catch(e) {	
-		        }
-
-		        var index = Math.floor(Math.random() * options.length);
-		        var direction = options[index];
-
-		        switch (direction) {
-		        	case "down": 
-		        		this.position.y = this.position.y+this.spriteSize;
-		        		if (this.facing != 'down'){
-			                this.animations.play('down');
-			                this.facing = 'down';
-			            }
-		        		break;
-		        	case "up":
-		        		this.position.y = this.position.y-this.spriteSize;
-		        		if (this.facing != 'up'){
-			                this.animations.play('up');
-			                this.facing = 'up';
-			            }
-		        		break;
-		        	case "left": 
-		        		this.position.x = this.position.x-this.spriteSize;
-				        if (this.facing != 'left'){
-			                this.animations.play('left');
-			                this.facing = 'left';
-			            }
-		        		break;
-		        	case "right":
-		        		this.position.x = this.position.x+this.spriteSize;
-		        		if (this.facing != 'right'){
-			                this.animations.play('right');
-			                this.facing = 'right';
-			            }
-		        		break;
-		        }	    
-
-
-		    }
+                console.log(this._player);
+                //Als dichtbij player, ga achterna.
+                if(this._game._state.getCurrentState()._player.x - this.x <= -96 || this._game._state.getCurrentState()._player.x - this.x >= 96 ||
+                	this._game._state.getCurrentState()._player.y - this.y <= -96 || this._game._state.getCurrentState()._player.y - this.y >= 96) {
+                	this.pacmanPlayer();
+                } else {
+                	this.pacmanNormal();
+            	}
+            }
     	}
-
     	this._enemies.push(this._enemy);
     }	
     
