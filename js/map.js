@@ -5,7 +5,7 @@
 WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
     this._game = game;
     var state = this._game.state.getCurrentState();
-    
+
     this.level = state.generate();
     this._game.load.tilemap('level', null, this.level, Phaser.Tilemap.CSV);
 
@@ -13,7 +13,7 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
 
     //automatically map tilemap (numbers) to images by their position
     this.addTilesetImage(tileSprite);
-    
+
     //make sure the player collides (cannot walk through) all tiles except tile 0
     this.setCollisionByExclusion([0]);
 
@@ -43,7 +43,7 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
 
     /*if(this._game._level > 3) {
         this._enemies = new Phaser.Group(this._game, null, "enemies", false);
-        
+
         for (var i=0; i<3; i++){
             var spawnPosition = state.getEnemyPosition();
             var enemy = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'enemy_dungeon');

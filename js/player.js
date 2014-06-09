@@ -105,6 +105,11 @@ Player.prototype.keyCollisionHandler = function(player, key){
     key.destroy(); 
 };
 
+//collisionhandler for npc in the rpg stage
+Player.prototype.npcCollisionHandler = function(player, npc){
+    console.log(npc);
+};
+
 
 /**
  * Automatically called by World.update
@@ -137,6 +142,13 @@ Player.prototype.keyCollisionHandler = function(player, key){
         try{
             var keys = this._game.state.getCurrentState()._map._keys;
             this._game.physics.arcade.collide(this, keys, this.keyCollisionHandler, null, this.update);
+        }catch(e){}
+
+        //collide with npcs
+        try{
+            var npcs = this._game.state.getCurrentState()._map._npcs;
+            //console.log(npcs);
+            this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
         }catch(e){}
 
         //Reset speed each update (else character keeps moving, velocity not position)
