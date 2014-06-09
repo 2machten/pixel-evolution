@@ -10,7 +10,7 @@ var ticks = 0;
     //properties
     this.hp = 1;
     this.facing = "";
-    this.movespeed = 70;
+    this.movespeed = 90;
     this.facing = "down";
 
     startPosition = this._state.getEnemyPosition();
@@ -85,7 +85,7 @@ Enemy.prototype.update = function() {
 
         var i = Math.floor(Math.random() * options.length);
         var direction = options[i];
-        console.log(direction + " - " + i);
+
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
