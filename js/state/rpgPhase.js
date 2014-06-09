@@ -13,13 +13,13 @@ rpgPhase.prototype.constructor = rpgPhase;
 rpgPhase.prototype.update = function(){
     var map = this._game.state.getCurrentState()._map;
     var items = map._items;
-    
+
     //Check whether the collectables are collected,and whether we are not yet in the last level of the phase.
         if(items.children.length == 0 && !ran && this._game._level != 12){
             ran = true;
             run = true;
             this._game._level++;
-        } 
+        }
 }
 
 rpgPhase.prototype.create = function(){
@@ -37,19 +37,22 @@ rpgPhase.prototype.create = function(){
     // and new NPC object
 
     //DENNIS @ PIETER: really rough generation template, better put this in map
-    this._npcs = new Phaser.Group(this._game, null, "NPCs", false);
+    //PIETER @ DENNIS: tried putting it in map, but somehow it does not show the NPCs then
+    this._map._npcs = new Phaser.Group(this._game, null, "NPCs", false);
 
     for (var i = 0; i < 100; i++){
         var choice = Math.ceil(ROT.RNG.getUniform() * 7);
-        this._npcs.add(new NPC(this._game, (32/27), 'npc'+choice+'_rpg'));
+        var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg');
+        this._game.physics.enable(npc);
+        npc.body.immovable = true;
+        this._map._npcs.add(npc);
     }
 
-    this._game.add.existing(this._npcs);
+    this._game.add.existing(this._map._npcs);
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {
             self._game.add.existing(self._player);
-            self._game.add.existing(self._npc);
         }})(this),200);
 
     this._score = new Phaser.Group(this._game, null, "score", false);
