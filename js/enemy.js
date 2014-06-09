@@ -25,7 +25,7 @@ var ticks = 0;
     this.body.collideWorldBounds = true;
 
     //Add animations for walking
-    var animsSpeed = 8;
+    var animsSpeed = 4;
     this.animations.add('left', [4, 5], animsSpeed, true);
     this.animations.add('right', [6, 7], animsSpeed, true);
     this.animations.add('up', [0, 1], animsSpeed, true);

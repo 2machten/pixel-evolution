@@ -3239,7 +3239,7 @@ ROT.Map.Rogue.prototype._connectUnconnectedRooms = function() {
 					room["connections"].push( [otherRoom["cellx"], otherRoom["celly"]] );  
 				} else {
 					console.log("-- Unable to connect room. DENNIS: restart generation!");
-					this._game.state.start("dungeon");
+					this._error = true;
 				}
 			}
 		}
