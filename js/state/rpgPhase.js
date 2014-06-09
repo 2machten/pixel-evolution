@@ -40,7 +40,7 @@ rpgPhase.prototype.create = function(){
     //PIETER @ DENNIS: tried putting it in map, but somehow it does not show the NPCs then
     this._map._npcs = new Phaser.Group(this._game, null, "NPCs", false);
 
-    for (var i = 0; i < 100; i++){
+    for (var i = 0; i < 3; i++){
         var choice = Math.ceil(ROT.RNG.getUniform() * 7);
         var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg');
         this._game.physics.enable(npc);
