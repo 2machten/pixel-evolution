@@ -5,7 +5,7 @@ var ticks = 0;
 
  var Enemy = function(game, scale, sprite) {
     this._game = game;
-    var state = this._game.state.getCurrentState();
+    this._state = this._game.state.getCurrentState();
 
     //properties
     this.hp = 1;
@@ -13,7 +13,7 @@ var ticks = 0;
     this.movespeed = 70;
     this.facing = "down";
 
-    startPosition = state.getEnemyPosition();
+    startPosition = this._state.getEnemyPosition();
 
     //create a new sprite and put it on that free spot
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
@@ -51,7 +51,7 @@ console.log("Created enemy");
  */
 Enemy.prototype.update = function() {
     try {
-        var tiles = this._game.state.getCurrentState()._layer;
+        var tiles = this._state._layer;
         this._game.physics.arcade.collide(this, tiles);
     } catch (e) {
     }
@@ -60,12 +60,37 @@ Enemy.prototype.update = function() {
 
     if(ticks > 50) {
         ticks = 0;
-        var direction = Math.ceil(Math.random() * 4);
+
+        var options = []; // could give other options for more noise ["left", "right", "up", "down"];
+
+        var diffx = (this._state._player.position.x - this.position.x);
+        var diffy = (this._state._player.position.y - this.position.y);
+        
+        //x coordinate
+        //if within 300px radius, but dicard very close distances (else it keeps moving in front of you)
+        if(diffx > 25 && diffx < 300){
+            //push 3 times right, so that it has 5 times as much change to occur than other movements.
+            options.push('right');
+        } else if(diffx < -25 && diffx > -300){
+            options.push('left');
+        }
+
+        //y coordinate
+        //if within 300px radius, but dicard very close distances (else it keeps moving in front of you)
+        if(diffy > 25 && diffy < 300){
+            options.push('down');
+        } else if(diffy < -25 && diffy > -300){
+            options.push('up');
+        }
+
+        var i = Math.floor(Math.random() * options.length);
+        var direction = options[i];
+        console.log(direction + " - " + i);
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
         //down
-        if(direction == 1) {
+        if(direction == "down") {
             this.body.velocity.y = this.movespeed;
             if (this.facing != 'down'){
                 this.animations.play('down');
@@ -73,7 +98,7 @@ Enemy.prototype.update = function() {
             }
         }
         //up
-        else if(direction == 2) {
+        else if(direction == "up") {
             this.body.velocity.y = -this.movespeed;
             if (this.facing != 'up'){
                 this.animations.play('up');
@@ -81,7 +106,7 @@ Enemy.prototype.update = function() {
             }
         }
         //left
-         else if(direction == 3) {
+         else if(direction == "left") {
             this.body.velocity.x = -this.movespeed;
             if (this.facing != 'left'){
                 this.animations.play('left');
@@ -89,7 +114,7 @@ Enemy.prototype.update = function() {
             }
         }
         //right
-        else if(direction == 4) {
+        else if(direction == "right") {
             this.body.velocity.x = this.movespeed;
             if (this.facing != 'right'){
                 this.animations.play('right');
