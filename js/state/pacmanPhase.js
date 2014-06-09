@@ -51,9 +51,9 @@ pacmanPhase.prototype.create = function(){
 
                 console.log(this._player);
                 //Als dichtbij player, ga achterna.
-                if(this._game._state.getCurrentState()._player.x - this.x <= -96 || this._game._state.getCurrentState()._player.x - this.x >= 96 ||
-                	this._game._state.getCurrentState()._player.y - this.y <= -96 || this._game._state.getCurrentState()._player.y - this.y >= 96) {
-                	this.pacmanPlayer();
+                if(this._game.state.getCurrentState()._player.x - this.x <= -96 || this._game.state.getCurrentState()._player.x - this.x >= 96 ||
+                    this._game.state.getCurrentState()._player.y - this.y <= -96 || this._game.state.getCurrentState()._player.y - this.y >= 96) {
+                    this.pacmanPlayer();
                 } else {
                 	this.pacmanNormal();
             	}
