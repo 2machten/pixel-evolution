@@ -1,7 +1,9 @@
-NPC = function(game, scale, sprite, startPosition) {
+NPC = function(game, scale, sprite) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
+    startPosition = state.getItemPosition();
+    
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
 
     this.scale.setTo(scale, scale);

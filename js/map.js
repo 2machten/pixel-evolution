@@ -57,7 +57,16 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
     //spawn collectables in this group
     for (var i=0; i<6; i++){
         var spawnPosition = state.getItemPosition();
-        var collectable = this._game.add.sprite(spawnPosition[0], spawnPosition[1], collectableSprite);
+
+        var spriteName;
+        if (this._game._level < 3){
+            spriteName = collectableSprite + (Math.floor(i/2)+1);
+        } else {
+            spriteName = collectableSprite;
+        }
+
+        console.log(spriteName);
+        var collectable = this._game.add.sprite(spawnPosition[0], spawnPosition[1], spriteName);
         this._game.physics.enable(collectable);
         collectable.body.immovable = true;
         this._items.add(collectable);

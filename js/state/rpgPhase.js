@@ -35,7 +35,16 @@ rpgPhase.prototype.create = function(){
     this._player = new Player(this._game, 1, 'player_rpg', 150);
 
     // and new NPC object
-    this._npc = new NPC(this._game, 0.8, 'player_rpg', this.getItemPosition(), 200);
+
+    //DENNIS @ PIETER: really rough generation template, better put this in map
+    this._npcs = new Phaser.Group(this._game, null, "NPCs", false);
+
+    for (var i = 0; i < 100; i++){
+        var choice = Math.ceil(ROT.RNG.getUniform() * 7);
+        this._npcs.add(new NPC(this._game, 1, 'npc'+choice+'_rpg'));
+    }
+
+    this._game.add.existing(this._npcs);
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {

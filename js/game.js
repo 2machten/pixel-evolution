@@ -36,7 +36,9 @@ function preload()
     this.load.spritesheet('player_pixel2', 'assets/character_pixel2.png', 90, 90);
     this.load.spritesheet('player_pixel3', 'assets/character_pixel3.png', 90, 90);
     this.load.image('tiles_pixel', 'assets/tiles_pixel.png');
-    this.load.image('collectable_pixel', 'assets/collectable_pixel.png');
+    this.load.image('collectable_pixel1', 'assets/collectable_pixel1.png');
+    this.load.image('collectable_pixel2', 'assets/collectable_pixel2.png');
+    this.load.image('collectable_pixel3', 'assets/collectable_pixel3.png');
 
     //Pacman state sprites
     this.load.spritesheet('player_pacman1', 'assets/character_pacman.png', 18, 18);
@@ -59,6 +61,14 @@ function preload()
     this.load.spritesheet('player_rpg', 'assets/character_rpg.png', 27, 32);
     this.load.image('tiles_rpg', 'assets/tiles_rpg.png');
     this.load.image('collectable_rpg', 'assets/chest.png');
+
+    this.load.image('npc1_rpg', 'assets/npc_01.png');
+    this.load.image('npc2_rpg', 'assets/npc_02.png');
+    this.load.image('npc3_rpg', 'assets/npc_03.png');
+    this.load.image('npc4_rpg', 'assets/npc_04.png');
+    this.load.image('npc5_rpg', 'assets/npc_05.png');
+    this.load.image('npc6_rpg', 'assets/npc_06.png');
+    this.load.image('npc7_rpg', 'assets/npc_07.png');
 };
 
 function create()
