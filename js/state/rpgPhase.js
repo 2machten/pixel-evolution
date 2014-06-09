@@ -50,9 +50,96 @@ rpgPhase.prototype.create = function(){
 
     this._game.add.existing(this._map._npcs);
 
+    // create one enemy
+    // the current collision handler implementation in the player does not allow more
+    // to be created
+    this._enemy = new Enemy(this._game, 1, 'enemy_pacman1');
+
+    this._enemy.update = function() {
+        ticks++;
+        this.spriteSize = 32;
+        var tiles = this._game.state.getCurrentState()._layer;
+        this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
+
+        if(ticks > 40) {
+            ticks = 0;
+
+            var options = [];
+
+            var tileX = this.position.x/32;
+            var tileY = this.position.y/32;
+
+            var state = this._game.state.getCurrentState();
+
+            try{
+                if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
+                    options.push("down");
+                    //console.log("down");
+                }
+            } catch(e) {
+            }
+            try{
+                if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
+                    options.push("up");
+                    //console.log("up");
+                }
+            } catch(e) {
+            }
+            try {
+                if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
+                    options.push("left");
+                    //console.log("left");
+                }
+            } catch(e) {
+            }
+            try {
+                if(state._map.getTileRight(0, tileX,tileY).index == "0") {
+                    options.push("right");
+                    //console.log("right");
+                }
+            } catch(e) {
+            }
+
+            var index = Math.floor(Math.random() * options.length);
+            var direction = options[index];
+
+            switch (direction) {
+                case "down":
+                    this.position.y = this.position.y+this.spriteSize;
+                    if (this.facing != 'down'){
+                        this.animations.play('down');
+                        this.facing = 'down';
+                    }
+                    break;
+                case "up":
+                    this.position.y = this.position.y-this.spriteSize;
+                    if (this.facing != 'up'){
+                        this.animations.play('up');
+                        this.facing = 'up';
+                    }
+                    break;
+                case "left":
+                    this.position.x = this.position.x-this.spriteSize;
+                    if (this.facing != 'left'){
+                        this.animations.play('left');
+                        this.facing = 'left';
+                    }
+                    break;
+                case "right":
+                    this.position.x = this.position.x+this.spriteSize;
+                    if (this.facing != 'right'){
+                        this.animations.play('right');
+                        this.facing = 'right';
+                    }
+                    break;
+            }
+        }
+    };
+
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {
             self._game.add.existing(self._player);
+            self._game.add.existing(self._enemy);
         }})(this),200);
 
     this._score = new Phaser.Group(this._game, null, "score", false);
@@ -70,6 +157,7 @@ rpgPhase.prototype.create = function(){
 
 //Returns a position on the map where the player or an item can spawn
 rpgPhase.prototype.getItemPosition =
+rpgPhase.prototype.getEnemyPosition =
 rpgPhase.prototype.getPlayerPosition = function(){
     //shuffle the array of free tiles
     shuffle(this._freeTiles);
@@ -209,10 +297,10 @@ rpgPhase.prototype.generate = function(){
     }
 
     // find the largest open field
-    var max = 0;
+    var max = 1000000;
     var largest;
     $.each(fields, function(index, field) {
-        if (field.length > max) {
+        if (field.length < max) {
             max = field.length;
             largest = field;
         }
