@@ -41,7 +41,7 @@ rpgPhase.prototype.create = function(){
 
     for (var i = 0; i < 100; i++){
         var choice = Math.ceil(ROT.RNG.getUniform() * 7);
-        this._npcs.add(new NPC(this._game, 1, 'npc'+choice+'_rpg'));
+        this._npcs.add(new NPC(this._game, (32/27), 'npc'+choice+'_rpg'));
     }
 
     this._game.add.existing(this._npcs);
