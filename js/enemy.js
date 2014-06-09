@@ -25,12 +25,20 @@ var ticks = 0;
     this.body.collideWorldBounds = true;
 
     //Add animations for walking
-    var animsSpeed = 4;
-    this.animations.add('left', [4, 5], animsSpeed, true);
-    this.animations.add('right', [6, 7], animsSpeed, true);
-    this.animations.add('up', [0, 1], animsSpeed, true);
-    this.animations.add('down', [2, 3], animsSpeed, true);
+    
+    if(this._game._level < 6){ //pacman phase
+        var animsSpeed = 4;
 
+        this.animations.add('left', [4, 5], animsSpeed, true);
+        this.animations.add('right', [6, 7], animsSpeed, true);
+        this.animations.add('up', [0, 1], animsSpeed, true);
+        this.animations.add('down', [2, 3], animsSpeed, true);
+    } else if (this._game._level < 9){ // dungeon phase
+        var animsSpeed = 6;
+
+        this.animations.add('right', [0,1,2,3], animsSpeed, true);
+        this.animations.add('left', [4,5,6,7], animsSpeed, true);
+    }
 };
 
 //Extend the player object to be a Phaser.Sprite

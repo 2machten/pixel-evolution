@@ -43,6 +43,8 @@ dungeonPhase.prototype.create = function(){
             self._game.add.existing(self._player);
         }})(this),200); 
 
+    this._enemy = new Enemy(this._game, 1, 'enemy_dungeon1');
+    this._game.add.existing(this._enemy);
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
@@ -172,6 +174,7 @@ dungeonPhase.prototype.getItemPosition = function(){
     return [x*32 ,y*32];
 }
 
+dungeonPhase.prototype.getEnemyPosition =
 dungeonPhase.prototype.getKeyPosition = function(){
     //get right room index to put a key at.
     var i = this.getRoom(function(i){
