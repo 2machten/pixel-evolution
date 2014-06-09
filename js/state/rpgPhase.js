@@ -24,7 +24,7 @@ rpgPhase.prototype.update = function(){
 
 rpgPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, 'collectable_rpg');
+    this._map = new WorldMap(this._game, 'level', 'tiles_rpg', 32, 'collectable_rpg', 'enemy_dungeon1', 5);
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
@@ -34,107 +34,8 @@ rpgPhase.prototype.create = function(){
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', 150);
 
-    // and new NPC object
-
-    //DENNIS @ PIETER: really rough generation template, better put this in map
-    //PIETER @ DENNIS: tried putting it in map, but somehow it does not show the NPCs then
-    this._map._npcs = new Phaser.Group(this._game, null, "NPCs", false);
-
-    for (var i = 0; i < 3; i++){
-        var choice = Math.ceil(ROT.RNG.getUniform() * 7);
-        var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg');
-        this._game.physics.enable(npc);
-        npc.body.immovable = true;
-        this._map._npcs.add(npc);
-    }
-
     this._game.add.existing(this._map._npcs);
-
-    // create one enemy
-    // the current collision handler implementation in the player does not allow more
-    // to be created
-    this._enemy = new Enemy(this._game, 1, 'enemy_pacman1');
-
-    this._enemy.update = function() {
-        ticks++;
-        this.spriteSize = 32;
-        var tiles = this._game.state.getCurrentState()._layer;
-        this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
-
-        if(ticks > 40) {
-            ticks = 0;
-
-            var options = [];
-
-            var tileX = this.position.x/32;
-            var tileY = this.position.y/32;
-
-            var state = this._game.state.getCurrentState();
-
-            try{
-                if(state._map.getTileBelow(0, tileX,tileY).index == "0") {
-                    options.push("down");
-                    //console.log("down");
-                }
-            } catch(e) {
-            }
-            try{
-                if(state._map.getTileAbove(0, tileX,tileY).index == "0") {
-                    options.push("up");
-                    //console.log("up");
-                }
-            } catch(e) {
-            }
-            try {
-                if(state._map.getTileLeft(0, tileX,tileY).index == "0") {
-                    options.push("left");
-                    //console.log("left");
-                }
-            } catch(e) {
-            }
-            try {
-                if(state._map.getTileRight(0, tileX,tileY).index == "0") {
-                    options.push("right");
-                    //console.log("right");
-                }
-            } catch(e) {
-            }
-
-            var index = Math.floor(Math.random() * options.length);
-            var direction = options[index];
-
-            switch (direction) {
-                case "down":
-                    this.position.y = this.position.y+this.spriteSize;
-                    if (this.facing != 'down'){
-                        this.animations.play('down');
-                        this.facing = 'down';
-                    }
-                    break;
-                case "up":
-                    this.position.y = this.position.y-this.spriteSize;
-                    if (this.facing != 'up'){
-                        this.animations.play('up');
-                        this.facing = 'up';
-                    }
-                    break;
-                case "left":
-                    this.position.x = this.position.x-this.spriteSize;
-                    if (this.facing != 'left'){
-                        this.animations.play('left');
-                        this.facing = 'left';
-                    }
-                    break;
-                case "right":
-                    this.position.x = this.position.x+this.spriteSize;
-                    if (this.facing != 'right'){
-                        this.animations.play('right');
-                        this.facing = 'right';
-                    }
-                    break;
-            }
-        }
-    };
+    this._game.add.existing(this._map._enemies);
 
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {
@@ -297,10 +198,10 @@ rpgPhase.prototype.generate = function(){
     }
 
     // find the largest open field
-    var max = 1000000;
+    var max = 0;
     var largest;
     $.each(fields, function(index, field) {
-        if (field.length < max) {
+        if (field.length > max) {
             max = field.length;
             largest = field;
         }

@@ -25,7 +25,7 @@ dungeonPhase.prototype.update = function(){
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon');
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon', 'enemy_dungeon1', 2);
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
@@ -43,8 +43,7 @@ dungeonPhase.prototype.create = function(){
             self._game.add.existing(self._player);
         }})(this),200); 
 
-    this._enemy = new Enemy(this._game, 1, 'enemy_dungeon1');
-    this._game.add.existing(this._enemy);
+    this._game.add.existing(this._map._enemies);
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);

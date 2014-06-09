@@ -2,7 +2,7 @@
  * WorldMap object, extends Phaser.Tilemap
  */
 
-WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
+WorldMap = function(game, key, tileSprite, tileSize, collectableSprite, enemySprite, enemyAmount) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
@@ -41,16 +41,30 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
         }
     }
 
-    /*if(this._game._level > 3) {
+
+    //NPCs
+    if(this._game._level > 8){
+        this._npcs = new Phaser.Group(this._game, null, "NPCs", false);
+
+        for (var i = 0; i < 3; i++){
+            var choice = Math.ceil(ROT.RNG.getUniform() * 7);
+            var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg');
+            this._game.physics.enable(npc);
+            npc.body.immovable = true;
+            this._npcs.add(npc);
+        }
+    }
+
+    //enemies
+    if(this._game._level > 5) {
         this._enemies = new Phaser.Group(this._game, null, "enemies", false);
 
-        for (var i=0; i<3; i++){
+        for (var i = 0; i < enemyAmount; i++){
             var spawnPosition = state.getEnemyPosition();
-            var enemy = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'enemy_dungeon');
-            this._game.physics.enable(enemy);
+            var enemy = new Enemy(this._game, 1, enemySprite);
             this._enemies.add(enemy);
         }
-    }*/
+    }
 
     //create a group of items
     this._items = new Phaser.Group(this._game, null, "items", false);
@@ -65,7 +79,6 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
             spriteName = collectableSprite;
         }
 
-        console.log(spriteName);
         var collectable = this._game.add.sprite(spawnPosition[0], spawnPosition[1], spriteName);
         this._game.physics.enable(collectable);
         collectable.body.immovable = true;
@@ -75,10 +88,3 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite) {
 
 WorldMap.prototype = Object.create(Phaser.Tilemap.prototype);
 WorldMap.prototype.constructor = WorldMap;
-
-/**
- * Automatically called by World.update
- */
-WorldMap.prototype.update = function() {
-    //updating
-}

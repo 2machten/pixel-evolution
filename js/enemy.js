@@ -3,7 +3,7 @@
  */
 var ticks = 0;
 
- var Enemy = function(game, scale, sprite, positionFunction) {
+ var Enemy = function(game, scale, sprite) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
@@ -33,7 +33,7 @@ var ticks = 0;
         this.animations.add('right', [6, 7], animsSpeed, true);
         this.animations.add('up', [0, 1], animsSpeed, true);
         this.animations.add('down', [2, 3], animsSpeed, true);
-    } else if (this._game._level < 9){ // dungeon phase
+    } else { //} else if (this._game._level < 9){ // dungeon phase
         var animsSpeed = 6;
 
         this.animations.add('right', [0,1,2,3], animsSpeed, true);
@@ -50,12 +50,10 @@ console.log("Created enemy");
  * Automatically called by World.update
  */
 Enemy.prototype.update = function() {
-
     try {
-    var tiles = this._game.state.getCurrentState()._layer;
-    this._game.physics.arcade.collide(this, tiles);
+        var tiles = this._game.state.getCurrentState()._layer;
+        this._game.physics.arcade.collide(this, tiles);
     } catch (e) {
-
     }
 
     ticks++;
