@@ -25,7 +25,7 @@ dungeonPhase.prototype.update = function(){
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 32, 'collectable_dungeon', 'enemy_dungeon1', 2);
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 2);
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
@@ -36,7 +36,7 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._map._keys);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 0.74, 'player_dungeon', 190);
+    this._player = new Player(this._game, 1, 'player_dungeon', 120);
     
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
@@ -113,7 +113,7 @@ dungeonPhase.prototype.getPlayerPosition = function(){
     randomPosition[0] = digger._rooms[i].x + digger._rooms[i].width/2;
     randomPosition[1] = digger._rooms[i].y + digger._rooms[i].height/2;
 
-    return [(randomPosition[0]+1)*32, (randomPosition[1]+1)*32]; //+1 for border tile compensation
+    return [(randomPosition[0]+1)*40, (randomPosition[1]+1)*40]; //+1 for border tile compensation
 }
 
 //return the sides of a room where that has a locked door if those are available.
@@ -170,7 +170,7 @@ dungeonPhase.prototype.getItemPosition = function(){
         }
     }
 
-    return [x*32 ,y*32];
+    return [x*40 ,y*40];
 }
 
 dungeonPhase.prototype.getEnemyPosition =
@@ -191,7 +191,7 @@ dungeonPhase.prototype.getKeyPosition = function(){
     var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
     var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
 
-    return [x*32 ,y*32];
+    return [x*40 ,y*40];
 }
 
 
@@ -206,7 +206,7 @@ dungeonPhase.prototype.getDoorPosition = function(){
 
     for (var j = 0; j < room._doors.length; j++){
         var door = room._doors[j];
-        return [(door[0]+1) * 32 ,(door[1]+1) * 32];
+        return [(door[0]+1) * 40 ,(door[1]+1) * 40];
     }
 }
 
