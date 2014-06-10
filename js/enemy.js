@@ -90,7 +90,7 @@ Enemy.prototype.update = function() {
             options.push('up');
         }
 
-        chooseDirection(options);
+        this.chooseDirection(options);
     }
 
 };
