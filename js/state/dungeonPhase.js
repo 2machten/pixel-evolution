@@ -38,6 +38,10 @@ dungeonPhase.prototype.create = function(){
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_dungeon', 120);
     
+    //change the hitarea for collision detection to not adapt the top 8 pixels, this way 
+    //the player can walk easier through corridors
+    this._player.body.setSize(28,28,0,8); 
+    
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
