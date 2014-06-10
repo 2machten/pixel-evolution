@@ -40,7 +40,6 @@ rpgPhase.prototype.create = function(){
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {
             self._game.add.existing(self._player);
-            self._game.add.existing(self._enemy);
         }})(this),200);
 
     this._score = new Phaser.Group(this._game, null, "score", false);
@@ -153,7 +152,7 @@ rpgPhase.prototype.generate = function(){
 
     for (var i = 0; i < this._freeTiles.length; i++) {
         var tile = this._freeTiles[i];
-       rFreeTiles[tile[0]][tile[1]] = i;
+        rFreeTiles[tile[0]][tile[1]] = i;
     }
 
     // now, unionize all free tiles together
@@ -197,17 +196,28 @@ rpgPhase.prototype.generate = function(){
         fields[field].push(this._freeTiles[i]);
     }
 
-    // find the largest open field
+    console.log(fields);
+
+    // find the largest open fields
     var max = 0;
+    var secondMax = 0;
     var largest;
+    var secondLargest;
     $.each(fields, function(index, field) {
         if (field.length > max) {
+            secondMax = max;
+            secondLargest = largest;
             max = field.length;
             largest = field;
+        } else if (field.length > secondMax) {
+            secondMax = field.length;
+            secondLargest = field;
         }
     });
 
     this._freeTiles = largest;
+
+    // TODO: create a path between the two largest open fields.
 
     return level;
 };
