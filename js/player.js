@@ -51,6 +51,7 @@
     this._game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
 
     this.ticks = 0;
+    this._spacePressed = false;
 };
 
 //Extend the player object to be a Phaser.Sprite
@@ -218,6 +219,21 @@ Player.prototype.npcCollisionHandler = function(player, npc){
 
                 this.facing = 'idle';
             }
+        }
+
+        // cut action
+        var keyboard = this._game.input.keyboard;
+        if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+            if (!this._spacePressed) {
+                // do action!
+                this._spacePressed = true;
+
+                // TODO: show axe swinging animation
+
+                // TODO: kill the tree(s)
+            }
+        } else if (this._spacePressed) {
+            this._spacePressed = false;
         }
     } else {
         this.body.velocity.x = 0;

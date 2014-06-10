@@ -40,7 +40,6 @@ rpgPhase.prototype.create = function(){
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {
             self._game.add.existing(self._player);
-            self._game.add.existing(self._enemy);
         }})(this),200);
 
     this._score = new Phaser.Group(this._game, null, "score", false);
@@ -121,23 +120,6 @@ rpgPhase.prototype.generate = function(){
         $('#minimap').html(display.getContainer());
     }
 
-    var level = "";
-
-    for (var i=0; i<map._map[0].length; i++) {
-        for (var j=0; j<map._map.length; j++) {
-            var point = map._map[j][i]+"";
-
-            if(point=="0" || point=="border"){
-                point = "1";
-            } else {
-                point = "0";
-            }
-
-            level += point + ",";
-        }
-        level = level.substring(0,level.length-1) + "\n";
-    }
-
     // calculate the biggest part of the map where we can freely move around
     var union = new UnionFind(this._freeTiles.length);
 
@@ -153,7 +135,7 @@ rpgPhase.prototype.generate = function(){
 
     for (var i = 0; i < this._freeTiles.length; i++) {
         var tile = this._freeTiles[i];
-       rFreeTiles[tile[0]][tile[1]] = i;
+        rFreeTiles[tile[0]][tile[1]] = i;
     }
 
     // now, unionize all free tiles together
@@ -197,17 +179,71 @@ rpgPhase.prototype.generate = function(){
         fields[field].push(this._freeTiles[i]);
     }
 
-    // find the largest open field
-    var max = 0;
+    console.log(fields);
+
+    // find the largest open fields
+    var max = 10000;
+    var secondMax = 10000;
     var largest;
+    var secondLargest;
     $.each(fields, function(index, field) {
-        if (field.length > max) {
+        if (field.length < max) {
+            secondMax = max;
+            secondLargest = largest;
             max = field.length;
             largest = field;
+        } else if (field.length < secondMax) {
+            secondMax = field.length;
+            secondLargest = field;
         }
     });
 
-    this._freeTiles = largest;
+
+    // create a path between the two largest open fields.
+    // we do this by simply selecting two random tiles, and making sure there
+    // is a (L-shaped) path between them.
+
+    var tileA = largest[Math.floor(Math.random() * largest.length)];
+    var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
+
+    // path of tiles in between
+    var path = [];
+
+    for (var i = Math.min(tileA[0], tileB[0]); i < Math.max(tileA[0], tileB[0]); i++) {
+        path.push([i, tileA[1]]);
+    }
+    for (var i = Math.min(tileA[1], tileB[1]); i < Math.max(tileA[1], tileB[1]); i++) {
+        path.push([tileB[0], i]);
+    }
+
+    // make sure the path is cleared
+    $.each(path, function(idx, item) {
+        if (map._map[item[0]][item[1]] == 0) {
+            console.log('hah');
+            console.log(item);
+            map._map[item[0]][item[1]] = 1;
+        }
+    });
+
+    // we have more spaaaccee!!
+    this._freeTiles = largest.concat(secondLargest);
+
+    var level = "";
+
+    for (var i=0; i<map._map[0].length; i++) {
+        for (var j=0; j<map._map.length; j++) {
+            var point = map._map[j][i]+"";
+
+            if(point=="0" || point=="border"){
+                point = "1";
+            } else {
+                point = "0";
+            }
+
+            level += point + ",";
+        }
+        level = level.substring(0,level.length-1) + "\n";
+    }
 
     return level;
 };
