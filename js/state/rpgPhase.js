@@ -179,8 +179,6 @@ rpgPhase.prototype.generate = function(){
         fields[field].push(this._freeTiles[i]);
     }
 
-    console.log(fields);
-
     // find the largest open fields
     var max = 10000;
     var secondMax = 10000;
@@ -216,12 +214,26 @@ rpgPhase.prototype.generate = function(){
         path.push([tileB[0], i]);
     }
 
-    // make sure the path is cleared
+    this._treeTiles = [];
+
+    // make sure the path is cleared, and select fields that might be good for a tree
     $.each(path, function(idx, item) {
         if (map._map[item[0]][item[1]] == 0) {
-            console.log('hah');
-            console.log(item);
             map._map[item[0]][item[1]] = 1;
+        }
+        var localTiles = [];
+        localTiles.push([item[0] + 1, item[1]]);
+        localTiles.push([item[0] - 1, item[1]]);
+        localTiles.push([item[0], item[1] + 1]);
+        localTiles.push([item[0], item[1] - 1]);
+        var openCount = 0;
+        $.each(localTiles, function(idx, localTile) {
+            if (map._map[localTile[0]][localTile[1]] == 0) {
+                openCount++;
+            }
+        });
+        if (openCount == 2) {
+            this._treeTiles.push(item);
         }
     });
 
