@@ -24,6 +24,7 @@ var ticks = 0;
     this._game.physics.enable(this);
     this.body.collideWorldBounds = true;
 
+
     //Add animations for walking
     
     if(this._game._level < 6){ //pacman phase
@@ -56,6 +57,12 @@ Enemy.prototype.update = function() {
     } catch (e) {
     }
 
+    try {
+        var player = this._state._player;
+        this._game.physics.arcade.collide(this, player);
+    } catch (e) {
+    }
+
     ticks++;
 
     if(ticks > 50) {
@@ -83,44 +90,7 @@ Enemy.prototype.update = function() {
             options.push('up');
         }
 
-        var i = Math.floor(Math.random() * options.length);
-        var direction = options[i];
-
-        this.body.velocity.x = 0;
-        this.body.velocity.y = 0;
-
-        //down
-        if(direction == "down") {
-            this.body.velocity.y = this.movespeed;
-            if (this.facing != 'down'){
-                this.animations.play('down');
-                this.facing = 'down';
-            }
-        }
-        //up
-        else if(direction == "up") {
-            this.body.velocity.y = -this.movespeed;
-            if (this.facing != 'up'){
-                this.animations.play('up');
-                this.facing = 'up';
-            }
-        }
-        //left
-         else if(direction == "left") {
-            this.body.velocity.x = -this.movespeed;
-            if (this.facing != 'left'){
-                this.animations.play('left');
-                this.facing = 'left';
-            }
-        }
-        //right
-        else if(direction == "right") {
-            this.body.velocity.x = this.movespeed;
-            if (this.facing != 'right'){
-                this.animations.play('right');
-                this.facing = 'right';
-            }
-        }
+        chooseDirection(options);
     }
 
 };
@@ -181,8 +151,46 @@ Enemy.prototype.pacmanNormal = function() {
     this.chooseDirection(options);   
 }
 
-Enemy.prototype.pacmanPlayer = function() {
-    console.log("player action");
+Enemy.prototype.pacmanPlayer = function(diffx, diffy) {
+    var options = [];
+
+    var tileX = this.position.x/32;
+    var tileY = this.position.y/32;
+
+    var state = this._game.state.getCurrentState();
+
+    try{
+        if(diffy > 0 && state._map.getTileBelow(0, tileX,tileY).index == "0") {
+            options.push("down");
+        }
+    } catch(e) {    
+    }
+    try{
+        if(diffy < 0 && state._map.getTileAbove(0, tileX,tileY).index == "0") {
+            options.push("up");
+        }
+    } catch(e) {    
+    }
+    try {
+        if(diffx < 0 && state._map.getTileLeft(0, tileX,tileY).index == "0") {
+            options.push("left");
+        }
+    } catch(e) {    
+    }
+    try {
+        if(diffx > 0 && state._map.getTileRight(0, tileX,tileY).index == "0") {
+            options.push("right");
+        }
+    } catch(e) {    
+    }
+
+    if(options.length == 0) {
+        this.pacmanNormal();
+    } else {
+        console.log("following");
+        this.chooseDirection(options);
+    }
+
 }
 
 Enemy.prototype.chooseDirection = function(options) {
