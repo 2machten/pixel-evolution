@@ -41,22 +41,28 @@ pacmanPhase.prototype.create = function(){
     	this._enemy = new Enemy(this._game, 1, 'enemy_pacman'+(i+1));
 
     	this._enemy.update = function(){
+    		try {
+		        var player = this._state._player;
+		        this._game.physics.arcade.overlap(this, player, player.enemyCollisionHandler, null, this.update);
+		    } catch (e) {
+		    }
+
 		    ticks++;
 		    this.spriteSize = 32;
 		    var tiles = this._game.state.getCurrentState()._layer;
-		    this._game.physics.arcade.overlap(this.sprite, tiles, this.collisionHandler, null, this.update);
+		    this._game.physics.arcade.overlap(this, tiles, this.collisionHandler, null, this.update);
 
 		    if(ticks > 40) {
                 ticks = 0;
 
-                console.log(this._player);
-                //Als dichtbij player, ga achterna.
-                if(this._game.state.getCurrentState()._player.x - this.x <= -96 || this._game.state.getCurrentState()._player.x - this.x >= 96 ||
-                    this._game.state.getCurrentState()._player.y - this.y <= -96 || this._game.state.getCurrentState()._player.y - this.y >= 96) {
-                    this.pacmanPlayer();
-                } else {
-                	this.pacmanNormal();
-            	}
+                var diffx = (this._state._player.position.x - this.position.x);
+		        var diffy = (this._state._player.position.y - this.position.y);
+		        
+		        if((diffx > 16 && diffx < 144) || (diffy > 16 && diffy < 144)){
+		            this.pacmanPlayer(diffx, diffy);
+		        } else {
+		        	this.pacmanNormal();
+		        }
             }
     	}
     	this._enemies.push(this._enemy);
