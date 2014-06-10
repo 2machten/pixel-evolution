@@ -51,7 +51,7 @@ function preload()
     this.load.image('collectable_pacman', 'assets/collectable_pacman.png');
 
     //Dungeon state sprites
-    this.load.spritesheet('player_dungeon', 'assets/character_dungeon1.png', 24, 30);
+    this.load.spritesheet('player_dungeon', 'assets/character_dungeon1.png', 28, 36);
     this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
     this.load.image('collectable_dungeon', 'assets/chest.png');
     this.load.image('key_dungeon', 'assets/dungeon_key.png');

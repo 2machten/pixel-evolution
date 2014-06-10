@@ -31,11 +31,18 @@
     this.body.collideWorldBounds = true;
 
     //Add animations for walking
-    var animsSpeed = 8;
-    this.animations.add('left', [8, 9], animsSpeed, true);
-    this.animations.add('right', [3, 4], animsSpeed, true);
-    this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
-    this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+    
+    if(this._game._level > 5 && this._game._level < 9){
+        var animsSpeed = 10;
+        this.animations.add('right', [0,1,2,3], animsSpeed, true);
+        this.animations.add('left', [4,5,6,7], animsSpeed, true);
+    } else {
+        var animsSpeed = 8;
+        this.animations.add('left', [8, 9], animsSpeed, true);
+        this.animations.add('right', [3, 4], animsSpeed, true);
+        this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
+        this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+    }
 
     //store cursors object for controlling the character
     this.cursors = this._game.input.keyboard.createCursorKeys();
