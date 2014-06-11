@@ -24,6 +24,7 @@ pacmanPhase.prototype.create = function(){
 
 	//create player
 	switch (this._game._level) {
+		default:
         case 3: 
             this._player = new Player(this._game, 1, 'player_pacman1', 100);
             break;
@@ -31,10 +32,8 @@ pacmanPhase.prototype.create = function(){
             this._player = new Player(this._game, 0.9, 'player_pacman2', 120);
             break;
         case 5:
-            this._player = new Player(this._game, 0.9, 'player_pacman2', 150);
+            this._player = new Player(this._game, 0.9, 'player_pacman3', 150);
             break;
-        default:
-        	this._player = new Player(this._game, 1,'player_pacman1', 100);
     }
 
     for(var i = 0; i < 4; i++) {
