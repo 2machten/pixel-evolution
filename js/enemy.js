@@ -59,7 +59,8 @@ Enemy.prototype.update = function() {
 
     try {
         var player = this._state._player;
-        this._game.physics.arcade.collide(this, player);
+        this._game.physics.arcade.collide(this, player, this._player.enemyCollisionHandler);
+        console.log("collision in Enemy");
     } catch (e) {
     }
 

@@ -4,21 +4,21 @@
 
  Player = function(game, scale, sprite, moveSpeed) {
     this._game = game;
-    var state = this._game.state.getCurrentState();
+    this._state = this._game.state.getCurrentState();
 
     //properties
     this.quests = [];
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = moveSpeed;
+    this.movespeed = 550;
     this.facing = "down";
     this._keys = 0;
 
-    startPosition = state.getPlayerPosition();
+    startPosition = this._state.getPlayerPosition();
 
-    var halfWidth = this._game.state.getCurrentState()._map.tileWidth * 0.5;
-    var halfHeight = this._game.state.getCurrentState()._map.tileHeight * 0.5;
+    var halfWidth = this._state._map.tileWidth * 0.5;
+    var halfHeight = this._state._map.tileHeight * 0.5;
 
     //create a new sprite and put it on that free spot
     Phaser.Sprite.call(this, this._game, startPosition[0]+halfWidth, startPosition[1]+halfHeight, sprite);
@@ -46,6 +46,7 @@
 
     //store cursors object for controlling the character
     this.cursors = this._game.input.keyboard.createCursorKeys();
+    this.swordKey = game.input.keyboard.addKey(Phaser.Keyboard.Z);
 
     //make the camera follow the player
     this._game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
@@ -131,36 +132,36 @@ Player.prototype.npcCollisionHandler = function(player, npc){
  Player.prototype.update = function() {
     if(!this._game._pause){
 
-        var tiles = this._game.state.getCurrentState()._layer;
-        this._game.physics.arcade.collide(this, tiles);
+        var tiles = this._state._layer;
+        //this._game.physics.arcade.collide(this, tiles);
 
         //collide with items
         try{
-            var items = this._game.state.getCurrentState()._map._items;
+            var items = this._state._map._items;
             this._game.physics.arcade.collide(this, items, this.itemCollisionHandler, null, this.update);
         }catch(e){}
 
         //collide with enemies
         try{
-            var enemies = this._game.state.getCurrentState()._enemy;
+            var enemies = this._state._enemy;
             this._game.physics.arcade.collide(this, enemies, this.enemyCollisionHandler, null, this.update);
         }catch(e){}
 
         //collide with doors
         try{
-            var doors = this._game.state.getCurrentState()._map._doors;
+            var doors = this._state._map._doors;
             this._game.physics.arcade.collide(this, doors, this.doorCollisionHandler, null, this.update);
         }catch(e){}
 
         //collide with keys
         try{
-            var keys = this._game.state.getCurrentState()._map._keys;
+            var keys = this._state._map._keys;
             this._game.physics.arcade.collide(this, keys, this.keyCollisionHandler, null, this.update);
         }catch(e){}
 
         //collide with npcs
         try{
-            var npcs = this._game.state.getCurrentState()._map._npcs;
+            var npcs = this._state._map._npcs;
             //console.log(npcs);
             this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
         }catch(e){}
@@ -218,6 +219,9 @@ Player.prototype.npcCollisionHandler = function(player, npc){
                 }
 
                 this.facing = 'idle';
+            } else {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
             }
         }
 
@@ -235,8 +239,21 @@ Player.prototype.npcCollisionHandler = function(player, npc){
         } else if (this._spacePressed) {
             this._spacePressed = false;
         }
-    } else {
-        this.body.velocity.x = 0;
-        this.body.velocity.y = 0;
+
+        //sword action 
+        if (this.swordKey.isDown && this._game._level > 5) {
+                var diffx = (this.position.x - this._state._map._enemies.position.x);
+                var diffy = (this.position.y - this._state._map._enemies.position.y);
+                if(this.facing == 'down' && diffy < 0 && diffy > -64 && diffx > -16 && diffx < 16) {
+                    this._state._enemies[i].destroy();
+                } else if(this.facing == 'up' && diffy < 64 && diffy > 0 && diffx > -16 && diffx < 16) {
+                    this._state._enemies[i].destroy();
+                } else if(this.facing == 'left' && diffy > -16 && diffy < 16 && diffx > 0 && diffx < 64) {
+                    this._state._enemies[i].destroy();
+                } else if(this.facing == 'right' && diffy > -16 && diffy < 16 && diffx > -64 && diffx < 0) {
+                    this._state._enemies[i].destroy();
+                }
+        }
     }
+    
 };
