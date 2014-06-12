@@ -70,18 +70,18 @@ Player.prototype.itemCollisionHandler = function(player, chest){
 };
 
 Player.prototype.enemyCollisionHandler = function(player, enemy){
-    player._game.showMessage("Autch!");
-    console.log("enemy collision");
-
+    //if pacman stage, restart immediately
     var state = pixelEvolution.state.current;
     if(state == "pacman") {
         transitions.to('pacman');
     }
 
+    //Remove one visual heart container
     if(typeof pixelEvolution.state.getCurrentState()._hearts != "undefined"){
         pixelEvolution.state.getCurrentState()._hearts.getTop().destroy();
     }
 
+    //decrease player hp
     if(this.hp <= 0) {
         player._game.showMessage("You died. Kthxbai!")
     } else {

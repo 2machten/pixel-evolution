@@ -43,6 +43,7 @@ function preload()
     //Pacman state sprites
     this.load.spritesheet('player_pacman1', 'assets/character_pacman.png', 18, 18);
     this.load.spritesheet('player_pacman2', 'assets/character_pacman2.png', 24, 24);
+    this.load.spritesheet('player_pacman3', 'assets/character_pacman3.png', 24, 24);
     this.load.spritesheet('enemy_pacman1', 'assets/enemy_01.png', 32, 32);
     this.load.spritesheet('enemy_pacman2', 'assets/enemy_02.png', 32, 32);
     this.load.spritesheet('enemy_pacman3', 'assets/enemy_03.png', 32, 32);
@@ -51,7 +52,9 @@ function preload()
     this.load.image('collectable_pacman', 'assets/collectable_pacman.png');
 
     //Dungeon state sprites
-    this.load.spritesheet('player_dungeon', 'assets/character_dungeon1.png', 28, 36);
+    this.load.spritesheet('player_dungeon1', 'assets/character_dungeon1.png', 28, 36);
+    this.load.spritesheet('player_dungeon2', 'assets/character_dungeon2.png', 28, 36);
+    this.load.spritesheet('player_dungeon3', 'assets/character_dungeon3.png', 28, 36);
     this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
     this.load.image('collectable_dungeon', 'assets/chest.png');
     this.load.image('key_dungeon', 'assets/dungeon_key.png');
