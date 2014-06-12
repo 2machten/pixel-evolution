@@ -24,6 +24,8 @@ var ticks = 0;
     this._game.physics.enable(this);
     this.body.collideWorldBounds = true;
 
+    this.body.immovable = true;
+
 
     //Add animations for walking
     
@@ -35,7 +37,7 @@ var ticks = 0;
         this.animations.add('up', [0, 1], animsSpeed, true);
         this.animations.add('down', [2, 3], animsSpeed, true);
     } else { //} else if (this._game._level < 9){ // dungeon phase
-        var animsSpeed = 6;
+        var animsSpeed = 8;
 
         this.animations.add('right', [0,1,2,3], animsSpeed, true);
         this.animations.add('left', [4,5,6,7], animsSpeed, true);
@@ -59,10 +61,7 @@ Enemy.prototype.update = function() {
 
     try {
         var player = this._state._player;
-
-        //TODO: WAS this._player but that one doesnt exist.. right?
         this._game.physics.arcade.collide(this, player, player.enemyCollisionHandler);
-        console.log("collision in Enemy");
     } catch (e) {
     }
 
