@@ -36,7 +36,23 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._map._keys);
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_dungeon', 120);
+    
+    switch (this._game._level) {
+        default:
+        case 6: 
+            this._player = new Player(this._game, 1, 'player_dungeon1', 120);
+            break;
+        case 7:
+            this._player = new Player(this._game, 1, 'player_dungeon2', 120);
+            break;
+        case 8:
+            this._player = new Player(this._game, 1, 'player_dungeon3', 120);
+            break;
+    }
+
+    //change the hitarea for collision detection to not adapt the top 8 pixels, this way 
+    //the player can walk easier through corridors
+    this._player.body.setSize(28,28,0,8); 
     
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  
@@ -84,6 +100,9 @@ dungeonPhase.prototype.create = function(){
 var roomObjectCount = {};
 var roomDoorCount = {};
 var roomGenerationCount = 0;
+var itemPositions = {};
+itemPositions.x = [];
+itemPositions.y = [];
 
 dungeonPhase.prototype.getRoom = function(condition, log){
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
@@ -137,10 +156,12 @@ dungeonPhase.prototype.getItemPosition = function(){
 
     var side = Math.floor(ROT.RNG.getUniform() * 4);    
     var x, y;
-    var prohibitedx = [];
-    var prohibitedy = []; //x and y's from doors: we dont want to have chests spawning there.
+    var prohibitedx = itemPositions.x;
+    var prohibitedy = itemPositions.y; //x and y's from doors: we dont want to have chests spawning there.
 
     //find all the coordinates of all doors in the current room
+
+    //DENNIS: TODO: DOESNT WORK: DOORS ARENT SPAWNED IN THE ROOM BUT OUTSIDE
     for (var door in room._doors){
         prohibitedx.push(door[0]);
         prohibitedy.push(door[1]);
@@ -149,7 +170,7 @@ dungeonPhase.prototype.getItemPosition = function(){
     //retry when the x and y match a door location. 
 
     ////////////////////////////////NOTE: super ugly, but functional.
-    while((prohibitedx.indexOf(x) != -1 && prohibitedy.contains(y) != -1) || typeof x == "undefined"){
+    while((prohibitedx.indexOf(x) != -1 && prohibitedy.indexOf(y) != -1) || typeof x == "undefined"){
         switch(side){
             case 0: //left wall
                 x = left;
@@ -170,6 +191,9 @@ dungeonPhase.prototype.getItemPosition = function(){
         }
     }
 
+    itemPositions.x.push(x);
+    itemPositions.y.push(y);
+
     return [x*40 ,y*40];
 }
 
@@ -188,8 +212,13 @@ dungeonPhase.prototype.getKeyPosition = function(){
     var top = room.y+1;
     var bottom = room.y + room.height;
 
-    var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
-    var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
+    while((itemPositions.x.indexOf(x) != -1 && itemPositions.y.indexOf(y) != -1) || typeof x == "undefined"){
+        var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
+        var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
+    }
+
+    itemPositions.x.push(x);
+    itemPositions.y.push(y);
 
     return [x*40 ,y*40];
 }

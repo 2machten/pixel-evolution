@@ -118,20 +118,19 @@ pixelPhase.prototype.update = function(){
             var collectables = [];
 
             for(var i = 0; i < items.children.length; i++) {
-                items.children[i].destroy();
                 //Destroying moves all items to the left.
-                i--;
+                items.children[0].destroy();
 
                 //Create a new collectable on a random location.
                 var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
-                var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], 'collectable_pixel');
+
+                var spriteName = "collectable_pixel" + (Math.floor(i/2)+1);
+                console.log(spriteName);
+                var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], spriteName);
                 pixelEvolution.physics.enable(collectable);
 
                 collectables.push(collectable);
-            }
-            //Add all new items to the item-group.
-            for(var j = 0; j < collectables.length; j++) {
-                items.add(collectables[j])
+                items.add(collectable);
             }
         }
         
