@@ -59,7 +59,9 @@ Enemy.prototype.update = function() {
 
     try {
         var player = this._state._player;
-        this._game.physics.arcade.collide(this, player, this._player.enemyCollisionHandler);
+
+        //TODO: WAS this._player but that one doesnt exist.. right?
+        this._game.physics.arcade.collide(this, player, player.enemyCollisionHandler);
         console.log("collision in Enemy");
     } catch (e) {
     }
@@ -91,7 +93,45 @@ Enemy.prototype.update = function() {
             options.push('up');
         }
 
-        this.chooseDirection(options);
+        var i = Math.floor(Math.random() * options.length);
+        var direction = options[i];
+
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+
+        //down
+        if(direction == "down") {
+            this.body.velocity.y = this.movespeed;
+            if (this.facing != 'down'){
+                this.animations.play('down');
+                this.facing = 'down';
+            }
+        }
+        //up
+        else if(direction == "up") {
+            this.body.velocity.y = -this.movespeed;
+            if (this.facing != 'up'){
+                this.animations.play('up');
+                this.facing = 'up';
+            }
+        }
+        //left
+         else if(direction == "left") {
+            this.body.velocity.x = -this.movespeed;
+            if (this.facing != 'left'){
+                this.animations.play('left');
+                this.facing = 'left';
+            }
+        }
+        //right
+        else if(direction == "right") {
+            this.body.velocity.x = this.movespeed;
+            if (this.facing != 'right'){
+                this.animations.play('right');
+                this.facing = 'right';
+            }
+        }
+
     }
 
 };
