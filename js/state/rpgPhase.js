@@ -49,6 +49,9 @@ rpgPhase.prototype.create = function(){
     this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
     this._collectableText.anchor.setTo(0.5, 0.5);
 
+    var pos = this.getTreePosition();
+    var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+
     this._score.fixedToCamera = true;
     this._score.add(collectable);
     this._score.add(this._collectableText);
@@ -65,6 +68,16 @@ rpgPhase.prototype.getPlayerPosition = function(){
     //returns an array of x and y position (nth tile) that is free,
     //and remove it from the list so no other item can spawn on this position.
     var randomPosition = this._freeTiles.pop();
+    return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+rpgPhase.prototype.getTreePosition = function() {
+    //shuffle the array of tree tiles
+    shuffle(this._treeTiles);
+
+    //returns an array of x and y position (nth tile) that is free,
+    //and remove it from the list so no other item can spawn on this position.
+    var randomPosition = this._treeTiles.pop();
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
@@ -180,17 +193,17 @@ rpgPhase.prototype.generate = function(){
     }
 
     // find the largest open fields
-    var max = 10000;
-    var secondMax = 10000;
+    var max = 0;
+    var secondMax = 0;
     var largest;
     var secondLargest;
     $.each(fields, function(index, field) {
-        if (field.length < max) {
+        if (field.length > max) {
             secondMax = max;
             secondLargest = largest;
             max = field.length;
             largest = field;
-        } else if (field.length < secondMax) {
+        } else if (field.length > secondMax) {
             secondMax = field.length;
             secondLargest = field;
         }
@@ -217,10 +230,12 @@ rpgPhase.prototype.generate = function(){
     this._treeTiles = [];
 
     // make sure the path is cleared, and select fields that might be good for a tree
-    $.each(path, function(idx, item) {
+    (function(self){$.each(path, function(idx, item) {
         if (map._map[item[0]][item[1]] == 0) {
             map._map[item[0]][item[1]] = 1;
         }
+    });
+    $.each(path, function(idx, item) {
         var localTiles = [];
         localTiles.push([item[0] + 1, item[1]]);
         localTiles.push([item[0] - 1, item[1]]);
@@ -233,9 +248,9 @@ rpgPhase.prototype.generate = function(){
             }
         });
         if (openCount == 2) {
-            this._treeTiles.push(item);
+            self._treeTiles.push(item);
         }
-    });
+    })})(this);
 
     // we have more spaaaccee!!
     this._freeTiles = largest.concat(secondLargest);
