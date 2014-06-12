@@ -125,14 +125,8 @@ Player.prototype.npcCollisionHandler = function(player, npc){
     console.log(npc);
 };
 
-
-/**
- * Automatically called by World.update
- */
- Player.prototype.update = function() {
-    if(!this._game._pause){
-
-        var tiles = this._state._layer;
+Player.prototype.updateCollision = function() {
+    var tiles = this._state._layer;
         //this._game.physics.arcade.collide(this, tiles);
 
         //collide with items
@@ -165,8 +159,10 @@ Player.prototype.npcCollisionHandler = function(player, npc){
             //console.log(npcs);
             this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
         }catch(e){}
+}
 
-        //Reset speed each update (else character keeps moving, velocity not position)
+Player.protoype.updateMovement = function() {
+    //Reset speed each update (else character keeps moving, velocity not position)
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
@@ -224,23 +220,24 @@ Player.prototype.npcCollisionHandler = function(player, npc){
             this.body.velocity.y = 0;
             }
         }
+}
+/**
+ * Automatically called by World.update
+ */
+ Player.prototype.update = function() {
+    if(!this._game._pause){
 
-        // cut action
-        var keyboard = this._game.input.keyboard;
-        if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-            if (!this._spacePressed) {
-                // do action!
-                this._spacePressed = true;
+        this.updateCollision();
+        this.updateMovement();
+        
+        this.updateAxe();
+        this.updateSword();
+    }
+    
+};
 
-                // TODO: show axe swinging animation
-
-                // TODO: kill the tree(s)
-            }
-        } else if (this._spacePressed) {
-            this._spacePressed = false;
-        }
-
-        //sword action 
+Player.prototype.updateSword = function() {
+    //sword action 
         if (this.swordKey.isDown && this._game._level > 5) {
                 var diffx = (this.position.x - this._state._map._enemies.position.x);
                 var diffy = (this.position.y - this._state._map._enemies.position.y);
@@ -254,6 +251,21 @@ Player.prototype.npcCollisionHandler = function(player, npc){
                     this._state._enemies[i].destroy();
                 }
         }
-    }
-    
-};
+}
+
+Player.prototype.updateAxe = function() {
+    // cut action
+        var keyboard = this._game.input.keyboard;
+        if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+            if (!this._spacePressed) {
+                // do action!
+                this._spacePressed = true;
+
+                // TODO: show axe swinging animation
+
+                // TODO: kill the tree(s)
+            }
+        } else if (this._spacePressed) {
+            this._spacePressed = false;
+        }
+}
