@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = 550;
+    this.movespeed = moveSpeed;
     this.facing = "down";
     this._keys = 0;
 
@@ -127,99 +127,99 @@ Player.prototype.npcCollisionHandler = function(player, npc){
 
 Player.prototype.updateCollision = function() {
     var tiles = this._state._layer;
-        //this._game.physics.arcade.collide(this, tiles);
+    this._game.physics.arcade.collide(this, tiles);
 
-        //collide with items
-        try{
-            var items = this._state._map._items;
-            this._game.physics.arcade.collide(this, items, this.itemCollisionHandler, null, this.update);
-        }catch(e){}
+    //collide with items
+    try{
+        var items = this._state._map._items;
+        this._game.physics.arcade.collide(this, items, this.itemCollisionHandler, null, this.update);
+    }catch(e){}
 
-        //collide with enemies
-        try{
-            var enemies = this._state._enemy;
-            this._game.physics.arcade.collide(this, enemies, this.enemyCollisionHandler, null, this.update);
-        }catch(e){}
+    //collide with enemies
+    try{
+        var enemies = this._state._enemy;
+        this._game.physics.arcade.collide(this, enemies, this.enemyCollisionHandler, null, this.update);
+    }catch(e){}
 
-        //collide with doors
-        try{
-            var doors = this._state._map._doors;
-            this._game.physics.arcade.collide(this, doors, this.doorCollisionHandler, null, this.update);
-        }catch(e){}
+    //collide with doors
+    try{
+        var doors = this._state._map._doors;
+        this._game.physics.arcade.collide(this, doors, this.doorCollisionHandler, null, this.update);
+    }catch(e){}
 
-        //collide with keys
-        try{
-            var keys = this._state._map._keys;
-            this._game.physics.arcade.collide(this, keys, this.keyCollisionHandler, null, this.update);
-        }catch(e){}
+    //collide with keys
+    try{
+        var keys = this._state._map._keys;
+        this._game.physics.arcade.collide(this, keys, this.keyCollisionHandler, null, this.update);
+    }catch(e){}
 
-        //collide with npcs
-        try{
-            var npcs = this._state._map._npcs;
-            //console.log(npcs);
-            this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
-        }catch(e){}
+    //collide with npcs
+    try{
+        var npcs = this._state._map._npcs;
+        //console.log(npcs);
+        this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
+    }catch(e){}
 }
 
-Player.protoype.updateMovement = function() {
+Player.prototype.updateMovement = function() {
     //Reset speed each update (else character keeps moving, velocity not position)
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+
+    //walk up/down/left/right
+    if (this.cursors.up.isDown)
+    {
+        this.body.velocity.y = -this.movespeed;
+        if (this.facing != 'up'){
+            this.animations.play('up');
+            this.facing = 'up';
+
+        }
+    }
+    else if (this.cursors.down.isDown)
+    {
+        this.body.velocity.y = this.movespeed;
+        if (this.facing != 'down'){
+            this.animations.play('down');
+            this.facing = 'down';
+        }
+    } else if (this.cursors.left.isDown)
+    {
+        this.body.velocity.x = -this.movespeed;
+
+        if (this.facing != 'left'){
+            this.animations.play('left');
+            this.facing = 'left';
+        }
+    }
+    else if (this.cursors.right.isDown)
+    {
+        this.body.velocity.x = this.movespeed;
+        if (this.facing != 'right'){
+            this.animations.play('right');
+            this.facing = 'right';
+        }
+    } else {
+        //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
+        if (this.facing != 'idle'){
+            this.animations.stop();
+
+            if (this.facing == 'left'){
+                this.frame = 8;
+            } else if (this.facing == 'right'){
+                this.frame = 3;
+            } else if (this.facing == 'up'){
+                this.frame = 5;
+            } else if (this.facing == 'down'){
+                this.frame = 0;
+            }
+
+            this.facing = 'idle';
+        } else {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-
-        //walk up/down/left/right
-        if (this.cursors.up.isDown)
-        {
-            this.body.velocity.y = -this.movespeed;
-            if (this.facing != 'up'){
-                this.animations.play('up');
-                this.facing = 'up';
-
-            }
         }
-        else if (this.cursors.down.isDown)
-        {
-            this.body.velocity.y = this.movespeed;
-            if (this.facing != 'down'){
-                this.animations.play('down');
-                this.facing = 'down';
-            }
-        } else if (this.cursors.left.isDown)
-        {
-            this.body.velocity.x = -this.movespeed;
-
-            if (this.facing != 'left'){
-                this.animations.play('left');
-                this.facing = 'left';
-            }
-        }
-        else if (this.cursors.right.isDown)
-        {
-            this.body.velocity.x = this.movespeed;
-            if (this.facing != 'right'){
-                this.animations.play('right');
-                this.facing = 'right';
-            }
-        } else {
-            //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
-            if (this.facing != 'idle'){
-                this.animations.stop();
-
-                if (this.facing == 'left'){
-                    this.frame = 8;
-                } else if (this.facing == 'right'){
-                    this.frame = 3;
-                } else if (this.facing == 'up'){
-                    this.frame = 5;
-                } else if (this.facing == 'down'){
-                    this.frame = 0;
-                }
-
-                this.facing = 'idle';
-            } else {
-            this.body.velocity.x = 0;
-            this.body.velocity.y = 0;
-            }
-        }
+    }
 }
 /**
  * Automatically called by World.update
@@ -238,34 +238,34 @@ Player.protoype.updateMovement = function() {
 
 Player.prototype.updateSword = function() {
     //sword action 
-        if (this.swordKey.isDown && this._game._level > 5) {
-                var diffx = (this.position.x - this._state._map._enemies.position.x);
-                var diffy = (this.position.y - this._state._map._enemies.position.y);
-                if(this.facing == 'down' && diffy < 0 && diffy > -64 && diffx > -16 && diffx < 16) {
-                    this._state._enemies[i].destroy();
-                } else if(this.facing == 'up' && diffy < 64 && diffy > 0 && diffx > -16 && diffx < 16) {
-                    this._state._enemies[i].destroy();
-                } else if(this.facing == 'left' && diffy > -16 && diffy < 16 && diffx > 0 && diffx < 64) {
-                    this._state._enemies[i].destroy();
-                } else if(this.facing == 'right' && diffy > -16 && diffy < 16 && diffx > -64 && diffx < 0) {
-                    this._state._enemies[i].destroy();
-                }
-        }
+    if (this.swordKey.isDown && this._game._level > 5) {
+            var diffx = (this.position.x - this._state._map._enemies.position.x);
+            var diffy = (this.position.y - this._state._map._enemies.position.y);
+            if(this.facing == 'down' && diffy < 0 && diffy > -64 && diffx > -16 && diffx < 16) {
+                this._state._enemies[i].destroy();
+            } else if(this.facing == 'up' && diffy < 64 && diffy > 0 && diffx > -16 && diffx < 16) {
+                this._state._enemies[i].destroy();
+            } else if(this.facing == 'left' && diffy > -16 && diffy < 16 && diffx > 0 && diffx < 64) {
+                this._state._enemies[i].destroy();
+            } else if(this.facing == 'right' && diffy > -16 && diffy < 16 && diffx > -64 && diffx < 0) {
+                this._state._enemies[i].destroy();
+            }
+    }
 }
 
 Player.prototype.updateAxe = function() {
     // cut action
-        var keyboard = this._game.input.keyboard;
-        if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-            if (!this._spacePressed) {
-                // do action!
-                this._spacePressed = true;
+    var keyboard = this._game.input.keyboard;
+    if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        if (!this._spacePressed) {
+            // do action!
+            this._spacePressed = true;
 
-                // TODO: show axe swinging animation
+            // TODO: show axe swinging animation
 
-                // TODO: kill the tree(s)
-            }
-        } else if (this._spacePressed) {
-            this._spacePressed = false;
+            // TODO: kill the tree(s)
         }
+    } else if (this._spacePressed) {
+        this._spacePressed = false;
+    }
 }
