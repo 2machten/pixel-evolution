@@ -237,19 +237,25 @@ Player.prototype.updateMovement = function() {
 };
 
 Player.prototype.updateSword = function() {
+    var tileWidth = this._state._map.tileWidth;
+
     //sword action 
     if (this.swordKey.isDown && this._game._level > 5) {
-            var diffx = (this.position.x - this._state._map._enemies.position.x);
-            var diffy = (this.position.y - this._state._map._enemies.position.y);
-            if(this.facing == 'down' && diffy < 0 && diffy > -64 && diffx > -16 && diffx < 16) {
-                this._state._enemies[i].destroy();
-            } else if(this.facing == 'up' && diffy < 64 && diffy > 0 && diffx > -16 && diffx < 16) {
-                this._state._enemies[i].destroy();
-            } else if(this.facing == 'left' && diffy > -16 && diffy < 16 && diffx > 0 && diffx < 64) {
-                this._state._enemies[i].destroy();
-            } else if(this.facing == 'right' && diffy > -16 && diffy < 16 && diffx > -64 && diffx < 0) {
-                this._state._enemies[i].destroy();
-            }
+        var diffx = (this.position.x - this._state._map._enemies.position.x);
+        var diffy = (this.position.y - this._state._map._enemies.position.y);
+        if(this.facing == 'down' && ((diffy < -0.5*tileWidth && diffy > -2.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
+                (diffy < -0.5*tileWidth && diffy > -1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
+            this._state._enemies[i].destroy();
+        } else if(this.facing == 'up' && ((diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
+                (diffy < 2.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
+            this._state._enemies[i].destroy();
+        } else if(this.facing == 'left' && ((diffy < tileWidth && diffy > 0 && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) || 
+                (diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2*tileWidth))) {
+            this._state._enemies[i].destroy();
+        } else if(this.facing == 'right' && ((diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
+                (diffy < 2.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
+            this._state._enemies[i].destroy();
+        }
     }
 }
 
