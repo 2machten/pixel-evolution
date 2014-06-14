@@ -36,6 +36,8 @@
         var animsSpeed = 10;
         this.animations.add('right', [0,1,2,3], animsSpeed, true);
         this.animations.add('left', [4,5,6,7], animsSpeed, true);
+        this.animations.add('up', [4,5,6,7], animsSpeed, true);
+        this.animations.add('down', [0,1,2,3], animsSpeed, true);
     } else {
         var animsSpeed = 8;
         this.animations.add('left', [8, 9], animsSpeed, true);
@@ -69,7 +71,8 @@ Player.prototype.itemCollisionHandler = function(player, chest){
     chest.destroy();
 };
 
-Player.prototype.enemyCollisionHandler = function(player, enemy){
+var timer;
+Player.prototype.enemyCollisionHandler = function(enemy, player){
     //if pacman stage, restart immediately
     var state = pixelEvolution.state.current;
     if(state == "pacman") {
@@ -81,12 +84,41 @@ Player.prototype.enemyCollisionHandler = function(player, enemy){
         pixelEvolution.state.getCurrentState()._hearts.getTop().destroy();
     }
 
+    if(typeof timer == "undefined" || timer == null){
+        timer = setInterval(
+             (function(p) {  
+                 return function() {  
+                     if (p.tint == 0xff6868){
+                        p.tint = 0xffffff;
+                     } else{
+                        p.tint = 0xff6868;
+                     }
+                 }
+             })(player), 200); 
+
+        var diffx = player.position.x - (enemy.position.x+16);
+        var diffy = player.position.y - (enemy.position.y+16);
+
+        player.position.x += 3*diffx;
+        player.position.y += 3*diffy;
+    }
+
+    setTimeout((function(p) {  
+                 return function() { 
+                    clearInterval(timer); 
+                    timer = null;
+                    p.tint = 0xffffff;
+                }
+            })(player), 1500);
+
     //decrease player hp
-    if(this.hp <= 0) {
-        player._game.showMessage("You died. Kthxbai!")
+    if(player.hp <= 0) {
+
+        //WERK BITCH
+        transitions.to(state);
     } else {
-        this.hp--;
-        console.log(this.hp);
+        player.hp--;
+        console.log(player.hp);
     }
 }
 
