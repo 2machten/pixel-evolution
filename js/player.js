@@ -246,7 +246,7 @@ Player.prototype.updateMovement = function() {
                 this.frame = 0;
             }
 
-            this.facing = 'idle';
+            //this.facing = 'idle';
         } else {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
@@ -273,20 +273,27 @@ Player.prototype.updateSword = function() {
 
     //sword action 
     if (this.swordKey.isDown && this._game._level > 5) {
-        var diffx = (this.position.x - this._state._map._enemies.position.x);
-        var diffy = (this.position.y - this._state._map._enemies.position.y);
-        if(this.facing == 'down' && ((diffy < -0.5*tileWidth && diffy > -2.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
-                (diffy < -0.5*tileWidth && diffy > -1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
-            this._state._enemies[i].destroy();
-        } else if(this.facing == 'up' && ((diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
-                (diffy < 2.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
-            this._state._enemies[i].destroy();
-        } else if(this.facing == 'left' && ((diffy < tileWidth && diffy > 0 && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) || 
-                (diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2*tileWidth))) {
-            this._state._enemies[i].destroy();
-        } else if(this.facing == 'right' && ((diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > 0 && diffx < tileWidth) || 
-                (diffy < 2.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth))) {
-            this._state._enemies[i].destroy();
+        var enemyArray = this._state._map._enemies.children;
+        for(var i = 0; i < enemyArray.length; i++) {
+            var diffx = (this.position.x - enemyArray[i].position.x);
+            var diffy = (this.position.y - enemyArray[i].position.y);
+            console.log("player");console.log(this.position.x);console.log(this.position.y);
+            console.log("enemy");console.log(enemyArray[i].position.x);console.log(enemyArray[i].position.y);
+            console.log("differences"); console.log(diffx); console.log(diffy);
+            console.log("\n");
+            if(this.facing == 'down' && diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+                enemyArray[i].destroy();
+                console.log("down");
+            } else if(this.facing == 'up' && diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+                enemyArray[i].destroy();
+                console.log("up");
+            } else if(this.facing == 'left' && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) {
+                enemyArray[i].destroy();
+                console.log("left");
+            } else if(this.facing == 'right' && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > -1.5*tileWidth && diffx < -0.5*tileWidth) {
+                enemyArray[i].destroy();
+                console.log("right");
+            }
         }
     }
 }
