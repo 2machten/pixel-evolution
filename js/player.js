@@ -173,18 +173,7 @@ Player.prototype.npcCollisionHandler = function(player, npc){
     // TODO: create orange box
     player._game.showMessage("Hi there! I have a quest for you! Could you find the orange box for me, please?");
 
-    // spawn 'orange box'
-    var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
-
-    var orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
-    player._game.physics.enable(orangebox);
-    orangebox.body.immovable = true;
-
-    var orangegroup = new Phaser.Group(player._game, null, 'collectable_rpg', false);
-
-    orangegroup.add(orangebox);
-
-    player._game.add.existing(orangegroup);
+    npc.spawnOrangeBox(player, npc);
 };
 
 Player.prototype.updateCollision = function() {
