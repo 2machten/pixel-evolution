@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = moveSpeed;
+    this.movespeed = moveSpeed * 10;
     this.facing = "down";
     this._keys = 0;
     this._idleLeft;
@@ -170,7 +170,20 @@ Player.prototype.keyCollisionHandler = function(player, key){
 
 //collisionhandler for npc in the rpg stage
 Player.prototype.npcCollisionHandler = function(player, npc){
-    console.log(npc);
+    // TODO: create orange box
+    player._game.showMessage("Hi there! I have a quest for you! Could you find the orange box for me, please?");
+
+    // spawn 'orange box'
+    var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
+
+    //console.log(spawnPosition);
+
+    //console.log([player.position.x, player.position.y]);
+    spawnPosition = [player.position.x + 2, player.position.y + 2];
+
+    var orangebox = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
+
+    this._game.add.existing(orangebox);
 };
 
 Player.prototype.updateCollision = function() {
