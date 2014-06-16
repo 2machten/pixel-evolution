@@ -176,14 +176,15 @@ Player.prototype.npcCollisionHandler = function(player, npc){
     // spawn 'orange box'
     var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
 
-    //console.log(spawnPosition);
+    var orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
+    player._game.physics.enable(orangebox);
+    orangebox.body.immovable = true;
 
-    //console.log([player.position.x, player.position.y]);
-    spawnPosition = [player.position.x + 2, player.position.y + 2];
+    var orangegroup = new Phaser.Group(player._game, null, 'collectable_rpg', false);
 
-    var orangebox = this._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
+    orangegroup.add(orangebox);
 
-    this._game.add.existing(orangebox);
+    player._game.add.existing(orangegroup);
 };
 
 Player.prototype.updateCollision = function() {
