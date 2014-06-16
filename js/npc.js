@@ -7,6 +7,8 @@ NPC = function(game, scale, sprite) {
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
 
     this.scale.setTo(scale, scale);
+
+    this._hasOrangeBox = false;
 }
 
 NPC.prototype = Object.create(Phaser.Sprite.prototype);
@@ -20,16 +22,23 @@ NPC.prototype.update = function() {
 }
 
 NPC.prototype.spawnOrangeBox = function(player, npc) {
-    // spawn 'orange box'
-    var spawnPosition = player._game.state.getCurrentState().getItemPosition();
+    if (this._hasOrangeBox) {
+        // we are still looking for it
+        console.log("exists");
+    } else {
+        // spawn 'orange box'
+        var spawnPosition = player._game.state.getCurrentState().getItemPosition();
 
-    var orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
-    player._game.physics.enable(orangebox);
-    orangebox.body.immovable = true;
+        var orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
+        player._game.physics.enable(orangebox);
+        orangebox.body.immovable = true;
 
-    var orangegroup = new Phaser.Group(player._game, null, 'collectable_rpg', false);
+        var orangegroup = new Phaser.Group(player._game, null, 'orangebox', false);
 
-    orangegroup.add(orangebox);
+        orangegroup.add(orangebox);
 
-    player._game.add.existing(orangegroup);
+        player._game.add.existing(orangegroup);
+
+        this._hasOrangeBox = true;
+    }
 }
