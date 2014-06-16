@@ -11,9 +11,13 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = moveSpeed;
+    this.movespeed = 550;
     this.facing = "down";
     this._keys = 0;
+    this._idleLeft;
+    this._idleRight;
+    this._idleUp;
+    this._idleDown;
 
     startPosition = this._state.getPlayerPosition();
 
@@ -38,12 +42,22 @@
         this.animations.add('left', [4,5,6,7], animsSpeed, true);
         this.animations.add('up', [4,5,6,7], animsSpeed, true);
         this.animations.add('down', [0,1,2,3], animsSpeed, true);
+
+        this._idleLeft = 7;
+        this._idleRight = 3;
+        this._idleUp = 7;
+        this._idleDown = 3;
     } else {
         var animsSpeed = 8;
         this.animations.add('left', [8, 9], animsSpeed, true);
         this.animations.add('right', [3, 4], animsSpeed, true);
         this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
         this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+
+        this._idleLeft = 8;
+        this._idleRight = 3;
+        this._idleUp = 5;
+        this._idleDown = 0;
     }
 
     //store cursors object for controlling the character
@@ -159,7 +173,7 @@ Player.prototype.npcCollisionHandler = function(player, npc){
 
 Player.prototype.updateCollision = function() {
     var tiles = this._state._layer;
-    this._game.physics.arcade.collide(this, tiles);
+    //this._game.physics.arcade.collide(this, tiles);
 
     //collide with items
     try{
@@ -199,57 +213,57 @@ Player.prototype.updateMovement = function() {
     this.body.velocity.y = 0;
 
     //walk up/down/left/right
-    if (this.cursors.up.isDown)
-    {
+    if (this.cursors.up.isDown){
         this.body.velocity.y = -this.movespeed;
-        if (this.facing != 'up'){
+        if (this.facing.indexOf('up') == -1){
             this.animations.play('up');
             this.facing = 'up';
 
         }
     }
-    else if (this.cursors.down.isDown)
-    {
+    else if (this.cursors.down.isDown){
         this.body.velocity.y = this.movespeed;
-        if (this.facing != 'down'){
+        if (this.facing.indexOf('down') == -1){
             this.animations.play('down');
             this.facing = 'down';
         }
-    } else if (this.cursors.left.isDown)
-    {
+    } 
+    else if (this.cursors.left.isDown){
         this.body.velocity.x = -this.movespeed;
 
-        if (this.facing != 'left'){
+        if (this.facing.indexOf('left') == -1){
             this.animations.play('left');
             this.facing = 'left';
         }
-    }
-    else if (this.cursors.right.isDown)
-    {
+    } 
+    else if (this.cursors.right.isDown){
         this.body.velocity.x = this.movespeed;
-        if (this.facing != 'right'){
+        if (this.facing.indexOf('right') == -1){
             this.animations.play('right');
             this.facing = 'right';
         }
     } else {
         //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
-        if (this.facing != 'idle'){
+        if (this.facing.indexOf(' idle') == -1){
+
+            console.log('bla');
+
             this.animations.stop();
 
-            if (this.facing == 'left'){
-                this.frame = 8;
-            } else if (this.facing == 'right'){
-                this.frame = 3;
-            } else if (this.facing == 'up'){
-                this.frame = 5;
-            } else if (this.facing == 'down'){
-                this.frame = 0;
+            if (this.facing.indexOf('left') != -1){
+                this.frame = this._idleLeft;
+            } else if (this.facing.indexOf('right') != -1){
+                this.frame = this._idleRight;
+            } else if (this.facing.indexOf('up') != -1){
+                this.frame = this._idleUp;
+            } else if (this.facing.indexOf('down') != -1){
+                this.frame = this._idleDown;
             }
 
-            //this.facing = 'idle';
+            this.facing += ' idle';
         } else {
-        this.body.velocity.x = 0;
-        this.body.velocity.y = 0;
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
         }
     }
 }
@@ -277,20 +291,21 @@ Player.prototype.updateSword = function() {
         for(var i = 0; i < enemyArray.length; i++) {
             var diffx = (this.position.x - enemyArray[i].position.x);
             var diffy = (this.position.y - enemyArray[i].position.y);
-            console.log("player");console.log(this.position.x);console.log(this.position.y);
-            console.log("enemy");console.log(enemyArray[i].position.x);console.log(enemyArray[i].position.y);
-            console.log("differences"); console.log(diffx); console.log(diffy);
-            console.log("\n");
-            if(this.facing == 'down' && diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+            
+            //console.log("player");console.log(this.position.x);console.log(this.position.y);
+            //console.log("enemy");console.log(enemyArray[i].position.x);console.log(enemyArray[i].position.y);
+            //console.log("differences"); console.log(diffx); console.log(diffy);
+            //console.log("\n");
+            if(this.facing.indexOf('down')!=-1 && diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("down");
-            } else if(this.facing == 'up' && diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+            } else if(this.facing.indexOf('up')!=-1 && diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("up");
-            } else if(this.facing == 'left' && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) {
+            } else if(this.facing.indexOf('left')!=-1 && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("left");
-            } else if(this.facing == 'right' && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > -1.5*tileWidth && diffx < -0.5*tileWidth) {
+            } else if(this.facing.indexOf('right')!=-1 && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > -1.5*tileWidth && diffx < -0.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("right");
             }
