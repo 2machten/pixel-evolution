@@ -108,7 +108,7 @@ Player.prototype.enemyCollisionHandler = function(enemy, player){
                         p.tint = 0xff6868;
                      }
                  }
-             })(player), 200); 
+             })(player), 150); 
 
         var diffx = player.position.x - (enemy.position.x+16);
         var diffy = player.position.y - (enemy.position.y+16);
