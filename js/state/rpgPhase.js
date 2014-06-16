@@ -33,6 +33,9 @@ rpgPhase.prototype.create = function(){
 
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', 150);
+    //change the hitarea for collision detection to not adapt the top 5 pixels, this way 
+    //the player can walk easier through corridors
+    this._player.body.setSize(27,27,0,5);
 
     this._game.add.existing(this._map._npcs);
     this._game.add.existing(this._map._enemies);
@@ -49,8 +52,8 @@ rpgPhase.prototype.create = function(){
     this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
     this._collectableText.anchor.setTo(0.5, 0.5);
 
-    var pos = this.getTreePosition();
-    var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    //var pos = this.getTreePosition();
+    //var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
@@ -221,7 +224,7 @@ rpgPhase.prototype.generate = function(){
         }
     });
 
-
+    /*
     // create a path between the two largest open fields.
     // we do this by simply selecting two random tiles, and making sure there
     // is a (L-shaped) path between them.
@@ -265,7 +268,7 @@ rpgPhase.prototype.generate = function(){
     })})(this);
 
     // we have more spaaaccee!!
-    this._freeTiles = largest.concat(secondLargest);
+    this._freeTiles = largest.concat(secondLargest);*/
 
     var level = "";
 

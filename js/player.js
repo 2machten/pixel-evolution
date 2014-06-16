@@ -63,6 +63,7 @@
     //store cursors object for controlling the character
     this.cursors = this._game.input.keyboard.createCursorKeys();
     this.swordKey = game.input.keyboard.addKey(Phaser.Keyboard.Z);
+    this.axeKey = game.input.keyboard.addKey(Phaser.Keyboard.X);
 
     //make the camera follow the player
     this._game.camera.follow(this, Phaser.Camera.FOLLOW_TOPDOWN);
@@ -314,18 +315,29 @@ Player.prototype.updateSword = function() {
 }
 
 Player.prototype.updateAxe = function() {
+    var tileWidth = this._state._map.tileWidth;
+    var x = Math.floor(this.position.x/tileWidth);
+    var y = Math.floor(this.position.y/tileWidth);
+    var layer = this._state._map.getLayer();
+    var leftTile = this._state._map.getTileLeft(layer, x, y);
+    var rightTile = this._state._map.getTileRight(layer, x, y);
+    var downTile = this._state._map.getTileBelow(layer, x, y);
+    var upTile = this._state._map.getTileAbove(layer, x, y);
+
     // cut action
-    var keyboard = this._game.input.keyboard;
-    if (keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-        if (!this._spacePressed) {
-            // do action!
-            this._spacePressed = true;
-
-            // TODO: show axe swinging animation
-
-            // TODO: kill the tree(s)
+    if(this.axeKey.isDown && this._game._level > 8) {
+        if(this.facing == 'left' && leftTile.index == 1) {
+            console.log("left");
+            this._state._map.putTile(0, x-1, y, layer);
+        } else if(this.facing == 'right' && rightTile.index == 1) {
+            console.log("right");
+            this._state._map.putTile(0, x+1, y, layer);
+        } else if(this.facing == 'up' && upTile.index == 1) {
+            console.log("up");
+            this._state._map.putTile(0, x, y-1, layer);
+        } else if(this.facing == 'down' && downTile.index == 1) {
+            console.log("down");
+            this._state._map.putTile(0, x, y+1, layer);
         }
-    } else if (this._spacePressed) {
-        this._spacePressed = false;
     }
 }
