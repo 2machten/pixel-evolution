@@ -27,10 +27,10 @@ pixelPhase.prototype.create = function(){
             this._player = new Player(this._game, 1, 'player_pixel1', 100);
             break;
         case 1:
-            this._player = new Player(this._game, 0.4, 'player_pixel2', 120);
+            this._player = new Player(this._game, 0.6, 'player_pixel2', 120);
             break;
         case 2:
-            this._player = new Player(this._game, 0.5, 'player_pixel3', 150);
+            this._player = new Player(this._game, 0.78, 'player_pixel3', 150);
             break;
     }	
     
