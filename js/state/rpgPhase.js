@@ -33,6 +33,9 @@ rpgPhase.prototype.create = function(){
 
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', 150);
+    //change the hitarea for collision detection to not adapt the top 5 pixels, this way 
+    //the player can walk easier through corridors
+    this._player.body.setSize(27,27,0,5);
 
     this._game.add.existing(this._map._npcs);
     this._game.add.existing(this._map._enemies);
