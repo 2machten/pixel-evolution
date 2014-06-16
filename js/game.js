@@ -55,6 +55,8 @@ function preload()
     this.load.spritesheet('player_dungeon1', 'assets/character_dungeon1.png', 28, 36);
     this.load.spritesheet('player_dungeon2', 'assets/character_dungeon2.png', 28, 36);
     this.load.spritesheet('player_dungeon3', 'assets/character_dungeon3.png', 28, 36);
+
+    this.load.spritesheet('sword_dungeon', 'assets/sword_dungeon.png', 20, 34);
     this.load.image('tiles_dungeon', 'assets/tiles_dungeon.png');
     this.load.image('collectable_dungeon', 'assets/chest.png');
     this.load.image('key_dungeon', 'assets/dungeon_key.png');
