@@ -84,6 +84,7 @@ function create()
     this.state.add('pacman', pacmanPhase);
     this.state.add('dungeon', dungeonPhase);
     this.state.add('rpg', rpgPhase);
+    this.state.add('evolution', evolution);
 
     //and start the menu one
     this.state.start('menu');
@@ -220,6 +221,7 @@ var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
 
 
 // DEBUG: links to change between states/phases manually
+$('#evolutionLink').click(function(){ transitions.to('evolution'); });
 $('#menuLink').click(function(){    pixelEvolution._level = 0; transitions.to('menu'); });
 $('#pixelLink').click(function(){   pixelEvolution._level = 0; transitions.to('pixel'); });
 $('#pacmanLink').click(function(){  pixelEvolution._level = 3; transitions.to('pacman'); });

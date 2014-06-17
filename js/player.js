@@ -18,6 +18,7 @@
     this._idleRight;
     this._idleUp;
     this._idleDown;
+    this._sword = null;
 
     startPosition = this._state.getPlayerPosition();
 
@@ -169,12 +170,15 @@ Player.prototype.keyCollisionHandler = function(player, key){
 
 //collisionhandler for npc in the rpg stage
 Player.prototype.npcCollisionHandler = function(player, npc){
-    console.log(npc);
+    // TODO: create orange box
+    player._game.showMessage("Hi there! I have a quest for you! Could you find the orange box for me, please?");
+
+    npc.spawnOrangeBox(player, npc);
 };
 
 Player.prototype.updateCollision = function() {
     var tiles = this._state._layer;
-    //this._game.physics.arcade.collide(this, tiles);
+    this._game.physics.arcade.collide(this, tiles);
 
     //collide with items
     try{
@@ -247,8 +251,6 @@ Player.prototype.updateMovement = function() {
         //if cursor keys are released, make sure the player has the right sprite frame (no mid-walking sprites)
         if (this.facing.indexOf(' idle') == -1){
 
-            console.log('bla');
-
             this.animations.stop();
 
             if (this.facing.indexOf('left') != -1){
@@ -285,9 +287,30 @@ Player.prototype.updateMovement = function() {
 
 Player.prototype.updateSword = function() {
     var tileWidth = this._state._map.tileWidth;
+    this.ticks++;
 
     //sword action 
     if (this.swordKey.isDown && this._game._level > 5) {
+
+        if((this._sword == null || !this._sword.alive) && this.ticks > 30){
+            this.ticks = 0;
+            this._sword = this._game.add.sprite(0,0,'sword_dungeon');
+            this._sword.animations.add('slashRight', [0,1,2,3]);
+            this._sword.animations.add('slashLeft', [4,5,6,7]);
+
+            if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1) this._sword.animations.play('slashLeft', 20, false, true);
+            if(this.facing.indexOf('right') != -1 || this.facing.indexOf('down') != -1) this._sword.animations.play('slashRight', 20, false, true);
+        }
+
+        if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1){
+            this._sword.position.x = this.position.x - 30;
+        } else {
+            this._sword.position.x = this.position.x + 8;
+        }
+        
+        this._sword.position.y = this.position.y - 15;
+
+
         var enemyArray = this._state._map._enemies.children;
         for(var i = 0; i < enemyArray.length; i++) {
             var diffx = (this.position.x - enemyArray[i].position.x);
