@@ -132,7 +132,7 @@ PixelEvolution.prototype.switchLevel = function() {
                 console.log("level2");
                 ran = false;
                 break;
-        case 3: transitions.to('pacman');
+        case 3: transitions.to('evolution');
                 console.log("level3");
                 ran = false;
                 break;
@@ -144,7 +144,7 @@ PixelEvolution.prototype.switchLevel = function() {
                 console.log("level5");
                 ran = false;
                 break;
-        case 6: transitions.to('dungeon');
+        case 6: transitions.to('evolution');
                 console.log("level6");
                 ran = false;
                 break;
@@ -156,7 +156,7 @@ PixelEvolution.prototype.switchLevel = function() {
                 console.log("level8");
                 ran = false;
                 break;
-        case 9: transitions.to('rpg');
+        case 9: transitions.to('evolution');
                 console.log("level9");
                 ran = false;
                 break;

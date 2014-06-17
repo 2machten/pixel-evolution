@@ -26,13 +26,13 @@ evolution.prototype.create = function(){
 	var firstSprite;
 	var secondSprite;
 
-	if(this._game._level < 3){
+	if(this._game._level == 3){
 		firstSprite = 'player_pixel3';
 		secondSprite = 'player_pacman1';
-	} else if (this._game._level < 6){
+	} else if (this._game._level == 6){
 		firstSprite = 'player_pacman1';
 		secondSprite = 'player_dungeon1';
-	} else if (this._game._level < 9){
+	} else if (this._game._level == 9){
 		firstSprite = 'player_dungeon3';
 		secondSprite = 'player_rpg';
 	}
@@ -127,8 +127,25 @@ evolution.prototype.update = function(){
 
 			    this._game.showMessage("Nice! Mixel now knows additional skills!");
 
+			    this.ticks =0;
+
 			    //very hacky way to end this if
 			    secondModulo = 100;
+			} else {
+				if(this.input.activePointer.isDown){
+					this.transitionToNextLevel();
+				}
 			}
 	}
+	
+}
+
+evolution.prototype.transitionToNextLevel = function() {
+	if(this._game._level == 3){
+		transitions.to('pacman');
+	} else if (this._game._level == 6){
+		transitions.to('dungeon');
+	} else if (this._game._level == 9){
+		transitions.to('rpg');
+	}	
 }

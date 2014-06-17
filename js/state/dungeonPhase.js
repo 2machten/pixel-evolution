@@ -27,7 +27,7 @@ dungeonPhase.prototype.update = function(){
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 10);
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 5);
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();

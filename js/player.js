@@ -329,7 +329,7 @@ Player.prototype.updateSword = function() {
             } else if(this.facing.indexOf('left')!=-1 && diffy <= 1.5*tileWidth && diffy >= 0.5*tileWidth && diffx >= 1.5*tileWidth && diffx <= 2.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("left");
-            } else if(this.facing.indexOf('right')!=-1 && diffy <= 1.5*tileWidth && diffy >= -0.5*tileWidth && diffx >= 0.5*tileWidth && diffx <= 1.5*tileWidth) {
+            } else if(this.facing.indexOf('right')!=-1 && diffy <= 1.5*tileWidth && diffy >= -0.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= -1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("right");
             }
