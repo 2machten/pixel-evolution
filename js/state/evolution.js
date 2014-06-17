@@ -7,12 +7,18 @@ evolution = function(game) {
 }
 
 var introDone = false;
+var modulo = 50;
+var secondModulo = 2;
 
 //Extend the evolution object to be a Phaser.State
 evolution.prototype = Object.create(Phaser.State.prototype);
 evolution.prototype.constructor = evolution;
 
 evolution.prototype.create = function(){
+	introDone = false;
+	modulo = 50;
+	secondModulo = 2;
+
 	this.stage.backgroundColor = 0x0f4737;
 
 	this._game.showMessage("What? Mixel is evolving!");
@@ -56,7 +62,7 @@ evolution.prototype.create = function(){
 	this._firstCharacter.alpha = 0;
 	this._secondCharacter.alpha = 0;
 
-	var fadeIn = this._game.add.tween(this._firstCharacter).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None).start();
+	var fadeIn = this._game.add.tween(this._firstCharacter).to({ alpha: 1 }, 1000, Phaser.Easing.Linear.None).delay(500).start();
 
 	//Color tween
 	var obj = this._firstCharacter;
@@ -76,9 +82,6 @@ evolution.prototype.create = function(){
     fadeIn.chain(colorTween);
     colorTween.onComplete = {dispatch:function(){ introDone = true; }};
 }
-
-var modulo = 50;
-var secondModulo = 2;
 
 evolution.prototype.update = function(){
 	if(introDone){
