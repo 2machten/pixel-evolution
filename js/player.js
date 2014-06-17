@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = 550;
+    this.movespeed = moveSpeed;
     this.facing = "down";
     this._keys = 0;
     this._idleLeft;
@@ -297,16 +297,16 @@ Player.prototype.updateSword = function() {
             //console.log("enemy");console.log(enemyArray[i].position.x);console.log(enemyArray[i].position.y);
             //console.log("differences"); console.log(diffx); console.log(diffy);
             //console.log("\n");
-            if(this.facing.indexOf('down')!=-1 && diffy < 1.5*tileWidth && diffy > -0.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+            if(this.facing.indexOf('down')!=-1 && diffy <= -0.5*tileWidth && diffy >= -1.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= 1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("down");
-            } else if(this.facing.indexOf('up')!=-1 && diffy < 3.5*tileWidth && diffy > 1.5*tileWidth && diffx > -0.5*tileWidth && diffx < 1.5*tileWidth) {
+            } else if(this.facing.indexOf('up')!=-1 && diffy <= 2.5*tileWidth && diffy >= 1.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= 1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("up");
-            } else if(this.facing.indexOf('left')!=-1 && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > 1.5*tileWidth && diffx < 2.5*tileWidth) {
+            } else if(this.facing.indexOf('left')!=-1 && diffy <= 1.5*tileWidth && diffy >= 0.5*tileWidth && diffx >= 1.5*tileWidth && diffx <= 2.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("left");
-            } else if(this.facing.indexOf('right')!=-1 && diffy < 1.5*tileWidth && diffy > 0.5*tileWidth && diffx > -1.5*tileWidth && diffx < -0.5*tileWidth) {
+            } else if(this.facing.indexOf('right')!=-1 && diffy <= 1.5*tileWidth && diffy >= -0.5*tileWidth && diffx >= 0.5*tileWidth && diffx <= 1.5*tileWidth) {
                 enemyArray[i].destroy();
                 console.log("right");
             }

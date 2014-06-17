@@ -3,7 +3,9 @@ var digger;
 dungeonPhase = function(game) {
     Phaser.State.call(this); 
 
+    this._map;
     this._game = game;
+    this._state = this._game.state.getCurrentState();
     this._game.stage.smoothed = false;
 }
 
@@ -25,15 +27,16 @@ dungeonPhase.prototype.update = function(){
 
 dungeonPhase.prototype.create = function(){
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 2);
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 10);
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
-    //add items, doors and keys to the game
+    //add items, doors, enemies and keys to the game
     this._game.add.existing(this._map._items);
     this._game.add.existing(this._map._doors);
     this._game.add.existing(this._map._keys);
+    this._game.add.existing(this._map._enemies);
 
     //Instantiate new player object
     
@@ -58,8 +61,6 @@ dungeonPhase.prototype.create = function(){
     setTimeout((function(self) { return function() {  
             self._game.add.existing(self._player);
         }})(this),200); 
-
-    this._game.add.existing(this._map._enemies);
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
@@ -99,6 +100,7 @@ dungeonPhase.prototype.create = function(){
 //Returns a position on the map where an item can spawn
 var roomObjectCount = {};
 var roomDoorCount = {};
+var roomEnemyCount = {};
 var roomGenerationCount = 0;
 var itemPositions = {};
 itemPositions.x = [];
@@ -197,7 +199,31 @@ dungeonPhase.prototype.getItemPosition = function(){
     return [x*40 ,y*40];
 }
 
-dungeonPhase.prototype.getEnemyPosition =
+dungeonPhase.prototype.getEnemyPosition = function(){
+    //get right room index to put a key at.
+    var i = this.getRoom(function(i){
+        return (true)});
+
+
+    //return a tile against the wall of that room
+    var room = digger._rooms[i];
+    var left = room.x+1; //+1 for border tile compensation
+    var right = room.x + room.width;
+    var top = room.y+1;
+    var bottom = room.y + room.height;
+
+    while((itemPositions.x.indexOf(x) != -1 && itemPositions.y.indexOf(y) != -1) || typeof x == "undefined"){
+        var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
+        var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
+    }
+
+    itemPositions.x.push(x);
+    itemPositions.y.push(y);
+
+    return [x*40 ,y*40];
+}
+
+
 dungeonPhase.prototype.getKeyPosition = function(){
     //get right room index to put a key at.
     var i = this.getRoom(function(i){
