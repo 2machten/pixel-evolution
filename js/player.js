@@ -170,8 +170,6 @@ Player.prototype.keyCollisionHandler = function(player, key){
 
 //collisionhandler for npc in the rpg stage
 Player.prototype.npcCollisionHandler = function(player, npc){
-    // TODO: create orange box
-    player._game.showMessage("Hi there! I have a quest for you! Could you find the orange box for me, please?");
 
     npc.spawnOrangeBox(player, npc);
 };
