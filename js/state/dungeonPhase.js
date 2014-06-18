@@ -42,7 +42,7 @@ dungeonPhase.prototype.create = function(){
     itemPositions.y = [];
 
     //instantiate worldmap and create layer (this displays the map)
-    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 5);
+    this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 4);
 
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
@@ -139,7 +139,7 @@ dungeonPhase.prototype.getRoom = function(condition, log){
 dungeonPhase.prototype.getPlayerPosition = function(){
     //get the index of a random room
     var i = this.getRoom(function(i){
-        return (typeof roomDoorCount[i] == "undefined");
+        return ((typeof roomDoorCount[i] == "undefined") && (typeof roomEnemyCount[i] == "undefined"));
     }, null);
     
     //return the center of htat room
@@ -215,23 +215,16 @@ dungeonPhase.prototype.getItemPosition = function(){
 dungeonPhase.prototype.getEnemyPosition = function(){
     //get right room index to put a key at.
     var i = this.getRoom(function(i){
-        return (true)});
+        return (true)}, roomEnemyCount);
 
-
-    //return a tile against the wall of that room
     var room = digger._rooms[i];
-    var left = room.x+1; //+1 for border tile compensation
+    var left = room.x+1;
     var right = room.x + room.width;
     var top = room.y+1;
     var bottom = room.y + room.height;
 
-    while((itemPositions.x.indexOf(x) != -1 && itemPositions.y.indexOf(y) != -1) || typeof x == "undefined"){
-        var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
-        var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
-    }
-
-    itemPositions.x.push(x);
-    itemPositions.y.push(y);
+    var x = left + Math.floor(ROT.RNG.getUniform() * (right - left)); 
+    var y = top + Math.floor(ROT.RNG.getUniform() * (bottom - top)); 
 
     return [x*40 ,y*40];
 }
