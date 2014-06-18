@@ -363,29 +363,29 @@ Player.prototype.updateSword = function() {
 
 Player.prototype.updateAxe = function() {
     if (this._axeSkill) {
-        var tileWidth = this._state._map.tileWidth;
-        var x = Math.floor(this.position.x/tileWidth);
-        var y = Math.floor(this.position.y/tileWidth);
-        var layer = this._state._map.getLayer();
-        var leftTile = this._state._map.getTileLeft(layer, x, y);
-        var rightTile = this._state._map.getTileRight(layer, x, y);
-        var downTile = this._state._map.getTileBelow(layer, x, y);
-        var upTile = this._state._map.getTileAbove(layer, x, y);
-
         // cut action
         if(this.axeKey.isDown && this._game._level > 8) {
-            if(this.facing == 'left' && leftTile.index == 1) {
-                console.log("left");
-                this._state._map.putTile(0, x-1, y, layer);
-            } else if(this.facing == 'right' && rightTile.index == 1) {
-                console.log("right");
-                this._state._map.putTile(0, x+1, y, layer);
-            } else if(this.facing == 'up' && upTile.index == 1) {
-                console.log("up");
-                this._state._map.putTile(0, x, y-1, layer);
-            } else if(this.facing == 'down' && downTile.index == 1) {
-                console.log("down");
-                this._state._map.putTile(0, x, y+1, layer);
+            var tileWidth = this._state._map.tileWidth;
+            var x = Math.floor(this.position.x/tileWidth);
+            var y = Math.floor(this.position.y/tileWidth);
+            var treex = Math.floor(this._tree.position.x/tileWidth);
+            var treey = Math.floor(this._tree.position.y/tileWidth);
+            console.log([x, y]);
+            console.log([treex, treey]);
+            console.log(this.facing);
+
+            if(this.facing.indexOf('left') != -1 && treex < x && treex >= x - 2 && treey <= y + 1 && treey >= y - 1) {
+                console.log('left destroy');
+                this._tree.destroy();
+            } else if(this.facing.indexOf('right') != -1 && treex > x && treex <= x + 2 && treey <= y + 1 && treey >= y - 1) {
+                console.log('right destroy');
+                this._tree.destroy();
+            } else if(this.facing.indexOf('up') != -1 && treey < y && treey >= y - 2 && treex <= x + 1 && treex >= x - 1) {
+                console.log('up destroy');
+                this._tree.destroy();
+            } else if(this.facing.indexOf('down') != -1 && treey > y && treey <= y + 2 && treex <= x + 1 && treex >= x - 1) {
+                console.log('down destroy');
+                this._tree.destroy();
             }
         }
     }
