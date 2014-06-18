@@ -132,7 +132,7 @@ rpgPhase.prototype.getTreePosition = function() {
  * Get the distance between two tiles.
  */
 rpgPhase.prototype.distance = function(a, b) {
-    return Math.abs(a[0] - b[0]) + Math.abs(a[1] + b[1]);
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
 }
 
 //map generation for RPG (cellular automata)
@@ -273,7 +273,7 @@ rpgPhase.prototype.generate = function(){
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
     var closest = this.distance(tileA, tileB);
 
-    for (var i = 0; i < 100000; i++) {
+    while (closest > 15) {
         var tempA = largest[Math.floor(Math.random() * largest.length)];
         var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
         if (this.distance(tempA, tempB) < closest) {
