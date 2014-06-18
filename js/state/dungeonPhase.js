@@ -97,7 +97,9 @@ dungeonPhase.prototype.create = function(){
     this._score.add(this._keyText);
     this._game.add.existing(this._score);
 
-    this._game.showMessage("Wait, where did this Zword come from?");
+    if(this._game._level == 6){
+        this._game.showMessage("Wait, where did this Zword come from?");
+    }
 };
 
 

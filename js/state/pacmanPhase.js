@@ -93,7 +93,9 @@ pacmanPhase.prototype.create = function(){
 	this._score.add(this._collectableText);
 	this._game.add.existing(this._score);
 	
-	this._game.showMessage("Am I faster? I probably need this \n new speed for something..");
+ 	if(this._game._level == 3){
+		this._game.showMessage("Am I faster? I probably need this \n new speed for something..");
+	}
 }
 
 pacmanPhase.prototype.update = function(){
