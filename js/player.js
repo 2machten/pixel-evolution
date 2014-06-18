@@ -92,7 +92,11 @@ Player.prototype.itemCollisionHandler = function(player, chest){
     //Set new text off collectable ui
     textElement.setText(newText);
     chest.destroy();
-    player._game._music.play(currentMusic);
+
+    // play music again after short time
+    setTimeout(function() {
+        player._game._music.play(currentMusic);
+    }, 300);
 };
 
 var timer;
@@ -177,7 +181,10 @@ Player.prototype.keyCollisionHandler = function(player, key){
     //Set new text off collectable ui
     textElement.setText(newText);
     key.destroy(); 
-    player._game._music.play(currentMusic);
+
+    setTimeout(function() {
+        player._game._music.play(currentMusic);
+    }, 300);
 };
 
 //collisionhandler for npc in the rpg stage
