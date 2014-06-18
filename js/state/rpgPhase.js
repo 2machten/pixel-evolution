@@ -73,7 +73,9 @@ rpgPhase.prototype.create = function(){
     this._collectableText.anchor.setTo(0.5, 0.5);
 
     var pos = this.getTreePosition();
-    var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    this._player._tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    this._game.physics.enable(this._player._tree);
+    this._player._tree.body.immovable = true;
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
@@ -273,7 +275,7 @@ rpgPhase.prototype.generate = function(){
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
     var closest = this.distance(tileA, tileB);
 
-    for (var i = 0; i < 1000000; i++) {
+    while (closest > 15) {
         var tempA = largest[Math.floor(Math.random() * largest.length)];
         var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
         if (this.distance(tempA, tempB) < closest) {
