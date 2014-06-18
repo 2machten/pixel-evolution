@@ -40,6 +40,9 @@ function preload()
     this.load.image('collectable_pixel2', 'assets/collectable_pixel2.png');
     this.load.image('collectable_pixel3', 'assets/collectable_pixel3.png');
     this.load.image('collectable_pixel4', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel5', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel6', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel7', 'assets/black_pixel.png');
 
     //Pacman state sprites
     this.load.spritesheet('player_pacman1', 'assets/character_pacman.png', 18, 18);

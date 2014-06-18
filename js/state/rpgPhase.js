@@ -28,8 +28,9 @@ rpgPhase.prototype.update = function(){
         // new random sprite
         var x = Math.floor(Math.random() * (this._game.camera.width / 32)) * 32;
         var y = Math.floor(Math.random() * (this._game.camera.height / 32)) * 32;
-        var i = Math.floor(ROT.RNG.getUniform() * 4);
+        var i = Math.ceil(ROT.RNG.getUniform() * 7);
         var pixie =  this._game.add.sprite(x, y, 'collectable_pixel'+i);
+        pixie.scale.setTo(2,2);
         pixie.fixedToCamera = true;
         pixie.bringToTop();
         this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
