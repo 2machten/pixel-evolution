@@ -1,4 +1,11 @@
 var digger;
+var roomObjectCount = {};
+var roomDoorCount = {};
+var roomEnemyCount = {};
+var roomGenerationCount = 0;
+var itemPositions = {};
+itemPositions.x = [];
+itemPositions.y = [];
 
 dungeonPhase = function(game) {
     Phaser.State.call(this); 
@@ -26,6 +33,14 @@ dungeonPhase.prototype.update = function(){
 }
 
 dungeonPhase.prototype.create = function(){
+    roomObjectCount = {};
+    roomDoorCount = {};
+    roomEnemyCount = {};
+    roomGenerationCount = 0;
+    itemPositions = {};
+    itemPositions.x = [];
+    itemPositions.y = [];
+
     //instantiate worldmap and create layer (this displays the map)
     this._map = new WorldMap(this._game, 'level', 'tiles_dungeon', 40, 'collectable_dungeon', 'enemy_dungeon1', 5);
 
@@ -103,17 +118,7 @@ dungeonPhase.prototype.create = function(){
 };
 
 
-
-
 //Returns a position on the map where an item can spawn
-var roomObjectCount = {};
-var roomDoorCount = {};
-var roomEnemyCount = {};
-var roomGenerationCount = 0;
-var itemPositions = {};
-itemPositions.x = [];
-itemPositions.y = [];
-
 dungeonPhase.prototype.getRoom = function(condition, log){
     var i = Math.floor(ROT.RNG.getUniform() * digger._rooms.length);
 
