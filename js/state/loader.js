@@ -78,7 +78,6 @@ loader.prototype.preload = function(){
 
 
     //Preload music
-    pixelEvolution._music = Phaser.Sound;
     this.load.audio('music', ['assets/sounds.mp3'], false);
 }
 

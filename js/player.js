@@ -64,6 +64,11 @@
         this.animations.add('slashUp', [16,17,18,5], slashSpeed, false);
         this.animations.add('slashDown', [10,11,12,0], slashSpeed, false);
 
+        this.animations.add('axeRight', [25,26,27,3], slashSpeed, false);
+        this.animations.add('axeLeft', [31,32,33,8], slashSpeed, false);
+        this.animations.add('axeUp', [28,29,30,5], slashSpeed, false);
+        this.animations.add('axeDown', [22,23,24,0], slashSpeed, false);
+
         this._idleLeft = 8;
         this._idleRight = 3;
         this._idleUp = 5;
@@ -395,6 +400,19 @@ Player.prototype.updateAxe = function() {
     if (this._axeSkill) {
         // cut action
         if(this.axeKey.isDown && this._game._level > 8) {
+            if(this._game._level > 8){
+            //handle axe animation for rpg stage
+                if(this.facing.indexOf('left') != -1){
+                    this.animations.play('axeLeft');
+                } else if(this.facing.indexOf('right') != -1){
+                    this.animations.play('axeRight');
+                } else if(this.facing.indexOf('up') != -1){
+                    this.animations.play('axeUp');
+                } else if(this.facing.indexOf('down') != -1){
+                    this.animations.play('axeDown');
+                }
+            }
+
             var tileWidth = this._state._map.tileWidth;
             var x = Math.floor(this.position.x/tileWidth);
             var y = Math.floor(this.position.y/tileWidth);
