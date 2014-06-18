@@ -71,6 +71,15 @@ rpgPhase.prototype.create = function(){
     this._score.add(collectable);
     this._score.add(this._collectableText);
     this._game.add.existing(this._score);
+
+    // new random sprite
+    var pixie =  this._game.add.sprite(500, 500, 'black_pixel');
+    pixie.anchor.setTo(0.5, 0.5);
+    pixie.fixedToCamera = true;
+    pixie.bringToTop();
+    this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
+    this._pixies.add(pixie);
+    this._game.add.existing(this._pixies);
 };
 
 //Returns a position on the map where the player or an item can spawn
