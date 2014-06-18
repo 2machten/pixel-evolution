@@ -50,7 +50,7 @@
         this._idleRight = 3;
         this._idleUp = 7;
         this._idleDown = 3;
-    } else {
+    } else if(this._game._level > 8){
         var animsSpeed = 8;
         var slashSpeed = 13;
 

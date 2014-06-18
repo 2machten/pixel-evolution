@@ -136,7 +136,6 @@ pixelPhase.prototype.update = function(){
                 var spawnPosition = pixelEvolution.state.getCurrentState().getItemPosition();
 
                 var spriteName = "collectable_pixel" + (Math.floor(i/2)+1);
-                console.log(spriteName);
                 var collectable = pixelEvolution.add.sprite(spawnPosition[0], spawnPosition[1], spriteName);
                 pixelEvolution.physics.enable(collectable);
 
