@@ -40,6 +40,7 @@
     //Add animations for walking
     
     if(this._game._level > 5 && this._game._level < 9){
+        //dungeonstage
         var animsSpeed = 10;
         this.animations.add('right', [0,1,2,3], animsSpeed, true);
         this.animations.add('left', [4,5,6,7], animsSpeed, true);
@@ -51,6 +52,7 @@
         this._idleUp = 7;
         this._idleDown = 3;
     } else if(this._game._level > 8){
+        //rpgstage
         var animsSpeed = 8;
         var slashSpeed = 13;
 
@@ -73,6 +75,14 @@
         this._idleRight = 3;
         this._idleUp = 5;
         this._idleDown = 0;
+    } else {
+        //pacmanstage
+        var animsSpeed = 6;
+
+        this.animations.add('left', [8, 9], animsSpeed, true);
+        this.animations.add('right', [3, 4], animsSpeed, true);
+        this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
+        this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
     }
 
     //store cursors object for controlling the character
