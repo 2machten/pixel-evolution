@@ -4,6 +4,7 @@ rpgPhase = function(game) {
     this._game = game;
     this._freeTiles = [];
     this._game.stage.smoothed = false;
+    this._ticks = 0;
 }
 
 //Extend the rpgPhase object to be a Phaser.State
@@ -20,6 +21,20 @@ rpgPhase.prototype.update = function(){
             run = true;
             this._game._level++;
         }
+
+    this._ticks++;
+    if (this._ticks > 500) {
+        this._ticks = 0;
+        // new random sprite
+        var x = Math.floor(Math.random() * (this._game.camera.width / 32)) * 32;
+        var y = Math.floor(Math.random() * (this._game.camera.height / 32)) * 32;
+        var pixie =  this._game.add.sprite(x, y, 'black_pixel');
+        pixie.fixedToCamera = true;
+        pixie.bringToTop();
+        this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
+        this._pixies.add(pixie);
+        this._game.add.existing(this._pixies);
+    }
 }
 
 rpgPhase.prototype.create = function(){
@@ -35,8 +50,8 @@ rpgPhase.prototype.create = function(){
     //this._game.music.play('bg4');
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_rpg', 150);
-    //change the hitarea for collision detection to not adapt the top 5 pixels, this way 
+    this._player = new Player(this._game, 1, 'player_rpg', 150 * 3);
+    //change the hitarea for collision detection to not adapt the top 5 pixels, this way
     //the player can walk easier through corridors
     this._player.body.setSize(27,27,0,5);
 
@@ -60,7 +75,7 @@ rpgPhase.prototype.create = function(){
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
-    
+
     for(var i = 0; i < this._player.hp; i++){
         var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
         heart.scale.setTo(4,4);
@@ -68,7 +83,7 @@ rpgPhase.prototype.create = function(){
         this._hearts.add(heart);
     }
     this._game.add.existing(this._hearts);
-    
+
 
     this._score.fixedToCamera = true;
     this._score.add(collectable);
@@ -254,7 +269,7 @@ rpgPhase.prototype.generate = function(){
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
     var closest = this.distance(tileA, tileB);
 
-    for (var i = 0; i < 10000; i++) {
+    for (var i = 0; i < 100000; i++) {
         var tempA = largest[Math.floor(Math.random() * largest.length)];
         var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
         if (this.distance(tempA, tempB) < closest) {
