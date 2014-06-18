@@ -39,6 +39,10 @@ function preload()
     this.load.image('collectable_pixel1', 'assets/collectable_pixel1.png');
     this.load.image('collectable_pixel2', 'assets/collectable_pixel2.png');
     this.load.image('collectable_pixel3', 'assets/collectable_pixel3.png');
+    this.load.image('collectable_pixel4', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel5', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel6', 'assets/black_pixel.png');
+    this.load.image('collectable_pixel7', 'assets/black_pixel.png');
 
     //Pacman state sprites
     this.load.spritesheet('player_pacman1', 'assets/character_pacman.png', 18, 18);
@@ -74,6 +78,9 @@ function preload()
     this.load.image('npc5_rpg', 'assets/npc_05.png');
     this.load.image('npc6_rpg', 'assets/npc_06.png');
     this.load.image('npc7_rpg', 'assets/npc_07.png');
+    this.load.image('fragile_tree', 'assets/cuttable_tree.png');
+    this.load.spritesheet('enemy_rpg', 'assets/enemy_rpg.png', 32, 34);
+
 
     //Preload music
     pixelEvolution._music = Phaser.Sound;
@@ -129,7 +136,7 @@ PixelEvolution.prototype.update = function(time){
         
     }
 
-    if((this.input.activePointer.isDown || this.input.keyboard.isDown(Phaser.Keyboard.ENTER)) && this._bg){
+    if((this.input.activePointer.isDown || this.input.keyboard.isDown(Phaser.Keyboard.ENTER) || this.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) && this._bg){
         this._bg.destroy();
         this._continue.destroy();
         this._message.destroy();
