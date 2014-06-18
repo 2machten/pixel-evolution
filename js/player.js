@@ -50,6 +50,8 @@
         this._idleRight = 3;
         this._idleUp = 7;
         this._idleDown = 3;
+
+        this.frame = 3;
     } else if(this._game._level > 8){
         //rpgstage
         var animsSpeed = 8;
@@ -74,6 +76,8 @@
         this._idleRight = 3;
         this._idleUp = 5;
         this._idleDown = 0;
+
+        this.frame = 0;
     } else {
         //pacmanstage
         var animsSpeed = 6;
@@ -82,6 +86,8 @@
         this.animations.add('right', [3, 4], animsSpeed, true);
         this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
         this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+
+        this.frame = 3;
     }
 
     //store cursors object for controlling the character
