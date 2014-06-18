@@ -337,25 +337,24 @@ Player.prototype.updateSword = function() {
 
         var enemyArray = this._state._map._enemies.children;
         for(var i = 0; i < enemyArray.length; i++) {
-            var diffx = (this.position.x - enemyArray[i].position.x);
-            var diffy = (this.position.y - enemyArray[i].position.y);
-            
-            //console.log("player");console.log(this.position.x);console.log(this.position.y);
-            //console.log("enemy");console.log(enemyArray[i].position.x);console.log(enemyArray[i].position.y);
-            //console.log("differences"); console.log(diffx); console.log(diffy);
-            //console.log("\n");
-            if(this.facing.indexOf('down')!=-1 && diffy <= -0.5*tileWidth && diffy >= -1.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= 1.5*tileWidth) {
+            var tileWidth = this._state._map.tileWidth;
+            var x = Math.floor(this.position.x/tileWidth);
+            var y = Math.floor(this.position.y/tileWidth);
+            var treex = Math.floor(enemyArray[i].position.x/tileWidth);
+            var treey = Math.floor(enemyArray[i].position.y/tileWidth);
+
+            if(this.facing.indexOf('left') != -1 && treex < x && treex >= x - 2 && treey <= y + 1 && treey >= y - 1) {
+                console.log('left destroy');
                 enemyArray[i].destroy();
-                console.log("down");
-            } else if(this.facing.indexOf('up')!=-1 && diffy <= 2.5*tileWidth && diffy >= 1.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= 1.5*tileWidth) {
+            } else if(this.facing.indexOf('right') != -1 && treex > x && treex <= x + 2 && treey <= y + 1 && treey >= y - 1) {
+                console.log('right destroy');
                 enemyArray[i].destroy();
-                console.log("up");
-            } else if(this.facing.indexOf('left')!=-1 && diffy <= 1.5*tileWidth && diffy >= 0.5*tileWidth && diffx >= 1.5*tileWidth && diffx <= 2.5*tileWidth) {
+            } else if(this.facing.indexOf('up') != -1 && treey < y && treey >= y - 2 && treex <= x + 1 && treex >= x - 1) {
+                console.log('up destroy');
                 enemyArray[i].destroy();
-                console.log("left");
-            } else if(this.facing.indexOf('right')!=-1 && diffy <= 1.5*tileWidth && diffy >= -0.5*tileWidth && diffx >= -0.5*tileWidth && diffx <= -1.5*tileWidth) {
+            } else if(this.facing.indexOf('down') != -1 && treey > y && treey <= y + 2 && treex <= x + 1 && treex >= x - 1) {
+                console.log('down destroy');
                 enemyArray[i].destroy();
-                console.log("right");
             }
         }
     }
