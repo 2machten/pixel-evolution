@@ -31,6 +31,9 @@ rpgPhase.prototype.create = function(){
     //add items to the game
     this._game.add.existing(this._map._items);
 
+    //start the right music
+    //this._game.music.play('bg4');
+
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', 150);
     //change the hitarea for collision detection to not adapt the top 5 pixels, this way 

@@ -78,16 +78,7 @@ function preload()
     //Preload music
     /*this.music = Phaser.Sound;
     this.load.audio('music', ['assets/sounds.mp3'], false);
-    this.music = this.add.audio('music');
-    music.override = true;
-
-    music.addMarker('bg1', 0.028, 10.216, 1, true);
-    music.addMarker('bg2', 10.244, 10.214, 1, true);
-    music.addMarker('bg3', 20.458, 10.238, 1, true);
-    music.addMarker('bg4', 30.696, 10.188, 1, true);
-    music.addMarker('chat', 40.884, 0.314, 1, false);
-    music.addMarker('itempickup', 41.198, 0.494, 1, false);
-    music.addMarker('8bbg1', 41.629, 7.696, 1, true);*/
+    */
 };
 
 function create()
@@ -100,6 +91,17 @@ function create()
     this.state.add('rpg', rpgPhase);
     this.state.add('evolution', evolution);
 
+
+    /*this.music = this.add.audio('music');
+    music.override = true;
+
+    music.addMarker('bg1', 0.028, 10.216, 1, true);
+    music.addMarker('bg2', 10.244, 10.214, 1, true);
+    music.addMarker('bg3', 20.458, 10.238, 1, true);
+    music.addMarker('bg4', 30.696, 10.188, 1, true);
+    music.addMarker('chat', 40.884, 0.314, 1, false);
+    music.addMarker('itempickup', 41.198, 0.494, 1, false);
+    music.addMarker('8bbg1', 41.629, 7.696, 1, true);*/
 
     //and start the menu one
     this.state.start('menu');

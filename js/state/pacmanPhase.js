@@ -22,6 +22,9 @@ pacmanPhase.prototype.create = function(){
     //add items to the game
     this._game.add.existing(this._map._items);
 
+    //start music
+    //this._game.music.play('bg1');
+
 	//create player
 	switch (this._game._level) {
 		default:

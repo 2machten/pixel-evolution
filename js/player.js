@@ -80,12 +80,16 @@ Player.prototype.constructor = Player;
 
 //collisionhandler for items
 Player.prototype.itemCollisionHandler = function(player, chest){
+    //var currentMusic = this._game.music.currentMarker;
+
+    //this._game.music.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
 
     //Set new text off collectable ui
     textElement.setText(newText);
     chest.destroy();
+    //this._game.music.play(currentMusic);
 };
 
 var timer;
@@ -159,6 +163,9 @@ Player.prototype.doorCollisionHandler = function(player, door){
 
 //collisionhandler for doors in the dungeon stage
 Player.prototype.keyCollisionHandler = function(player, key){
+    //var currentMusic = this._game.music.currentMarker;
+
+    //this._game.music.play('itempickup');
     player._keys++;
 
     var textElement = pixelEvolution.state.getCurrentState()._keyText;
@@ -167,6 +174,7 @@ Player.prototype.keyCollisionHandler = function(player, key){
     //Set new text off collectable ui
     textElement.setText(newText);
     key.destroy(); 
+    //this._game.music.play(currentMusic);
 };
 
 //collisionhandler for npc in the rpg stage
