@@ -96,6 +96,13 @@ rpgPhase.prototype.getTreePosition = function() {
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
+/**
+ * Get the distance between two tiles.
+ */
+rpgPhase.prototype.distance = function(a, b) {
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] + b[1]);
+}
+
 //map generation for RPG (cellular automata)
 rpgPhase.prototype.generate = function(){
     this._freeTiles = [];
@@ -228,8 +235,22 @@ rpgPhase.prototype.generate = function(){
     // we do this by simply selecting two random tiles, and making sure there
     // is a (L-shaped) path between them.
 
+    // however, we want them close to each other, to make sure they are quite close
+    // we will take 10000 samples, and take the closest of the two
     var tileA = largest[Math.floor(Math.random() * largest.length)];
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
+    var closest = this.distance(tileA, tileB);
+
+    for (var i = 0; i < 10000; i++) {
+        var tempA = largest[Math.floor(Math.random() * largest.length)];
+        var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
+        if (this.distance(tempA, tempB) < closest) {
+            console.log(closest);
+            tileA = tempA;
+            tileB = tempB;
+            closest = this.distance(tileA, tileB);
+        }
+    }
 
     // path of tiles in between
     var path = [];
