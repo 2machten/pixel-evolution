@@ -2,12 +2,14 @@ NPC = function(game, scale, sprite, type) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
+    this._type = type;
+
     if (type == 'axe') {
         startPosition = state.getAxeNpcPosition();
     } else {
         startPosition = state.getItemPosition();
     }
-    
+
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
 
     this.scale.setTo(scale, scale);
@@ -48,28 +50,38 @@ NPC.prototype.orangeboxCollision = function(player, orangebox) {
 }
 
 NPC.prototype.spawnOrangeBox = function(player, npc) {
-    if (this._questFinished) {
-        // give end text and dissapear
-        player._game.showMessage("Thank you! Now I can play portal again!");
+    switch (this._type) {
+    case 'axe':
+        if (!player._axeSkill) {
+            player._game.showMessage("Hello Stranger! Here is an axe!");
+            player._axeSkill = true;
+        }
+        break;
+    default:
+        if (this._questFinished) {
+            // give end text and dissapear
+            player._game.showMessage("Thank you! Now I can play portal again!");
 
-        npc.destroy();
-    } else if (npc._hasOrangeBox) {
-        player._game.showMessage("Go fast! Find the orange box!");
-    } else {
-        player._game.showMessage("Go fast! Find the orange box!");
-        // hacks
-        npc._player = player;
-        // spawn 'orange box'
-        var spawnPosition = player._game.state.getCurrentState().getItemPosition();
+            npc.destroy();
+        } else if (npc._hasOrangeBox) {
+            player._game.showMessage("Go fast! Find the orange box!");
+        } else {
+            player._game.showMessage("Go fast! Find the orange box!");
+            // hacks
+            npc._player = player;
+            // spawn 'orange box'
+            var spawnPosition = player._game.state.getCurrentState().getItemPosition();
 
-        npc._orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
-        player._game.physics.enable(npc._orangebox);
-        npc._orangebox.body.immovable = true;
+            npc._orangebox = player._game.add.sprite(spawnPosition[0], spawnPosition[1], 'orange_box');
+            player._game.physics.enable(npc._orangebox);
+            npc._orangebox.body.immovable = true;
 
-        npc._orangegroup.add(npc._orangebox);
+            npc._orangegroup.add(npc._orangebox);
 
-        player._game.add.existing(npc._orangegroup);
+            player._game.add.existing(npc._orangegroup);
 
-        npc._hasOrangeBox = true;
+            npc._hasOrangeBox = true;
+        }
+        break;
     }
 }
