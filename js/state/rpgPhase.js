@@ -245,7 +245,6 @@ rpgPhase.prototype.generate = function(){
         var tempA = largest[Math.floor(Math.random() * largest.length)];
         var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
         if (this.distance(tempA, tempB) < closest) {
-            console.log(closest);
             tileA = tempA;
             tileB = tempB;
             closest = this.distance(tileA, tileB);
