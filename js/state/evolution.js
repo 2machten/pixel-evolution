@@ -142,10 +142,29 @@ evolution.prototype.update = function(){
 
 evolution.prototype.transitionToNextLevel = function() {
 	if(this._game._level == 3){
-		transitions.to('pacman');
+		
+		setTimeout((function(self) { return function() {  
+			self._game.showMessage("Am I faster? I probably need this \n new speed for something..");
+            if(self._game.input.activePointer.isDown) {
+				transitions.to('pacman');
+			}
+        }})(this),70); 
+		
 	} else if (this._game._level == 6){
-		transitions.to('dungeon');
+		setTimeout((function(self) { return function() {  
+			self._game.showMessage("Wait, where did this Zword come from?");
+			if(self._game.input.activePointer.isDown) {
+				transitions.to('dungeon');
+			}
+        }})(this),70); 
+		
 	} else if (this._game._level == 9){
-		transitions.to('rpg');
+		setTimeout((function(self) { return function() {  
+			self._game.showMessage("Hey, more people! Maybe I can talk to them.");
+			if (self._game.input.activePointer.isDown) {
+				transitions.to('rpg');
+			}
+        }})(this),70);
+		
 	}	
 }
