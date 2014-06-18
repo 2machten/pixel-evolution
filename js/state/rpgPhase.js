@@ -48,6 +48,7 @@ rpgPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //start the right music
+    this._game.sound.stopAll();
     this._game._music.play('bg4');
 
     //Instantiate new player object

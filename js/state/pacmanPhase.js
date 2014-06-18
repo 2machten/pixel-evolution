@@ -20,6 +20,7 @@ pacmanPhase.prototype.create = function(){
     this._layer.resizeWorld();
 
     //add items to the game
+    this._game.sound.stopAll();
     this._game.add.existing(this._map._items);
 
     //start music

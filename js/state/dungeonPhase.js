@@ -33,6 +33,7 @@ dungeonPhase.prototype.create = function(){
     this._layer.resizeWorld();
 
     //start the right music
+    this._game.sound.stopAll();
     this._game._music.play('bg2');
 
     //add items, doors, enemies and keys to the game

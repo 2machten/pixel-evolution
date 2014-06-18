@@ -19,6 +19,7 @@ pixelPhase.prototype.create = function(){
     this._layer.resizeWorld();
 
     //Start the right music
+    this._game.sound.stopAll();
     this._game._music.play('8bbg1');
 
     //Add items to the game
