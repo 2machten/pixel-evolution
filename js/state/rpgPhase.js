@@ -49,7 +49,7 @@ rpgPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
 
     //start the right music
-    //this._game.music.play('bg4');
+    this._game._music.play('bg4');
 
     //Instantiate new player object
     this._player = new Player(this._game, 1, 'player_rpg', 150 * 3);
