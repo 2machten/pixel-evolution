@@ -23,10 +23,12 @@ rpgPhase.prototype.update = function(){
         }
 
     this._ticks++;
-    if (this._ticks > 100) {
+    if (this._ticks > 500) {
+        this._ticks = 0;
         // new random sprite
-        var pixie =  this._game.add.sprite(500, 500, 'black_pixel');
-        pixie.anchor.setTo(0.5, 0.5);
+        var x = Math.floor(Math.random() * (this._game.camera.width / 32)) * 32;
+        var y = Math.floor(Math.random() * (this._game.camera.height / 32)) * 32;
+        var pixie =  this._game.add.sprite(x, y, 'black_pixel');
         pixie.fixedToCamera = true;
         pixie.bringToTop();
         this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
