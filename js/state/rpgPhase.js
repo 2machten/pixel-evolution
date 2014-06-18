@@ -75,14 +75,24 @@ rpgPhase.prototype.create = function(){
 
 //Returns a position on the map where the player or an item can spawn
 rpgPhase.prototype.getItemPosition =
-rpgPhase.prototype.getEnemyPosition =
-rpgPhase.prototype.getPlayerPosition = function(){
+rpgPhase.prototype.getEnemyPosition = function(){
     //shuffle the array of free tiles
     shuffle(this._freeTiles);
 
     //returns an array of x and y position (nth tile) that is free,
     //and remove it from the list so no other item can spawn on this position.
     var randomPosition = this._freeTiles.pop();
+    return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+rpgPhase.prototype.getAxeNpcPosition =
+rpgPhase.prototype.getPlayerPosition = function(){
+    //shuffle the array of free tiles
+    shuffle(this._largestTiles);
+
+    //returns an array of x and y position (nth tile) that is free,
+    //and remove it from the list so no other item can spawn on this position.
+    var randomPosition = this._largestTiles.pop();
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
@@ -287,6 +297,8 @@ rpgPhase.prototype.generate = function(){
     })})(this);
 
     // we have more spaaaccee!!
+    this._largestTiles = largest;
+    this._secondLargestTiles = secondLargest;
     this._freeTiles = largest.concat(secondLargest);
 
     var level = "";
