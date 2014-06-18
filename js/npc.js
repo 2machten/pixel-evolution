@@ -53,7 +53,7 @@ NPC.prototype.spawnOrangeBox = function(player, npc) {
     switch (this._type) {
     case 'axe':
         if (!player._axeSkill) {
-            player._game.showMessage("Hello Stranger! Here is an axe!");
+            player._game.showMessage("Hello Stranger! Here is an aXe!\nUse the X key to use it!");
             player._axeSkill = true;
         }
         break;
