@@ -20,6 +20,7 @@
     this._idleDown;
     this._sword = null;
     this._axeSkill = false;
+    this._tree = undefined;
 
     startPosition = this._state.getPlayerPosition();
 
@@ -183,6 +184,15 @@ Player.prototype.npcCollisionHandler = function(player, npc){
     npc.spawnOrangeBox(player, npc);
 };
 
+// tree collision handler
+Player.prototype.treeCollisionHandler = function(player, tree) {
+    if (player._axeSkill) {
+        player._game.showMessage("Maybe I should use my aXe?");
+    } else {
+        player._game.showMessage("If only I had an axe?");
+    }
+};
+
 Player.prototype.updateCollision = function() {
     var tiles = this._state._layer;
     this._game.physics.arcade.collide(this, tiles);
@@ -217,6 +227,13 @@ Player.prototype.updateCollision = function() {
         //console.log(npcs);
         this._game.physics.arcade.collide(this, npcs, this.npcCollisionHandler, null, this.update);
     }catch(e){}
+
+    // collide with fragile trees
+    if (this._tree != undefined) {
+        try{
+            this._game.physics.arcade.collide(this, this._tree, this.treeCollisionHandler, null, this.update);
+        }catch(e){}
+    }
 }
 
 Player.prototype.updateMovement = function() {

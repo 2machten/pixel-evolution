@@ -71,7 +71,9 @@ rpgPhase.prototype.create = function(){
     this._collectableText.anchor.setTo(0.5, 0.5);
 
     var pos = this.getTreePosition();
-    var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    this._player._tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    this._game.physics.enable(this._player._tree);
+    this._player._tree.body.immovable = true;
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
