@@ -38,15 +38,17 @@ function create()
 
 
     pixelEvolution._music = this.add.audio('music');
-    pixelEvolution._music.override = true;
+    pixelEvolution._sfx = this.add.audio('music');
 
+    pixelEvolution._music.addMarker('8bbg1', 41.629, 7.696, 1, true);
     pixelEvolution._music.addMarker('bg1', 0.028, 10.216, 1, true);
     pixelEvolution._music.addMarker('bg2', 10.244, 10.214, 1, true);
     pixelEvolution._music.addMarker('bg3', 20.458, 10.238, 1, true);
     pixelEvolution._music.addMarker('bg4', 30.696, 10.188, 1, true);
-    pixelEvolution._music.addMarker('chat', 40.884, 0.314, 1, false);
-    pixelEvolution._music.addMarker('itempickup', 41.198, 0.494, 1, false);
-    pixelEvolution._music.addMarker('8bbg1', 41.629, 7.696, 1, true);
+
+    pixelEvolution._sfx.addMarker('chat', 40.884, 0.314, 1, false);
+    pixelEvolution._sfx.addMarker('itempickup', 41.198, 0.494, 1, false);
+    
 
     //and start the menu one
     this.state.start('boot');

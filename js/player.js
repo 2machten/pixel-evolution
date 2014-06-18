@@ -93,22 +93,13 @@ Player.prototype.constructor = Player;
 
 //collisionhandler for items
 Player.prototype.itemCollisionHandler = function(player, chest){
-    var currentMusic = player._game._music.currentMarker;
-
-    console.log(currentMusic);
-
-    player._game._music.play('itempickup');
+    player._game._sfx.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
 
     //Set new text off collectable ui
     textElement.setText(newText);
     chest.destroy();
-
-    // play music again after short time
-    setTimeout(function() {
-        player._game._music.play(currentMusic);
-    }, 300);
 };
 
 var timer;
@@ -182,9 +173,7 @@ Player.prototype.doorCollisionHandler = function(player, door){
 
 //collisionhandler for doors in the dungeon stage
 Player.prototype.keyCollisionHandler = function(player, key){
-    var currentMusic = player._game._music.currentMarker;
-
-    player._game._music.play('itempickup');
+    player._game._sfx.play('itempickup');
     player._keys++;
 
     var textElement = pixelEvolution.state.getCurrentState()._keyText;
@@ -193,10 +182,6 @@ Player.prototype.keyCollisionHandler = function(player, key){
     //Set new text off collectable ui
     textElement.setText(newText);
     key.destroy(); 
-
-    setTimeout(function() {
-        player._game._music.play(currentMusic);
-    }, 300);
 };
 
 //collisionhandler for npc in the rpg stage
@@ -208,7 +193,7 @@ Player.prototype.npcCollisionHandler = function(player, npc){
 // tree collision handler
 Player.prototype.treeCollisionHandler = function(player, tree) {
     if (player._axeSkill) {
-        player._game.showMessage("Maybe I should use my aXe?");
+        //player._game.showMessage("Maybe I should use my aXe?");
     } else {
         player._game.showMessage("If only I had an axe?");
     }
