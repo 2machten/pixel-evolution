@@ -130,9 +130,12 @@ pacmanPhase.prototype.getEnemyPosition = function() {
 	} 
 }
 
-
-pacmanPhase.prototype.getItemPosition =
 pacmanPhase.prototype.getPlayerPosition = function(){
+	return [0, 0];
+}
+
+
+pacmanPhase.prototype.getItemPosition = function(){
     //shuffle the array of free tiles
     shuffle(this._freeTiles);
     
