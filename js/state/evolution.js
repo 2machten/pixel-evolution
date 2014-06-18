@@ -132,9 +132,7 @@ evolution.prototype.update = function(){
 			    //very hacky way to end this if
 			    secondModulo = 100;
 			} else {
-				if(this.input.activePointer.isDown){
-					this.transitionToNextLevel();
-				}
+				this.transitionToNextLevel();
 			}
 	}
 	
@@ -144,7 +142,6 @@ evolution.prototype.transitionToNextLevel = function() {
 	if(this._game._level == 3){		
 		
 		setTimeout((function(self) { return function() {  
-			self._game.showMessage("Am I faster? I probably need this \n new speed for something..");
             if(self._game.input.activePointer.isDown) {
 				transitions.to('pacman');
 			}
@@ -152,7 +149,6 @@ evolution.prototype.transitionToNextLevel = function() {
 		
 	} else if (this._game._level == 6){
 		setTimeout((function(self) { return function() {  
-			self._game.showMessage("Wait, where did this Zword come from?");
 			if(self._game.input.activePointer.isDown) {
 				transitions.to('dungeon');
 			}
@@ -160,7 +156,6 @@ evolution.prototype.transitionToNextLevel = function() {
 		
 	} else if (this._game._level == 9){
 		setTimeout((function(self) { return function() {  
-			self._game.showMessage("Hey, more people! Maybe I can talk to them.");
 			if (self._game.input.activePointer.isDown) {
 				transitions.to('rpg');
 			}

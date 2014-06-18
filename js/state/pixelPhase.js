@@ -42,7 +42,7 @@ pixelPhase.prototype.create = function(){
         if(!this._game._pause){
 
             this.ticks++;
-            if (this.ticks > 4) {
+            if (this.ticks > 1) {
 
             var spriteSize = 16;
 
@@ -100,6 +100,11 @@ pixelPhase.prototype.create = function(){
   this._score.add(collectable);
   this._score.add(this._collectableText);
   this._game.add.existing(this._score);
+
+  this._game.showMessage("There once was an evil gamer, that often hit his\n"+
+    "monitor in anger. At some day, Mixel had enough\n"+
+    "of this nonsense and decided to stand up against\n"+
+    "the gamer and bring peace back to his\nbeloved home land.");
 }
 
 pixelPhase.prototype.update = function(){

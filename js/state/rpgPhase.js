@@ -93,6 +93,8 @@ rpgPhase.prototype.create = function(){
     this._score.add(collectable);
     this._score.add(this._collectableText);
     this._game.add.existing(this._score);
+
+    this._game.showMessage("Hey, more people! Maybe I can talk to them.");
 };
 
 //Returns a position on the map where the player or an item can spawn
