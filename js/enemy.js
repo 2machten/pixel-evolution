@@ -36,11 +36,18 @@ var ticks = 0;
         this.animations.add('right', [6, 7], animsSpeed, true);
         this.animations.add('up', [0, 1], animsSpeed, true);
         this.animations.add('down', [2, 3], animsSpeed, true);
-    } else { //} else if (this._game._level < 9){ // dungeon phase
+    }  else if (this._game._level < 9){ // dungeon phase
         var animsSpeed = 8;
 
         this.animations.add('right', [0,1,2,3], animsSpeed, true);
         this.animations.add('left', [4,5,6,7], animsSpeed, true);
+    } else {
+        var animsSpeed = 8;
+        
+        this.animations.add('left', [9, 10, 9, 11], animsSpeed, true);
+        this.animations.add('right', [6, 7, 6, 8], animsSpeed, true);
+        this.animations.add('up', [3,4,3,5], animsSpeed, true);
+        this.animations.add('down', [0,1,0,2], animsSpeed, true);
     }
 };
 
