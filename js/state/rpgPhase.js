@@ -52,8 +52,8 @@ rpgPhase.prototype.create = function(){
     this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
     this._collectableText.anchor.setTo(0.5, 0.5);
 
-    //var pos = this.getTreePosition();
-    //var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+    var pos = this.getTreePosition();
+    var tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
@@ -75,14 +75,24 @@ rpgPhase.prototype.create = function(){
 
 //Returns a position on the map where the player or an item can spawn
 rpgPhase.prototype.getItemPosition =
-rpgPhase.prototype.getEnemyPosition =
-rpgPhase.prototype.getPlayerPosition = function(){
+rpgPhase.prototype.getEnemyPosition = function(){
     //shuffle the array of free tiles
     shuffle(this._freeTiles);
 
     //returns an array of x and y position (nth tile) that is free,
     //and remove it from the list so no other item can spawn on this position.
     var randomPosition = this._freeTiles.pop();
+    return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+rpgPhase.prototype.getAxeNpcPosition =
+rpgPhase.prototype.getPlayerPosition = function(){
+    //shuffle the array of free tiles
+    shuffle(this._largestTiles);
+
+    //returns an array of x and y position (nth tile) that is free,
+    //and remove it from the list so no other item can spawn on this position.
+    var randomPosition = this._largestTiles.pop();
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
@@ -94,6 +104,13 @@ rpgPhase.prototype.getTreePosition = function() {
     //and remove it from the list so no other item can spawn on this position.
     var randomPosition = this._treeTiles.pop();
     return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+/**
+ * Get the distance between two tiles.
+ */
+rpgPhase.prototype.distance = function(a, b) {
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] + b[1]);
 }
 
 //map generation for RPG (cellular automata)
@@ -224,13 +241,25 @@ rpgPhase.prototype.generate = function(){
         }
     });
 
-    /*
     // create a path between the two largest open fields.
     // we do this by simply selecting two random tiles, and making sure there
     // is a (L-shaped) path between them.
 
+    // however, we want them close to each other, to make sure they are quite close
+    // we will take 10000 samples, and take the closest of the two
     var tileA = largest[Math.floor(Math.random() * largest.length)];
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
+    var closest = this.distance(tileA, tileB);
+
+    for (var i = 0; i < 10000; i++) {
+        var tempA = largest[Math.floor(Math.random() * largest.length)];
+        var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
+        if (this.distance(tempA, tempB) < closest) {
+            tileA = tempA;
+            tileB = tempB;
+            closest = this.distance(tileA, tileB);
+        }
+    }
 
     // path of tiles in between
     var path = [];
@@ -268,7 +297,9 @@ rpgPhase.prototype.generate = function(){
     })})(this);
 
     // we have more spaaaccee!!
-    this._freeTiles = largest.concat(secondLargest);*/
+    this._largestTiles = largest;
+    this._secondLargestTiles = secondLargest;
+    this._freeTiles = largest.concat(secondLargest);
 
     var level = "";
 
