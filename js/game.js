@@ -76,6 +76,7 @@ function preload()
     this.load.image('npc7_rpg', 'assets/npc_07.png');
 
     this.load.spritesheet('enemy_rpg', 'assets/enemy_rpg.png', 32, 34);
+    this.load.image('fragile_tree', 'assets/cuttable_tree.png');
 };
 
 function create()
