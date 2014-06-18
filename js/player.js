@@ -52,10 +52,17 @@
         this._idleDown = 3;
     } else {
         var animsSpeed = 8;
+        var slashSpeed = 13;
+
         this.animations.add('left', [8, 9], animsSpeed, true);
         this.animations.add('right', [3, 4], animsSpeed, true);
         this.animations.add('up', [5, 6, 5, 7], animsSpeed, true);
         this.animations.add('down', [0, 1, 0, 2], animsSpeed, true);
+
+        this.animations.add('slashRight', [13,14,15,3], slashSpeed, false);
+        this.animations.add('slashLeft', [19,20,21,8], slashSpeed, false);
+        this.animations.add('slashUp', [16,17,18,5], slashSpeed, false);
+        this.animations.add('slashDown', [10,11,12,0], slashSpeed, false);
 
         this._idleLeft = 8;
         this._idleRight = 3;
@@ -325,23 +332,38 @@ Player.prototype.updateSword = function() {
     //sword action 
     if (this.swordKey.isDown && this._game._level > 5) {
 
-        if((this._sword == null || !this._sword.alive) && this.ticks > 30){
-            this.ticks = 0;
-            this._sword = this._game.add.sprite(0,0,'sword_dungeon');
-            this._sword.animations.add('slashRight', [0,1,2,3]);
-            this._sword.animations.add('slashLeft', [4,5,6,7]);
+        //handle sword animation in dungeon phase
+        if(this._game._level < 9){
+            if((this._sword == null || !this._sword.alive) && this.ticks > 30){
+                this.ticks = 0;
+                this._sword = this._game.add.sprite(0,0,'sword_dungeon');
+                this._sword.animations.add('slashRight', [0,1,2,3]);
+                this._sword.animations.add('slashLeft', [4,5,6,7]);
 
-            if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1) this._sword.animations.play('slashLeft', 20, false, true);
-            if(this.facing.indexOf('right') != -1 || this.facing.indexOf('down') != -1) this._sword.animations.play('slashRight', 20, false, true);
-        }
+                if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1) this._sword.animations.play('slashLeft', 20, false, true);
+                if(this.facing.indexOf('right') != -1 || this.facing.indexOf('down') != -1) this._sword.animations.play('slashRight', 20, false, true);
+            }
 
-        if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1){
-            this._sword.position.x = this.position.x - 30;
-        } else {
-            this._sword.position.x = this.position.x + 8;
+            if(this.facing.indexOf('left') != -1 || this.facing.indexOf('up') != -1){
+                this._sword.position.x = this.position.x - 30;
+            } else {
+                this._sword.position.x = this.position.x + 8;
+            }
+            
+            this._sword.position.y = this.position.y - 15;
+        } 
+        //handle sword animation for rpg stage
+        else {
+            if(this.facing.indexOf('left') != -1){
+                this.animations.play('slashLeft');
+            } else if(this.facing.indexOf('right') != -1){
+                this.animations.play('slashRight');
+            } else if(this.facing.indexOf('up') != -1){
+                this.animations.play('slashUp');
+            } else if(this.facing.indexOf('down') != -1){
+                this.animations.play('slashDown');
+            }
         }
-        
-        this._sword.position.y = this.position.y - 15;
 
 
         var enemyArray = this._state._map._enemies.children;
