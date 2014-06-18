@@ -75,6 +75,7 @@ loader.prototype.preload = function(){
     this.load.image('npc7_rpg', 'assets/npc_07.png');
     this.load.image('fragile_tree', 'assets/cuttable_tree.png');
     this.load.spritesheet('enemy_rpg', 'assets/enemy_rpg.png', 32, 34);
+    this.load.image('orange_box', 'assets/orange_box.png');
 
 
     //Preload music
