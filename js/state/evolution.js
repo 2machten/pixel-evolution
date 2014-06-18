@@ -142,21 +142,21 @@ evolution.prototype.transitionToNextLevel = function() {
 	if(this._game._level == 3){		
 		
 		setTimeout((function(self) { return function() {  
-            if(self._game.input.activePointer.isDown) {
+            if((self.input.activePointer.isDown || self.input.keyboard.isDown(Phaser.Keyboard.ENTER) || self.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))){
 				transitions.to('pacman');
 			}
         }})(this),70); 
 		
 	} else if (this._game._level == 6){
 		setTimeout((function(self) { return function() {  
-			if(self._game.input.activePointer.isDown) {
+			if((self.input.activePointer.isDown || self.input.keyboard.isDown(Phaser.Keyboard.ENTER) || self.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))){
 				transitions.to('dungeon');
 			}
         }})(this),70); 
 		
 	} else if (this._game._level == 9){
 		setTimeout((function(self) { return function() {  
-			if (self._game.input.activePointer.isDown) {
+			if((self.input.activePointer.isDown || self.input.keyboard.isDown(Phaser.Keyboard.ENTER) || self.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))){
 				transitions.to('rpg');
 			}
         }})(this),70);
