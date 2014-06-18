@@ -12,6 +12,8 @@ NPC = function(game, scale, sprite) {
     this._orangebox = undefined;
     this._orangegroup =  new Phaser.Group(this._game, null, "orangebox", false);
     this._player = undefined;
+
+    this._questFinished = false;
 }
 
 NPC.prototype = Object.create(Phaser.Sprite.prototype);
@@ -24,13 +26,22 @@ NPC.prototype.update = function() {
     // collide with orangebox
     if (this._hasOrangeBox) {
         try {
-            this._game.physics.arcade.collide(this._player, this._orangegroup, function() {
-                console.log("aapjes");
-            }, null, this);
+            this._game.physics.arcade.collide(this._player, this._orangegroup, this.orangeboxCollision, null, this);
         } catch (e) {}
     }
 }
 
+/**
+ * Collision handler for orangebox.
+ *
+ * Makes the orangebox dissapear and finishes the quest.
+ */
+NPC.prototype.orangeboxCollision = function(player, orangebox) {
+    this._questFinished = true;
+    console.log(this);
+
+    orangebox.destroy();
+}
 
 NPC.prototype.spawnOrangeBox = function(player, npc) {
     if (npc._hasOrangeBox) {
