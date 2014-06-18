@@ -82,7 +82,7 @@ Player.prototype.constructor = Player;
 Player.prototype.itemCollisionHandler = function(player, chest){
     //var currentMusic = this._game.music.currentMarker;
 
-    //this._game.music.play('itempickup');
+    pixelEvolution._music.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
 
