@@ -123,48 +123,46 @@ Player.prototype.enemyCollisionHandler = function(enemy, player){
     var state = pixelEvolution.state.current;
     if(state == "pacman") {
         transitions.to('pacman');
-    }
-
-    //Remove one visual heart container
-    if(typeof pixelEvolution.state.getCurrentState()._hearts != "undefined"){
-        pixelEvolution.state.getCurrentState()._hearts.getTop().destroy();
-    }
-
-    if(typeof timer == "undefined" || timer == null){
-        timer = setInterval(
-             (function(p) {  
-                 return function() {  
-                     if (p.tint == 0xff6868){
-                        p.tint = 0xffffff;
-                     } else{
-                        p.tint = 0xff6868;
-                     }
-                 }
-             })(player), 150); 
-
-        var diffx = player.position.x - (enemy.position.x+16);
-        var diffy = player.position.y - (enemy.position.y+16);
-
-        player.position.x += 3*diffx;
-        player.position.y += 3*diffy;
-    }
-
-    setTimeout((function(p) {  
-                 return function() { 
-                    clearInterval(timer); 
-                    timer = null;
-                    p.tint = 0xffffff;
-                }
-            })(player), 1500);
-
-    //decrease player hp
-    if(player.hp <= 0) {
-
-        //WERK BITCH
-        transitions.to(state);
     } else {
-        player.hp--;
-        console.log(player.hp);
+        //Remove one visual heart container
+        if(typeof pixelEvolution.state.getCurrentState()._hearts != "undefined"){
+            pixelEvolution.state.getCurrentState()._hearts.getTop().destroy();
+        }
+
+        if(typeof timer == "undefined" || timer == null){
+            timer = setInterval(
+                 (function(p) {  
+                     return function() {  
+                         if (p.tint == 0xff6868){
+                            p.tint = 0xffffff;
+                         } else{
+                            p.tint = 0xff6868;
+                         }
+                     }
+                 })(player), 150); 
+
+            var diffx = player.position.x - (enemy.position.x+16);
+            var diffy = player.position.y - (enemy.position.y+16);
+
+            player.position.x += 3*diffx;
+            player.position.y += 3*diffy;
+        }
+
+        setTimeout((function(p) {  
+                     return function() { 
+                        clearInterval(timer); 
+                        timer = null;
+                        p.tint = 0xffffff;
+                    }
+                })(player), 1500);
+
+        //decrease player hp
+        if(player.hp == 1) {
+            transitions.to(state);
+        } else {
+            player.hp--;
+            console.log(player.hp);
+        }
     }
 }
 
