@@ -12,7 +12,6 @@
     this.damage = 1;
     this.facing = "";
     this.movespeed = moveSpeed;
-    this.facing = "down";
     this._keys = 0;
     this._idleLeft;
     this._idleRight;
