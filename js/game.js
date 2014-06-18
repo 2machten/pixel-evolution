@@ -27,14 +27,18 @@ function preload(){
 function create()
 {
     //Add all different states/phases
+    //general
     this.state.add('boot', boot);
     this.state.add('loader', loader);
     this.state.add('menu', mainMenu);
+    this.state.add('evolution', evolution);
+
+    //phases
     this.state.add('pixel', pixelPhase);
     this.state.add('pacman', pacmanPhase);
     this.state.add('dungeon', dungeonPhase);
     this.state.add('rpg', rpgPhase);
-    this.state.add('evolution', evolution);
+    
 
 
     pixelEvolution._music = this.add.audio('music');
@@ -185,9 +189,19 @@ var pixelEvolution = new PixelEvolution(800, 608, Phaser.CANVAS, 'game', {
 
 
 // DEBUG: links to change between states/phases manually
-$('#evolutionLink').click(function(){ transitions.to('evolution'); });
 $('#menuLink').click(function(){    pixelEvolution._level = 0; transitions.to('menu'); });
-$('#pixelLink').click(function(){   pixelEvolution._level = 0; transitions.to('pixel'); });
-$('#pacmanLink').click(function(){  pixelEvolution._level = 3; transitions.to('pacman'); });
-$('#dungeonLink').click(function(){ pixelEvolution._level = 6; transitions.to('dungeon'); });
+
+$('#pixelLink1').click(function(){   pixelEvolution._level = 0; transitions.to('pixel'); });
+$('#pixelLink2').click(function(){   pixelEvolution._level = 1; transitions.to('pixel'); });
+$('#pixelLink3').click(function(){   pixelEvolution._level = 2; transitions.to('pixel'); });
+
+$('#pacmanLink1').click(function(){  pixelEvolution._level = 3; transitions.to('pacman'); });
+$('#pacmanLink2').click(function(){  pixelEvolution._level = 4; transitions.to('pacman'); });
+$('#pacmanLink3').click(function(){  pixelEvolution._level = 5; transitions.to('pacman'); });
+
+$('#dungeonLink1').click(function(){ pixelEvolution._level = 6; transitions.to('dungeon'); });
+$('#dungeonLink2').click(function(){ pixelEvolution._level = 7; transitions.to('dungeon'); });
+$('#dungeonLink3').click(function(){ pixelEvolution._level = 8; transitions.to('dungeon'); });
+
 $('#rpgLink').click(function(){     pixelEvolution._level = 9; transitions.to('rpg'); });
+
