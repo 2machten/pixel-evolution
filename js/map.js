@@ -48,11 +48,19 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite, enemySpr
 
         for (var i = 0; i < 3; i++){
             var choice = Math.ceil(ROT.RNG.getUniform() * 7);
-            var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg');
+            var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg', 'default');
             this._game.physics.enable(npc);
             npc.body.immovable = true;
             this._npcs.add(npc);
         }
+
+        // add axe NPC
+        var choice = Math.ceil(ROT.RNG.getUniform() * 7);
+        var npc = new NPC(this._game, (32/27), 'npc'+choice+'_rpg', 'axe');
+        this._game.physics.enable(npc);
+        npc.body.immovable = true;
+        this._npcs.add(npc);
+
     }
 
     //enemies

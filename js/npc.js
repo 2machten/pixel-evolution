@@ -1,8 +1,12 @@
-NPC = function(game, scale, sprite) {
+NPC = function(game, scale, sprite, type) {
     this._game = game;
     var state = this._game.state.getCurrentState();
 
-    startPosition = state.getItemPosition();
+    if (type == 'axe') {
+        startPosition = state.getAxeNpcPosition();
+    } else {
+        startPosition = state.getItemPosition();
+    }
     
     Phaser.Sprite.call(this, this._game, startPosition[0], startPosition[1], sprite);
 
