@@ -44,10 +44,15 @@ NPC.prototype.orangeboxCollision = function(player, orangebox) {
 }
 
 NPC.prototype.spawnOrangeBox = function(player, npc) {
-    if (npc._hasOrangeBox) {
-        // we are still looking for it
-        console.log("exists");
+    if (this._questFinished) {
+        // give end text and dissapear
+        player._game.showMessage("Thank you! Now I can play portal again!");
+
+        npc.destroy();
+    } else if (npc._hasOrangeBox) {
+        player._game.showMessage("Go fast! Find the orange box!");
     } else {
+        player._game.showMessage("Go fast! Find the orange box!");
         // hacks
         npc._player = player;
         // spawn 'orange box'
