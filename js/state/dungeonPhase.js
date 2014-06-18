@@ -32,6 +32,9 @@ dungeonPhase.prototype.create = function(){
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
+    //start the right music
+    //this._game.music.play('bg2');
+
     //add items, doors, enemies and keys to the game
     this._game.add.existing(this._map._items);
     this._game.add.existing(this._map._doors);
@@ -43,13 +46,13 @@ dungeonPhase.prototype.create = function(){
     switch (this._game._level) {
         default:
         case 6: 
-            this._player = new Player(this._game, 1, 'player_dungeon1', 120);
+            this._player = new Player(this._game, 1, 'player_dungeon1', 320);
             break;
         case 7:
-            this._player = new Player(this._game, 1, 'player_dungeon2', 120);
+            this._player = new Player(this._game, 1, 'player_dungeon2', 320);
             break;
         case 8:
-            this._player = new Player(this._game, 1, 'player_dungeon3', 120);
+            this._player = new Player(this._game, 1, 'player_dungeon3', 320);
             break;
     }
 

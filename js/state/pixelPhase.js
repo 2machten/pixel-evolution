@@ -18,6 +18,9 @@ pixelPhase.prototype.create = function(){
     this._layer = this._map.createLayer(0);
     this._layer.resizeWorld();
 
+    //Start the right music
+    //this._game.music.play('8bbg1');
+
     //Add items to the game
     this._game.add.existing(this._map._items);
 

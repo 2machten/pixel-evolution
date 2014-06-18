@@ -4,6 +4,7 @@ rpgPhase = function(game) {
     this._game = game;
     this._freeTiles = [];
     this._game.stage.smoothed = false;
+    this._ticks = 0;
 }
 
 //Extend the rpgPhase object to be a Phaser.State
@@ -20,6 +21,20 @@ rpgPhase.prototype.update = function(){
             run = true;
             this._game._level++;
         }
+
+    this._ticks++;
+    if (this._ticks > 500) {
+        this._ticks = 0;
+        // new random sprite
+        var x = Math.floor(Math.random() * (this._game.camera.width / 32)) * 32;
+        var y = Math.floor(Math.random() * (this._game.camera.height / 32)) * 32;
+        var pixie =  this._game.add.sprite(x, y, 'black_pixel');
+        pixie.fixedToCamera = true;
+        pixie.bringToTop();
+        this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
+        this._pixies.add(pixie);
+        this._game.add.existing(this._pixies);
+    }
 }
 
 rpgPhase.prototype.create = function(){
@@ -31,9 +46,12 @@ rpgPhase.prototype.create = function(){
     //add items to the game
     this._game.add.existing(this._map._items);
 
+    //start the right music
+    //this._game.music.play('bg4');
+
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_rpg', 150);
-    //change the hitarea for collision detection to not adapt the top 5 pixels, this way 
+    this._player = new Player(this._game, 1, 'player_rpg', 150 * 3);
+    //change the hitarea for collision detection to not adapt the top 5 pixels, this way
     //the player can walk easier through corridors
     this._player.body.setSize(27,27,0,5);
 
@@ -57,7 +75,7 @@ rpgPhase.prototype.create = function(){
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);
-    
+
     for(var i = 0; i < this._player.hp; i++){
         var heart = this._game.add.sprite(15+(i*35), 15, 'heart');
         heart.scale.setTo(4,4);
@@ -65,7 +83,7 @@ rpgPhase.prototype.create = function(){
         this._hearts.add(heart);
     }
     this._game.add.existing(this._hearts);
-    
+
 
     this._score.fixedToCamera = true;
     this._score.add(collectable);
@@ -75,14 +93,24 @@ rpgPhase.prototype.create = function(){
 
 //Returns a position on the map where the player or an item can spawn
 rpgPhase.prototype.getItemPosition =
-rpgPhase.prototype.getEnemyPosition =
-rpgPhase.prototype.getPlayerPosition = function(){
+rpgPhase.prototype.getEnemyPosition = function(){
     //shuffle the array of free tiles
     shuffle(this._freeTiles);
 
     //returns an array of x and y position (nth tile) that is free,
     //and remove it from the list so no other item can spawn on this position.
     var randomPosition = this._freeTiles.pop();
+    return [randomPosition[0]*32, randomPosition[1]*32];
+}
+
+rpgPhase.prototype.getAxeNpcPosition =
+rpgPhase.prototype.getPlayerPosition = function(){
+    //shuffle the array of free tiles
+    shuffle(this._largestTiles);
+
+    //returns an array of x and y position (nth tile) that is free,
+    //and remove it from the list so no other item can spawn on this position.
+    var randomPosition = this._largestTiles.pop();
     return [randomPosition[0]*32, randomPosition[1]*32];
 }
 
@@ -241,11 +269,10 @@ rpgPhase.prototype.generate = function(){
     var tileB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
     var closest = this.distance(tileA, tileB);
 
-    for (var i = 0; i < 10000; i++) {
+    for (var i = 0; i < 100000; i++) {
         var tempA = largest[Math.floor(Math.random() * largest.length)];
         var tempB = secondLargest[Math.floor(Math.random() * secondLargest.length)];
         if (this.distance(tempA, tempB) < closest) {
-            console.log(closest);
             tileA = tempA;
             tileB = tempB;
             closest = this.distance(tileA, tileB);
@@ -288,6 +315,8 @@ rpgPhase.prototype.generate = function(){
     })})(this);
 
     // we have more spaaaccee!!
+    this._largestTiles = largest;
+    this._secondLargestTiles = secondLargest;
     this._freeTiles = largest.concat(secondLargest);
 
     var level = "";

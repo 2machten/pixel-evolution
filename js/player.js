@@ -19,6 +19,7 @@
     this._idleUp;
     this._idleDown;
     this._sword = null;
+    this._axeSkill = false;
 
     startPosition = this._state.getPlayerPosition();
 
@@ -79,12 +80,16 @@ Player.prototype.constructor = Player;
 
 //collisionhandler for items
 Player.prototype.itemCollisionHandler = function(player, chest){
+    //var currentMusic = this._game.music.currentMarker;
+
+    //this._game.music.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
 
     //Set new text off collectable ui
     textElement.setText(newText);
     chest.destroy();
+    //this._game.music.play(currentMusic);
 };
 
 var timer;
@@ -158,6 +163,9 @@ Player.prototype.doorCollisionHandler = function(player, door){
 
 //collisionhandler for doors in the dungeon stage
 Player.prototype.keyCollisionHandler = function(player, key){
+    //var currentMusic = this._game.music.currentMarker;
+
+    //this._game.music.play('itempickup');
     player._keys++;
 
     var textElement = pixelEvolution.state.getCurrentState()._keyText;
@@ -166,6 +174,7 @@ Player.prototype.keyCollisionHandler = function(player, key){
     //Set new text off collectable ui
     textElement.setText(newText);
     key.destroy(); 
+    //this._game.music.play(currentMusic);
 };
 
 //collisionhandler for npc in the rpg stage
@@ -336,29 +345,31 @@ Player.prototype.updateSword = function() {
 }
 
 Player.prototype.updateAxe = function() {
-    var tileWidth = this._state._map.tileWidth;
-    var x = Math.floor(this.position.x/tileWidth);
-    var y = Math.floor(this.position.y/tileWidth);
-    var layer = this._state._map.getLayer();
-    var leftTile = this._state._map.getTileLeft(layer, x, y);
-    var rightTile = this._state._map.getTileRight(layer, x, y);
-    var downTile = this._state._map.getTileBelow(layer, x, y);
-    var upTile = this._state._map.getTileAbove(layer, x, y);
+    if (this._axeSkill) {
+        var tileWidth = this._state._map.tileWidth;
+        var x = Math.floor(this.position.x/tileWidth);
+        var y = Math.floor(this.position.y/tileWidth);
+        var layer = this._state._map.getLayer();
+        var leftTile = this._state._map.getTileLeft(layer, x, y);
+        var rightTile = this._state._map.getTileRight(layer, x, y);
+        var downTile = this._state._map.getTileBelow(layer, x, y);
+        var upTile = this._state._map.getTileAbove(layer, x, y);
 
-    // cut action
-    if(this.axeKey.isDown && this._game._level > 8) {
-        if(this.facing == 'left' && leftTile.index == 1) {
-            console.log("left");
-            this._state._map.putTile(0, x-1, y, layer);
-        } else if(this.facing == 'right' && rightTile.index == 1) {
-            console.log("right");
-            this._state._map.putTile(0, x+1, y, layer);
-        } else if(this.facing == 'up' && upTile.index == 1) {
-            console.log("up");
-            this._state._map.putTile(0, x, y-1, layer);
-        } else if(this.facing == 'down' && downTile.index == 1) {
-            console.log("down");
-            this._state._map.putTile(0, x, y+1, layer);
+        // cut action
+        if(this.axeKey.isDown && this._game._level > 8) {
+            if(this.facing == 'left' && leftTile.index == 1) {
+                console.log("left");
+                this._state._map.putTile(0, x-1, y, layer);
+            } else if(this.facing == 'right' && rightTile.index == 1) {
+                console.log("right");
+                this._state._map.putTile(0, x+1, y, layer);
+            } else if(this.facing == 'up' && upTile.index == 1) {
+                console.log("up");
+                this._state._map.putTile(0, x, y-1, layer);
+            } else if(this.facing == 'down' && downTile.index == 1) {
+                console.log("down");
+                this._state._map.putTile(0, x, y+1, layer);
+            }
         }
     }
 }

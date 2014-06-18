@@ -141,7 +141,7 @@ evolution.prototype.update = function(){
 }
 
 evolution.prototype.transitionToNextLevel = function() {
-	if(this._game._level == 3){
+	if(this._game._level == 3){		
 		
 		setTimeout((function(self) { return function() {  
 			self._game.showMessage("Am I faster? I probably need this \n new speed for something..");
