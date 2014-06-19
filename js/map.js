@@ -77,7 +77,12 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite, enemySpr
     //create a group of items
     this._items = new Phaser.Group(this._game, null, "items", false);
     //spawn collectables in this group
-    for (var i=0; i<6; i++){
+    if (this._game._level >= 9) {
+        var numItems = 3;
+    } else {
+        var numItems = 6;
+    }
+    for (var i=0; i<numItems; i++){
         var spawnPosition = state.getItemPosition();
 
         var spriteName;

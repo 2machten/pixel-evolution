@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = moveSpeed;
+    this.movespeed = moveSpeed * 10;
     this._keys = 0;
     this._idleLeft;
     this._idleRight;
@@ -20,6 +20,7 @@
     this._sword = null;
     this._axeSkill = false;
     this._tree = undefined;
+    this._chests = 0; // only used in RPG
 
     startPosition = this._state.getPlayerPosition();
 
@@ -111,6 +112,7 @@ Player.prototype.itemCollisionHandler = function(player, chest){
     player._game._sfx.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
+    this._chests++;
 
     //Set new text off collectable ui
     textElement.setText(newText);
