@@ -94,7 +94,7 @@ pacmanPhase.prototype.create = function(){
 	this._game.add.existing(this._score);
 	
  	if(this._game._level == 3){
-		this._game.showMessage("Darn, enemies!\n I should be quick this time.");
+		this._game.showMessage("Darn, enemies!\nI should be quick this time.");
 	}
 }
 
