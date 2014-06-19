@@ -32,15 +32,15 @@ function create()
     this.state.add('loader', loader);
     this.state.add('menu', mainMenu);
     this.state.add('evolution', evolution);
+    this.state.add('end', end);
 
     //phases
     this.state.add('pixel', pixelPhase);
     this.state.add('pacman', pacmanPhase);
     this.state.add('dungeon', dungeonPhase);
     this.state.add('rpg', rpgPhase);
-    
 
-
+    //initialise music
     pixelEvolution._music = this.add.audio('music');
     pixelEvolution._sfx = this.add.audio('music');
 
@@ -53,9 +53,8 @@ function create()
     pixelEvolution._sfx.addMarker('chat', 40.884, 0.314, 1, false);
     pixelEvolution._sfx.addMarker('itempickup', 41.198, 0.494, 1, false);
     
-
     //and start the menu one
-    this.state.start('boot');
+    this.state.start('end');
 
     //set up transition plugin to smoothly transition between states.
     transitions = this.game.plugins.add(Phaser.Plugin.StateTransition);
@@ -132,11 +131,8 @@ PixelEvolution.prototype.switchLevel = function() {
                 console.log("level10");
                 ran = false;
                 break;
-        case 11: transitions.to('rpg');
-                console.log("level11");
-                ran = false;
-                break;
-        case 12: console.log("done");
+        case 11: transitions.to('end');
+                console.log("Fin");
                 break;
     }
 }
