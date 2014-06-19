@@ -20,7 +20,8 @@ loader.prototype.preload = function(){
     //general game sprites
     this.load.image('message_bg', 'assets/message_bg.png');
     this.load.spritesheet('heart', 'assets/heart.png', 8, 7);
-    this.load.text('font', 'http://fonts.googleapis.com/css?family=Press+Start+2P');
+    //this.load.text('font', 'http://fonts.googleapis.com/css?family=Press+Start+2P');
+    this.load.image('space', 'assets/spaaaaaaace.png');
     
     //Main menu sprites
     this.load.image('logo', 'assets/logo.png');

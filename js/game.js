@@ -158,8 +158,11 @@ PixelEvolution.prototype.showMessage = function(message){
     this._bg.scale.setTo(3.2,3.2);
     this._bg.fixedToCamera = true;
 
-    this._continue = this.add.text(this.camera.width - 150, this.camera.height - 30, "Continue..", { font: "14px 'Press Start 2P'", fill: "#000" });
+    //this._continue = this.add.text(this.camera.width - 150, this.camera.height - 30, "Continue..", { font: "14px 'Press Start 2P'", fill: "#000" });
+    this._continue = this.add.sprite(this.camera.width - 20, this.camera.height - 15, 'space');
     this._continue.fixedToCamera = true;
+    this._continue.anchor.setTo(1,1);
+    this._continue.scale.setTo(1.25, 1.25);
 
     //show text
     this._message = this.add.text(50, this.camera.height - 70, "", { font: "14px 'Press Start 2P'", fill: "#000" });
