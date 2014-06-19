@@ -23,7 +23,7 @@ rpgPhase.prototype.update = function(){
         }
 
     this._ticks++;
-    if (this._ticks > 400) {
+    if (this._ticks > 200) {
         this._ticks = 0;
 
         $('canvas').addClass('shake');
@@ -304,10 +304,10 @@ rpgPhase.prototype.generate = function(){
     // path of tiles in between
     var path = [];
 
-    for (var i = Math.min(tileA[0], tileB[0]); i < Math.max(tileA[0], tileB[0]); i++) {
+    for (var i = Math.min(tileA[0], tileB[0]); i <= Math.max(tileA[0], tileB[0]); i++) {
         path.push([i, tileA[1]]);
     }
-    for (var i = Math.min(tileA[1], tileB[1]); i < Math.max(tileA[1], tileB[1]); i++) {
+    for (var i = Math.min(tileA[1], tileB[1]); i <= Math.max(tileA[1], tileB[1]); i++) {
         path.push([tileB[0], i]);
     }
 
