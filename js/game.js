@@ -54,7 +54,7 @@ function create()
     pixelEvolution._sfx.addMarker('itempickup', 41.198, 0.494, 1, false);
     
     //and start the menu one
-    this.state.start('end');
+    this.state.start('boot');
 
     //set up transition plugin to smoothly transition between states.
     transitions = this.game.plugins.add(Phaser.Plugin.StateTransition);
