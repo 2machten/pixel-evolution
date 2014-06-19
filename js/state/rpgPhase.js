@@ -77,10 +77,21 @@ rpgPhase.prototype.create = function(){
     this._collectableText = this._game.add.text(this._game.camera.width - 60, this._game.camera.height - 25, "0x",{ font: "14px 'Press Start 2P'", fill: "#fff" });
     this._collectableText.anchor.setTo(0.5, 0.5);
 
-    var pos = this.getTreePosition();
-    this._player._tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
-    this._game.physics.enable(this._player._tree);
-    this._player._tree.body.immovable = true;
+    this._player._trees = new Phaser.Group(this._game, null, "trees", false);
+    this._player._treeArr = [];
+
+    for (var i = 0; i < 3; i++) {
+        var pos = this.getTreePosition();
+        this._player._tree = this._game.add.sprite(pos[0], pos[1], 'fragile_tree');
+        this._game.physics.enable(this._player._tree);
+        this._player._tree.body.immovable = true;
+
+        this._player._trees.add(this._player._tree);
+        this._player._treeArr.push(this._player._tree);
+    }
+
+    this._game.add.existing(this._player._trees);
+
 
     //display player lives in terms of hearts
     this._hearts = new Phaser.Group(this._game, null, "hearts", false);

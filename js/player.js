@@ -20,6 +20,8 @@
     this._sword = null;
     this._axeSkill = false;
     this._tree = undefined;
+    this._trees = undefined;
+    this._treeArr = undefined;
     this._chests = 0; // only used in RPG
 
     startPosition = this._state.getPlayerPosition();
@@ -250,9 +252,9 @@ Player.prototype.updateCollision = function() {
     }catch(e){}
 
     // collide with fragile trees
-    if (this._tree != undefined) {
+    if (this._trees != undefined) {
         try{
-            this._game.physics.arcade.collide(this, this._tree, this.treeCollisionHandler, null, this.update);
+            this._game.physics.arcade.collide(this, this._trees, this.treeCollisionHandler, null, this.update);
         }catch(e){}
     }
 }
@@ -413,27 +415,23 @@ Player.prototype.updateAxe = function() {
                 }
             }
 
-            var tileWidth = this._state._map.tileWidth;
-            var x = Math.floor(this.position.x/tileWidth);
-            var y = Math.floor(this.position.y/tileWidth);
-            var treex = Math.floor(this._tree.position.x/tileWidth);
-            var treey = Math.floor(this._tree.position.y/tileWidth);
-            console.log([x, y]);
-            console.log([treex, treey]);
-            console.log(this.facing);
+            for (var i = 0; i < this._treeArr.length; i++) {
+                var tree = this._treeArr[i];
+                var tileWidth = this._state._map.tileWidth;
+                var x = Math.floor(this.position.x/tileWidth);
+                var y = Math.floor(this.position.y/tileWidth);
+                var treex = Math.floor(tree.position.x/tileWidth);
+                var treey = Math.floor(tree.position.y/tileWidth);
 
-            if(this.facing.indexOf('left') != -1 && treex < x && treex >= x - 2 && treey <= y + 1 && treey >= y - 1) {
-                console.log('left destroy');
-                this._tree.destroy();
-            } else if(this.facing.indexOf('right') != -1 && treex > x && treex <= x + 2 && treey <= y + 1 && treey >= y - 1) {
-                console.log('right destroy');
-                this._tree.destroy();
-            } else if(this.facing.indexOf('up') != -1 && treey < y && treey >= y - 2 && treex <= x + 1 && treex >= x - 1) {
-                console.log('up destroy');
-                this._tree.destroy();
-            } else if(this.facing.indexOf('down') != -1 && treey > y && treey <= y + 2 && treex <= x + 1 && treex >= x - 1) {
-                console.log('down destroy');
-                this._tree.destroy();
+                if(this.facing.indexOf('left') != -1 && treex < x && treex >= x - 2 && treey <= y + 1 && treey >= y - 1) {
+                    tree.destroy();
+                } else if(this.facing.indexOf('right') != -1 && treex > x && treex <= x + 2 && treey <= y + 1 && treey >= y - 1) {
+                    tree.destroy();
+                } else if(this.facing.indexOf('up') != -1 && treey < y && treey >= y - 2 && treex <= x + 1 && treex >= x - 1) {
+                    tree.destroy();
+                } else if(this.facing.indexOf('down') != -1 && treey > y && treey <= y + 2 && treex <= x + 1 && treex >= x - 1) {
+                    tree.destroy();
+                }
             }
         }
     }
