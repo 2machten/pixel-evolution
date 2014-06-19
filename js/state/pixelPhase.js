@@ -130,6 +130,9 @@ pixelPhase.prototype.update = function(){
         //If in level higher than 2 and time is up, respawn collectables.
         if(this.ticks > tickInterval && items.children.length > 0 && this._game._level != 0) {
             this.ticks = 0;
+
+            $('canvas').addClass('shake');
+
             var collectables = [];
 
             for(var i = 0; i < items.children.length; i++) {
@@ -146,6 +149,8 @@ pixelPhase.prototype.update = function(){
                 collectables.push(collectable);
                 items.add(collectable);
             }
+
+            setTimeout(function(){$('canvas').removeClass('shake');}, 200);
         }
         
 }
