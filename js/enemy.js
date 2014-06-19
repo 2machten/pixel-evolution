@@ -11,7 +11,7 @@ var ticks = 0;
     this.hp = 1;
     this.facing = "";
     this.movespeed = 90;
-    this.facing = "down";
+    this.facing = "";
 
     startPosition = this._state.getEnemyPosition();
 
