@@ -112,7 +112,7 @@ Player.prototype.itemCollisionHandler = function(player, chest){
     player._game._sfx.play('itempickup');
     var textElement = pixelEvolution.state.getCurrentState()._collectableText;
     var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
-    this._chests++;
+    player._chests++;
 
     //Set new text off collectable ui
     textElement.setText(newText);
