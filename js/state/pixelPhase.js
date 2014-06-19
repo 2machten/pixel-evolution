@@ -43,7 +43,7 @@ pixelPhase.prototype.create = function(){
         if(!this._game._pause){
 
             this.ticks++;
-            if (this.ticks > 1) {
+            if (this.ticks > 8) {
 
             var spriteSize = 16;
 
@@ -123,8 +123,12 @@ pixelPhase.prototype.update = function(){
             this._game._level++;
             console.log(this._game._level);
         } 
+
+        var tickInterval = (((2-this._game._level) * 50) + 100 + ((6*32) - items.children.length*32));
+        console.log(tickInterval);
+
         //If in level higher than 2 and time is up, respawn collectables.
-        if(this.ticks > 150 && items.children.length > 0 && this._game._level != 0) {
+        if(this.ticks > tickInterval && items.children.length > 0 && this._game._level != 0) {
             this.ticks = 0;
             var collectables = [];
 
