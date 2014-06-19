@@ -30,7 +30,7 @@ evolution.prototype.create = function(){
 		firstSprite = 'player_pixel3';
 		secondSprite = 'player_pacman1';
 	} else if (this._game._level == 6){
-		firstSprite = 'player_pacman1';
+		firstSprite = 'player_pacman3';
 		secondSprite = 'player_dungeon1';
 	} else if (this._game._level == 9){
 		firstSprite = 'player_dungeon3';
