@@ -11,7 +11,7 @@
     this.hp = 3;
     this.damage = 1;
     this.facing = "";
-    this.movespeed = moveSpeed * 10;
+    this.movespeed = moveSpeed;
     this._keys = 0;
     this._idleLeft;
     this._idleRight;

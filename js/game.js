@@ -127,11 +127,7 @@ PixelEvolution.prototype.switchLevel = function() {
                 console.log("level9");
                 ran = false;
                 break;
-        case 10: transitions.to('rpg');
-                console.log("level10");
-                ran = false;
-                break;
-        case 11: transitions.to('end');
+        case 10: transitions.to('end');
                 console.log("Fin");
                 break;
     }
