@@ -19,7 +19,7 @@ mainMenu.prototype.create = function(){
 	this.logo.anchor.setTo(0.5, 0.5);
 
 	//text "press start"
-    this.text = this._game.add.text(this._game.width/2, (this._game.height* (3/5)), "Press start..", { 
+    this.text = this._game.add.text(this._game.width/2, (this._game.height* (3/5)), "Press space to start..", { 
     	font: "20px 'Press Start 2P'", 
     	fill: "#fff", 
     	align: "center" 
@@ -37,7 +37,7 @@ mainMenu.prototype.update = function(){
 	this.ticks++;
 	if(this.ticks > 45){
 		//re-set text so it works when the custom font is loaded.
-		this.text.setText("Press start..");
+		this.text.setText("Press space to start..");
 
 		//toggle visibility
 		this.text.visible = !this.text.visible;
