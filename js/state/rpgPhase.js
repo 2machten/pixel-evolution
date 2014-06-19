@@ -25,6 +25,9 @@ rpgPhase.prototype.update = function(){
     this._ticks++;
     if (this._ticks > 400) {
         this._ticks = 0;
+
+        $('canvas').addClass('shake');
+        
         // new random sprite
         var x = Math.floor(Math.random() * (this._game.camera.width / 32)) * 32;
         var y = Math.floor(Math.random() * (this._game.camera.height / 32)) * 32;
@@ -35,6 +38,8 @@ rpgPhase.prototype.update = function(){
         this._pixies = new Phaser.Group(this._game, null, 'pixies', false);
         this._pixies.add(pixie);
         this._game.add.existing(this._pixies);
+
+        setTimeout(function(){$('canvas').removeClass('shake');}, 200);
     }
 }
 
