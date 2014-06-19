@@ -64,19 +64,19 @@ dungeonPhase.prototype.create = function(){
     switch (this._game._level) {
         default:
         case 6: 
-            this._player = new Player(this._game, 1, 'player_dungeon1', 320);
+            this._player = new Player(this._game, 1, 'player_dungeon1', 170);
             break;
         case 7:
-            this._player = new Player(this._game, 1, 'player_dungeon2', 320);
+            this._player = new Player(this._game, 1, 'player_dungeon2', 190);
             break;
         case 8:
-            this._player = new Player(this._game, 1, 'player_dungeon3', 320);
+            this._player = new Player(this._game, 1, 'player_dungeon3', 210);
             break;
     }
 
     //change the hitarea for collision detection to not adapt the top 8 pixels, this way 
     //the player can walk easier through corridors
-    this._player.body.setSize(28,28,0,8); 
+    this._player.body.setSize(17,17,0,8); 
     
     //postpone character creation for a sec to avoid rendering problems
     setTimeout((function(self) { return function() {  

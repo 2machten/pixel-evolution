@@ -52,7 +52,7 @@ rpgPhase.prototype.create = function(){
     this._game._music.play('bg4');
 
     //Instantiate new player object
-    this._player = new Player(this._game, 1, 'player_rpg', 150 * 3);
+    this._player = new Player(this._game, 1, 'player_rpg', 180);
     //change the hitarea for collision detection to not adapt the top 5 pixels, this way
     //the player can walk easier through corridors
     this._player.body.setSize(14,25,0,5);
