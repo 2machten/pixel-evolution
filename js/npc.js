@@ -62,6 +62,12 @@ NPC.prototype.spawnOrangeBox = function(player, npc) {
             // give end text and dissapear
             player._game.showMessage("Thank you! Now I can play portal again!");
 
+            player._chests++;
+            player._game._sfx.play('itempickup');
+            var textElement = pixelEvolution.state.getCurrentState()._collectableText;
+            var newText = parseInt(textElement.text.substring(0,textElement.text.length-1))+1 + "x";
+            textElement.setText(newText);
+
             npc.destroy();
         } else if (npc._hasOrangeBox) {
             player._game.showMessage("Go fast! Find the orange box!");

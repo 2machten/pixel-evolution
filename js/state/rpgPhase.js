@@ -16,7 +16,7 @@ rpgPhase.prototype.update = function(){
     var items = map._items;
 
     //Check whether the collectables are collected,and whether we are not yet in the last level of the phase.
-        if(items.children.length == 0 && !ran && this._game._level != 12){
+        if(this._player._chests >= 6 && !ran && this._game._level != 10){
             ran = true;
             run = true;
             this._game._level++;
