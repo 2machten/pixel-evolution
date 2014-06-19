@@ -115,9 +115,9 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._score);
 
     if(this._game._level == 6){
-        this._game.showMessage("Oh some doors, I probably need keys to open those...");
+        this._game.showMessage("Oh some doors,\nI probably need keys to open those...");
     } else if(this._game._level == 7){
-        this._game.showMessage("Wait, where did this Zword come from? Press Z to slash and kill enemies");
+        this._game.showMessage("Wait, where did this Zword come from?\nPress Z to slash and kill enemies!");
     }
 };
 
@@ -281,8 +281,14 @@ dungeonPhase.prototype.generate = function(){
     roomDoorCount = {};
 
     var w = 80, h = 60;
+
+    if(this._game._level == 6){
+        eendraak = 3;
+    } else {
+        eendraak = 4;
+    }
     digger = new ROT.Map.Rogue(w, h, {
-        cellWidth: 4,
+        cellWidth: eendraak,
         cellHeight: 3,
         roomWidth: [5,9],
         roomHeight: [5,9]
