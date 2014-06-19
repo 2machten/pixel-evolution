@@ -64,7 +64,7 @@ WorldMap = function(game, key, tileSprite, tileSize, collectableSprite, enemySpr
     }
 
     //enemies
-    if(this._game._level > 5) {
+    if(this._game._level > 6) {
         this._enemies = new Phaser.Group(this._game, null, "enemies", false);
 
         for (var i = 0; i < enemyAmount; i++){

@@ -55,7 +55,9 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._map._items);
     this._game.add.existing(this._map._doors);
     this._game.add.existing(this._map._keys);
-    this._game.add.existing(this._map._enemies);
+    if(typeof this._map._enemies != "undefined"){
+        this._game.add.existing(this._map._enemies);
+    }
 
     //Instantiate new player object
     
@@ -113,7 +115,9 @@ dungeonPhase.prototype.create = function(){
     this._game.add.existing(this._score);
 
     if(this._game._level == 6){
-        this._game.showMessage("Wait, where did this Zword come from?");
+        this._game.showMessage("Oh some doors, I probably need keys to open those...");
+    } else if(this._game._level == 7){
+        this._game.showMessage("Wait, where did this Zword come from? Press Z to slash and kill enemies");
     }
 };
 

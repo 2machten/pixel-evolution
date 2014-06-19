@@ -333,7 +333,7 @@ Player.prototype.updateSword = function() {
     this.ticks++;
 
     //sword action 
-    if (this.swordKey.isDown && this._game._level > 5) {
+    if (this.swordKey.isDown && this._game._level > 6) {
 
         //handle sword animation in dungeon phase
         if(this._game._level < 9){
